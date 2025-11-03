@@ -1,0 +1,46 @@
+# === Carpetas de compilación ===
+/build/
+/dist/
+/out/
+/target/
+
+# === Carpetas del IDE ===
+/.nbproject/private/
+/.vscode/
+/.idea/
+/.classpath
+/.project
+/.settings/
+
+# === Archivos temporales ===
+*.log
+*.tmp
+*.bak
+*.swp
+*~
+*.DS_Store
+
+# === Archivos de sistema ===
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# === Archivos Java compilados ===
+*.class
+*.jar
+*.war
+*.ear
+
+# === Dependencias (si las descargas localmente) ===
+/lib/
+/dependencies/
+/node_modules/
+
+# === Archivos de prueba o ejemplos ===
+/test/
+/tests/
+/example/
+
+# === Archivos específicos que no quieres subir ===
+build.xml
+manifest.mf
