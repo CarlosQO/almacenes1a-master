@@ -9,7 +9,6 @@ public class pr {
          * Registro r = new Registro();
          * PaginaRegistro p = new PaginaRegistro(r);
          */
-        System.out.println("hola desde admmin");
         Login l = new Login();
         PaginaLogin p = new PaginaLogin(l);
     }
