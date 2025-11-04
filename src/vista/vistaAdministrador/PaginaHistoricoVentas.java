@@ -31,9 +31,9 @@ public class PaginaHistoricoVentas extends JFrame {
         super("Historico de Ventas");
         /*
          * setLayout(null);
-         * setLocationRelativeTo(null);
          */
         setSize(1300, 700);
+        setLocationRelativeTo(null);
         contenedor = getContentPane();
         contenedor.setLayout(null);
         contenedor.setBackground(Color.white);
@@ -55,20 +55,20 @@ public class PaginaHistoricoVentas extends JFrame {
         // Título
         titulo = new JLabel("Histórico de Ventas");
         titulo.setFont(fuente.fuente(2, true));
-        titulo.setBounds(370, 10, 700, 40);
+        titulo.setBounds(400, 0, 400, 40);
         containMayorTarjeta.add(titulo);
 
         // Contenedor de información
         containInfo = new JPanel();
         containInfo.setVisible(false);
         containInfo.setLayout(null);
-        containInfo.setBackground(Color.white);
-        containInfo.setBounds(2, 50, 940, 510);
+        containInfo.setBackground(Color.WHITE);
+        containInfo.setBounds(0, 40, containMayorTarjeta.getWidth(), 510);
         containMayorTarjeta.add(containInfo);
         // Agregar la fecha de la consulta
         fecha = new JLabel();
-        fecha.setFont(fuente.fuente(4, true));
-        fecha.setBounds(100, 20, 720, 40);
+        fecha.setFont(fuente.fuente(5, true));
+        fecha.setBounds(400, 10, 500, 20);
         containInfo.add(fecha);
 
         // Tabla dentro de containInfo
@@ -82,7 +82,13 @@ public class PaginaHistoricoVentas extends JFrame {
         };
         tablaVentas = new JTable(modeloTabla);
         configurarEncabezadosTabla();
-        tablaVentas.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tablaVentas.getColumnModel().getColumn(0).setPreferredWidth(50);
+        tablaVentas.getColumnModel().getColumn(1).setPreferredWidth(10);
+        tablaVentas.getColumnModel().getColumn(4).setPreferredWidth(10);
+        tablaVentas.getColumnModel().getColumn(5).setPreferredWidth(10);
+        tablaVentas.getColumnModel().getColumn(6).setPreferredWidth(10);
+        tablaVentas.getColumnModel().getColumn(7).setPreferredWidth(10);
+        tablaVentas.getColumnModel().getColumn(9).setPreferredWidth(10);
         tablaVentas.getTableHeader().setPreferredSize(new java.awt.Dimension(0, 45));
         tablaVentas.getTableHeader().setFont(fuente.fuente(5, true));
         tablaVentas.getColumnModel().setColumnMargin(10);
@@ -100,9 +106,9 @@ public class PaginaHistoricoVentas extends JFrame {
 
         // ScrollPane dentro de containInfo
         scrollTabla = new JScrollPane(tablaVentas);
-        scrollTabla.setBounds(0, titulo.getY() + titulo.getHeight() + 10, containMayorTarjeta.getWidth(), 320);
+        scrollTabla.setBounds(10, fecha.getY() + 20, containInfo.getWidth() - 20, 320);
         containInfo.add(scrollTabla);
-        containMayorTarjeta.add(scrollTabla);
+        containMayorTarjeta.add(containInfo);
 
         contenedor.add(containMayorTarjeta);
     }
@@ -120,10 +126,18 @@ public class PaginaHistoricoVentas extends JFrame {
         });
     }
 
-    public static void main(String[] args) {
-        PaginaHistoricoVentas phv = new PaginaHistoricoVentas();
-        phv.setLocationRelativeTo(null);
-        phv.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        phv.setVisible(true);
+    public void ConfigurarTamaño(int opcion) {
+        // containFechas.agregarBtnDescargarInforme("Descargar Historico");
+        // containFechas.setBounds(10, header.getHeight() + 20, 850, 110); //con el
+        // boton de descargar
+        if (opcion == 1) {
+            containFechas.setBounds(225, header.getHeight() + 20, 850, 110);
+            repaint();
+            revalidate();
+        } else {
+            containFechas.setBounds(340, header.getHeight() + 20, 620, 110);
+            repaint();
+            revalidate();
+        }
     }
 }

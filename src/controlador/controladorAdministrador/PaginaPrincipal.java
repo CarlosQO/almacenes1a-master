@@ -19,6 +19,7 @@ import modelo.crudUsuario.Usuario;
 import modelo.crudUsuario.UsuarioDao;
 import modelo.crudVendedor.Vendedor;
 import modelo.crudVendedor.VendedorDao;
+import vista.vistaAdministrador.PaginaHistoricoVentas;
 import vista.vistaAdministrador.PaginaProductoMasVendidos;
 import vista.vistaAdministrador.PaginaProductoMenosVendidos;
 import vista.vistaAdministrador.PanelesModal;
@@ -50,6 +51,9 @@ public class PaginaPrincipal implements ActionListener {
     // controHistoVenta;
     public PaginaHistorialVenta controHistoVenta;
     public Rol rol = new Rol();
+
+    public PaginaHistoricoVenta controhistoVenta;
+    public PaginaHistoricoVentas pHistoricoVentas;
 
     public PaginaPrincipal(PrincipalAdministradorVista p) throws IOException {
         this.principal = p;
@@ -106,6 +110,14 @@ public class PaginaPrincipal implements ActionListener {
                 paginaHistoVenta = new vista.vistaAdministrador.PaginaHistorialVenta();
                 controHistoVenta = new PaginaHistorialVenta(paginaHistoVenta);
                 configurarCierreVentana(paginaHistoVenta);
+            }
+        });
+        p.historiVentaPeri.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                pHistoricoVentas = new PaginaHistoricoVentas();
+                controhistoVenta = new PaginaHistoricoVenta(pHistoricoVentas);
+                configurarCierreVentana(pHistoricoVentas);
             }
         });
     }
