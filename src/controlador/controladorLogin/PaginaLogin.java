@@ -90,7 +90,7 @@ public class PaginaLogin implements ActionListener {
         switch (idRol) {
             case 1:
                 PrincipalAdministradorVista v = new PrincipalAdministradorVista();
-                PaginaPrincipal c = new PaginaPrincipal(v);
+                PaginaPrincipal c = new PaginaPrincipal(v, login.inputNumero.getText());
                 v.setResizable(false);
                 v.setVisible(true);
                 v.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
