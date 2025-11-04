@@ -11,5 +11,6 @@ public class pr {
          */
         Login l = new Login();
         PaginaLogin p = new PaginaLogin(l);
+        System.out.println("Prueba");
     }
 }
