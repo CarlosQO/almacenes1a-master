@@ -27,12 +27,12 @@ public class PrincipalAdministradorVista extends JFrame {
         private Container container;
         private JPanel principal, histoContain, proveeContain;
         private RoundedPanel principalContainer, header, cuerpo;
-        private RoundedPanel historiVentaPeri, historiTendeCompra, carritoContain;
+        private RoundedPanel historiTendeCompra, carritoContain;
         private JLabel icono, user, titulo, permisos, promociones, reportes, historicos, proveedores, cerrarSesion;
         private RoundedPanel listaProvee, aprobarProvee, contratoProvee, modificarInfo, deshabiliProvee,
                         habilitarProvee;
         public RoundedPanel confiRol, promoContain, producMasVendi, producMenVendi,
-                        informeGlobal, histoVentas;
+                        informeGlobal, histoVentas, historiVentaPeri;
         public JLabel actualizarPerfil;
         private static boolean carritoBooleano = false;
 
@@ -330,6 +330,7 @@ public class PrincipalAdministradorVista extends JFrame {
 
                 // historiVentaPeri
                 historiVentaPeri = new RoundedPanel(20, 0x9E9C9C);
+                historiVentaPeri.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 historiVentaPeri.setShadowSize(1);
                 historiVentaPeri.setLayout(null);
                 historiVentaPeri.setBackground(Color.WHITE);

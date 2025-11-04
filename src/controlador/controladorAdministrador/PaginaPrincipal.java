@@ -19,6 +19,7 @@ import modelo.crudUsuario.Usuario;
 import modelo.crudUsuario.UsuarioDao;
 import modelo.crudVendedor.Vendedor;
 import modelo.crudVendedor.VendedorDao;
+import vista.vistaAdministrador.PaginaHistoricoVentas;
 import vista.vistaAdministrador.PaginaProductoMasVendidos;
 import vista.vistaAdministrador.PaginaProductoMenosVendidos;
 import vista.vistaAdministrador.PanelesModal;
@@ -51,8 +52,14 @@ public class PaginaPrincipal implements ActionListener {
     public PaginaHistorialVenta controHistoVenta;
     public Rol rol = new Rol();
 
-    public PaginaPrincipal(PrincipalAdministradorVista p) throws IOException {
+    public PaginaHistoricoVenta controhistoVenta;
+    public PaginaHistoricoVentas pHistoricoVentas;
+
+    private String idAdministrador;
+
+    public PaginaPrincipal(PrincipalAdministradorVista p, String id) throws IOException {
         this.principal = p;
+        this.idAdministrador = id;
         r.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         p.confiRol.addMouseListener(new MouseAdapter() {
             @Override
@@ -108,6 +115,14 @@ public class PaginaPrincipal implements ActionListener {
                 configurarCierreVentana(paginaHistoVenta);
             }
         });
+        p.historiVentaPeri.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                pHistoricoVentas = new PaginaHistoricoVentas();
+                controhistoVenta = new PaginaHistoricoVenta(pHistoricoVentas);
+                configurarCierreVentana(pHistoricoVentas);
+            }
+        });
     }
 
     private List<Rol> roles = new ArrayList<>();
@@ -115,7 +130,11 @@ public class PaginaPrincipal implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == r.buscar) {
-
+            if (r.numeCedula.getText().equals(idAdministrador)) {
+                JOptionPane.showMessageDialog(null, "No puede cambiar el rol del administrador", "",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
             if (r.numeCedula.getText().length() > 0 && r.numeCedula.getText().length() <= 10) {
                 String documento = r.numeCedula.getText();
                 Usuario user = uDao.obtenerUsuario(documento);
