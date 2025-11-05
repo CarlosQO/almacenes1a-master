@@ -23,7 +23,6 @@ import javax.swing.text.JTextComponent;
 import vista.fuenteLetra.Fuente;
 import vista.vistaAdministrador.RoundedPanel;
 
-import vista.componentes.Validaciones;
 
 public class Promociones extends JFrame {
 
