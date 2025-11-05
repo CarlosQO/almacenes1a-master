@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import vista.componentes.Header;
-import vista.componentes.Tarjetas;
+//import vista.componentes.Tarjetas;
 import vista.fuenteLetra.Fuente;
 
 public class PaginaPromociones extends JFrame {
@@ -17,7 +17,7 @@ public class PaginaPromociones extends JFrame {
     private JLabel titulo;
     public JButton regresar;
     public RoundedPanel contenedorImagen;
-    public Tarjetas tarjeta;
+    // public Tarjetas tarjeta;
     private vista.fuenteLetra.Fuente f = new Fuente();
 
     public PaginaPromociones() throws IOException {

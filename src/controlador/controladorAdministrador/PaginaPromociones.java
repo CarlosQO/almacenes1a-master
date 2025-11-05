@@ -192,6 +192,10 @@ public class PaginaPromociones implements ActionListener {
     }
 
     public void guardarPromociones(int IdPrimerPro, String imgPrimerPro) {
+        if (!promoModal.validarCampos()) {
+            System.out.println("Por favor, complete todos los campos.");
+            return;
+        }
 
         if (!validarCamposPromocion(IdPrimerPro)) {
             return; // Detiene la ejecución si hay errores

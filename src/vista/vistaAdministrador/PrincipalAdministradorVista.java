@@ -364,13 +364,12 @@ public class PrincipalAdministradorVista extends JFrame {
                 ScrollPersonalizado scrollHist = new ScrollPersonalizado(histoContain, "horizontal",
                                 (int) (cuerpo.getWidth() * 0.35),
                                 100);
+                scrollHist.habilitarArrastreEnHijos(histoContain);
                 scrollHist.setBounds(20, historicos.getY() + historicos.getHeight() + 10,
                                 (int) (cuerpo.getWidth() * 0.35),
                                 100);
 
                 cuerpo.add(scrollHist);
-                cuerpo.revalidate();
-                cuerpo.repaint();
 
                 // añadir el titulo del modulo de proveedores
                 proveedores = new JLabel("Proveedores                                                   >");
@@ -481,6 +480,7 @@ public class PrincipalAdministradorVista extends JFrame {
 
                 // Crear scroll personalizado para Proveedores
                 ScrollPersonalizado scrollProvee = new ScrollPersonalizado(proveeContain, "horizontal", 655, 100);
+                scrollProvee.habilitarArrastreEnHijos(proveeContain);
                 scrollProvee.setBounds((int) (scrollHist.getX() + scrollHist.getWidth() + 20),
                                 historicos.getY() + historicos.getHeight() + 10, 655, 100);
                 cuerpo.add(scrollProvee);

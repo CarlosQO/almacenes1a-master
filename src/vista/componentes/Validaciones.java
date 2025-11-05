@@ -67,4 +67,70 @@ public class Validaciones {
         return true;
     }
 
+    public static boolean validarDescripcion(String texto) {
+        if (texto == null)
+            return false;
+        texto = texto.trim();
+
+        if (texto.length() < 20 || texto.length() > 55) {
+            return false;
+        }
+
+        int letras = 0;
+        int numeros = 0;
+        for (char c : texto.toCharArray()) {
+            if (Character.isLetter(c) || "áéíóúÁÉÍÓÚñÑ".indexOf(c) >= 0) {
+                letras++;
+            } else if (Character.isDigit(c)) {
+                numeros++;
+            }
+        }
+
+        // Calcular porcentaje de letras
+        double porcentajeLetras = (double) letras / texto.length();
+
+        // Debe tener al menos el 50% de letras
+        return porcentajeLetras >= 0.5;
+    }
+
+    public static boolean validarNombrePromocion(String texto) {
+        if (texto == null)
+            return false;
+
+        texto = texto.trim();
+
+        // Validar longitud
+        if (texto.length() < 10 || texto.length() > 15) {
+            return false;
+        }
+
+        // Contar letras y números
+        int letras = 0;
+        int numeros = 0;
+        for (char c : texto.toCharArray()) {
+            if (Character.isLetter(c) || "áéíóúÁÉÍÓÚñÑ".indexOf(c) >= 0) {
+                letras++;
+            } else if (Character.isDigit(c)) {
+                numeros++;
+            }
+        }
+
+        // Calcular porcentaje de letras
+        double porcentajeLetras = (double) letras / texto.length();
+
+        return porcentajeLetras >= 0.5;
+    }
+
+    public static boolean validarCantidadPromocionar(String texto) {
+        if (texto == null || texto.trim().isEmpty()) {
+            return false;
+        }
+
+        if (!texto.matches("\\d+")) {
+            return false;
+        }
+
+        int cantidad = Integer.parseInt(texto);
+        return cantidad > 0;
+    }
 }
