@@ -1,5 +1,7 @@
 package modelo.crudEstadosProdcutos;
 
-public class CrudEstadosProductos {
-    
+import java.util.List;
+
+public interface CrudEstadosProductos<E> {
+    public List<E> mostrarEstados();
 }
