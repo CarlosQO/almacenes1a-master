@@ -25,7 +25,7 @@ public class Producto {
     }
 
     public Producto(int id, int idCategoria, int idEstado, int cantidad, String nombre, String talla, String imagen,
-            String descripcion, String fechaRegistro, Double precio) {
+            String descripcion, Double precio) {
         this.id = id;
         this.idCategoria = idCategoria;
         this.idEstado = idEstado;
@@ -34,8 +34,22 @@ public class Producto {
         this.talla = talla;
         this.imagen = imagen;
         this.descripcion = descripcion;
-        this.fechaRegistro = fechaRegistro;
         this.precio = precio;
+    }
+
+    public Producto(int id, String nombre, int cantidad, Double precio, String descripcion, String talla,
+            String imagen, int idCategoria, int idEstado, String fechaRegistro, int idProveedor) {
+        this.id = id;
+        this.nombre = nombre;
+        this.cantidad = cantidad;
+        this.precio = precio;
+        this.descripcion = descripcion;
+        this.talla = talla;
+        this.imagen = imagen;
+        this.idCategoria = idCategoria;
+        this.idEstado = idEstado;
+        this.fechaRegistro = fechaRegistro;
+        this.idProveedor = idProveedor;
     }
 
     public int getId() {

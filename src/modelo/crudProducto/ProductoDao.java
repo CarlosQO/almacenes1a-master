@@ -400,4 +400,164 @@ public class ProductoDao implements CrudProducto<Producto> {
             return false;
         }
     }
+
+    @Override
+    public boolean registrarProducto(int id, String nombre, int cantidad, double precio, String descripcion,
+            String talla, String imagen, int idCategoria, int idEstado) {
+
+        try {
+            // Primero verificamos si el producto ya existe por id
+            if (productoExiste(id)) {
+                JOptionPane.showMessageDialog(null, "El producto con este ID ya existe.", "Registro de producto",
+                        JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+            // Si no existe, insertamos
+            String sql = "INSERT INTO producto (id, nombre, cantidad, precio, descripcion, talla, imagen, id_categoria, id_estado) "
+                    +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            try (Connection con = Conexion.getInstance().getConnection();
+                    PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setInt(1, id);
+                ps.setString(2, nombre);
+                ps.setInt(3, cantidad);
+                ps.setDouble(4, precio);
+                ps.setString(5, descripcion);
+                ps.setString(6, talla);
+                ps.setString(7, imagen);
+                ps.setInt(8, idCategoria);
+                ps.setInt(9, idEstado);
+
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Producto registrado correctamente. ", "Registro de producto",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return true;
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "Error de Consulta (Registro de producto)",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean productoExiste(int id) {
+        try {
+            String sql = "SELECT 1 FROM producto WHERE id = ? LIMIT 1";
+
+            try (Connection con = Conexion.getInstance().getConnection();
+                    PreparedStatement ps = con.prepareStatement(sql)) {
+
+                ps.setInt(1, id);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    return rs.next(); // true si el producto existe
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "Error de Consulta (Verificación de producto)",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    @Override
+    public List<Producto> informacionDeUnProducto(int id) {
+        List<Producto> info = new ArrayList<>();
+        String sql = """
+                SELECT p.id, p.nombre, p.descripcion, p.talla, p.imagen, p.precio,
+                       c.id AS categoria_id, c.nombre AS categoria_nombre,
+                       e.id AS estado_id, e.nombre AS estado_nombre
+                FROM producto p
+                JOIN categoria c ON p.id_categoria = c.id
+                JOIN producto_estado e ON p.id_estado = e.id
+                WHERE p.id = ?
+                LIMIT 1
+                """;
+
+        try (Connection con = Conexion.getInstance().getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Producto p = new Producto();
+                p.setId(rs.getInt("id"));
+                p.setNombre(rs.getString("nombre"));
+                p.setDescripcion(rs.getString("descripcion"));
+                p.setTalla(rs.getString("talla"));
+                p.setImagen(rs.getString("imagen"));
+                p.setPrecio(rs.getDouble("precio"));
+
+                // Datos de categoría
+                p.setIdCategoria(rs.getInt("categoria_id"));
+                p.setCategoria(rs.getString("categoria_nombre"));
+
+                // Datos de estado
+                p.setIdEstado(rs.getInt("estado_id"));
+                p.setEstado(rs.getString("estado_nombre"));
+
+                info.add(p);
+            }
+
+            return info;
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(),
+                    "Error de Consulta (Información de producto)", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    @Override
+    public boolean actualizarDatosProducto(int id, String nombre, double precio, String descripcion, String talla,
+            String imagen, int idCategoria, int idEstado) {
+
+        try {
+            // Primero verificamos si el producto existe
+            if (!productoExiste(id)) {
+                JOptionPane.showMessageDialog(null, "El producto con ID " + id + " no existe.",
+                        "Actualización de producto", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+
+            // Si existe, realizamos la actualización
+            String sql = "UPDATE producto SET nombre = ?, precio = ?, descripcion = ?, talla = ?, imagen = ?, id_categoria = ?, id_estado = ? WHERE id = ?";
+
+            try (Connection con = Conexion.getInstance().getConnection();
+                    PreparedStatement ps = con.prepareStatement(sql)) {
+
+                ps.setString(1, nombre);
+                ps.setDouble(2, precio);
+                ps.setString(3, descripcion);
+                ps.setString(4, talla);
+                ps.setString(5, imagen);
+                ps.setInt(6, idCategoria);
+                ps.setInt(7, idEstado);
+                ps.setInt(8, id);
+
+                int filasActualizadas = ps.executeUpdate();
+
+                if (filasActualizadas > 0) {
+                    JOptionPane.showMessageDialog(null, "Producto actualizado correctamente.",
+                            "Actualización de producto", JOptionPane.INFORMATION_MESSAGE);
+                    return true;
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo actualizar el producto.",
+                            "Actualización de producto", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "Error de Consulta (Actualización de producto)",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
 }
