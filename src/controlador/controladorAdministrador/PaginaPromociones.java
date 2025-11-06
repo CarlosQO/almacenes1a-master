@@ -20,7 +20,7 @@ import modelo.crudProducto.ProductoDao;
 import modelo.crudPromociones.PromocionDao;
 import vista.componentes.Promociones;
 import vista.componentes.Tarjetas;
-import vista.vistaAdministrador.PanelesModal;
+import vista.vistaAdministrador.PaginaListarConfigRolModal;
 
 public class PaginaPromociones implements ActionListener {
 
@@ -29,7 +29,7 @@ public class PaginaPromociones implements ActionListener {
     public ProductoDao prDao = new ProductoDao();
     private List<Producto> prod = new ArrayList<>();
     public Promociones promoModal = new Promociones();
-    public PanelesModal modal = new PanelesModal();
+    public PaginaListarConfigRolModal modal = new PaginaListarConfigRolModal();
     public PromocionDao promoDao = new PromocionDao();
 
     // Variables para manejar los precios base y segundo producto

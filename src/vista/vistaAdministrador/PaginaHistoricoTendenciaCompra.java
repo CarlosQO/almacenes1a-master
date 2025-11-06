@@ -53,7 +53,7 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
         containInfo.setShadowSize(1);
         containInfo.setBounds(2, 50, 940, 510);
         containMayorTarjeta.add(containInfo);
-        //agregar la fecha de la consulta
+        // agregar la fecha de la consulta
         fecha = new JLabel();
         fecha.setFont(fuente.fuente(4, true));
         fecha.setBounds(100, 20, 720, 40);
@@ -64,9 +64,9 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
         tituloHistorico.setFont(fuente.fuente(2, true));
         tituloHistorico.setBounds(180, 10, 700, 40);
         containMayorTarjeta.add(tituloHistorico);
-     
-        //  Tabla dentro de containInfo
-        String[] columnas = {"Id Producto","Producto", "Cantidad Venta","Valor Und","Valor Total"};
+
+        // Tabla dentro de containInfo
+        String[] columnas = { "Id Producto", "Producto", "Cantidad Venta", "Valor Und", "Valor Total" };
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -79,7 +79,7 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
         tablaTendencia.getTableHeader().setFont(fuente.fuente(5, true));
         tablaTendencia.getColumnModel().setColumnMargin(10);
 
-        tablaTendencia.setRowSelectionAllowed(false);   // No permite seleccionar filas
+        tablaTendencia.setRowSelectionAllowed(false); // No permite seleccionar filas
         tablaTendencia.setColumnSelectionAllowed(false); // No permite seleccionar columnas
         tablaTendencia.setCellSelectionEnabled(false);
 
@@ -94,17 +94,18 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
         scrollTabla = new JScrollPane(tablaTendencia);
         scrollTabla.setBounds(80, 80, 800, 390);
         containInfo.add(scrollTabla);
-        
-        
+
         contenedor.add(containMayorTarjeta);
     }
 
     // MAIN de prueba
-    public static void main(String[] args) {
-        PaginaHistoricoTendenciaCompra frame = new PaginaHistoricoTendenciaCompra();
-        frame.setSize(1280, 720);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-    }
+    /*
+     * public static void main(String[] args) {
+     * PaginaHistoricoTendenciaCompra frame = new PaginaHistoricoTendenciaCompra();
+     * frame.setSize(1280, 720);
+     * frame.setLocationRelativeTo(null);
+     * frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+     * frame.setVisible(true);
+     * }
+     */
 }

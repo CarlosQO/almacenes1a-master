@@ -22,13 +22,13 @@ import modelo.crudVendedor.VendedorDao;
 import vista.vistaAdministrador.PaginaHistoricoVentas;
 import vista.vistaAdministrador.PaginaProductoMasVendidos;
 import vista.vistaAdministrador.PaginaProductoMenosVendidos;
-import vista.vistaAdministrador.PanelesModal;
+import vista.vistaAdministrador.PaginaListarConfigRolModal;
 import vista.vistaAdministrador.PrincipalAdministradorVista;
 
 public class PaginaPrincipal implements ActionListener {
 
     public PrincipalAdministradorVista principal;
-    public PanelesModal r = new PanelesModal();
+    public PaginaListarConfigRolModal r = new PaginaListarConfigRolModal();
     public Usuario usuario = new Usuario();
     public Vendedor vendedor = new Vendedor();
     public UsuarioDao uDao = new UsuarioDao();
