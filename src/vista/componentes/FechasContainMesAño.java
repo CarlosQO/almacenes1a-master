@@ -9,9 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-
-import javafx.scene.layout.BorderWidths;
 import vista.fuenteLetra.Fuente;
 import vista.vistaAdministrador.RoundedPanel;
 
@@ -28,7 +25,6 @@ public class FechasContainMesAño extends RoundedPanel {
         setBackground(new Color(0xFFFFFF));
         setBounds(10, 120, 200, 180);
         setShadowSize(2);
-        
 
         Font fontLabel = fuente.fuente(6, true);
         Font fontTitulo = fuente.fuente(5, true);
@@ -111,7 +107,7 @@ public class FechasContainMesAño extends RoundedPanel {
         descargar = new JButton(tipo);
         descargar.setBackground(new Color(0xDFF6FD));
         descargar.setForeground(Color.black);
-        descargar.setFont(fuente.fuente(5, false));
+        descargar.setFont(fuente.fuente(6, true));
         descargar.setFocusable(false);
         descargar.setBounds(generar.getX(), generar.getY() + 35, 160, 30);
         descargar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -124,5 +120,17 @@ public class FechasContainMesAño extends RoundedPanel {
 
     public JButton getGenerarReporte() {
         return generar;
+    }
+
+    public String getMesSeleccionado() {
+        return comboMes.getSelectedItem().toString();
+    }
+
+    public String getAñoSeleccionado() {
+        return comboAnio.getSelectedItem().toString();
+    }
+
+    public int obtenerNumeroMes() {
+        return comboMes.getSelectedIndex() + 1;
     }
 }

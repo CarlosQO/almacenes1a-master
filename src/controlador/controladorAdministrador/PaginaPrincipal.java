@@ -19,6 +19,7 @@ import modelo.crudUsuario.Usuario;
 import modelo.crudUsuario.UsuarioDao;
 import modelo.crudVendedor.Vendedor;
 import modelo.crudVendedor.VendedorDao;
+import vista.vistaAdministrador.PaginaHistoricoTendenciaCompra;
 import vista.vistaAdministrador.PaginaHistoricoVentas;
 import vista.vistaAdministrador.PaginaProductoMasVendidos;
 import vista.vistaAdministrador.PaginaProductoMenosVendidos;
@@ -51,9 +52,13 @@ public class PaginaPrincipal implements ActionListener {
     // controHistoVenta;
     public PaginaHistorialVenta controHistoVenta;
     public Rol rol = new Rol();
-
+    // Historico de ventas
     public PaginaHistoricoVenta controhistoVenta;
     public PaginaHistoricoVentas pHistoricoVentas;
+
+    // Tendencia de compra
+    public PaginaHistoricoTendenciaCompra pTendenciaCompra;
+    public PaginaTendenciaCompra controTendenciaCompra;
 
     private String idAdministrador;
 
@@ -121,6 +126,14 @@ public class PaginaPrincipal implements ActionListener {
                 pHistoricoVentas = new PaginaHistoricoVentas();
                 controhistoVenta = new PaginaHistoricoVenta(pHistoricoVentas);
                 configurarCierreVentana(pHistoricoVentas);
+            }
+        });
+        p.historiTendeCompra.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                pTendenciaCompra = new PaginaHistoricoTendenciaCompra();
+                controTendenciaCompra = new PaginaTendenciaCompra(pTendenciaCompra);
+                configurarCierreVentana(pTendenciaCompra);
             }
         });
     }

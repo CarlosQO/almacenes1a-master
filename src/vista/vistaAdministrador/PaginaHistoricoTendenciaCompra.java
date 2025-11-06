@@ -2,6 +2,8 @@ package vista.vistaAdministrador;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -26,6 +28,9 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
 
     public PaginaHistoricoTendenciaCompra() {
         super("Histórico de Tendencia de Compra");
+        setSize(1300, 700);
+        setLocationRelativeTo(null);
+        setResizable(false);
         contenedor = getContentPane();
         contenedor.setLayout(null);
         contenedor.setBackground(Color.white);
@@ -48,6 +53,7 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
 
         // CONTENEDOR DE TARJETAS
         containInfo = new RoundedPanel(20, 0xF8F9FB);
+        containInfo.setVisible(false);
         containInfo.setLayout(null);
         containInfo.setBackground(new Color(0xF8F9FB));
         containInfo.setShadowSize(1);
@@ -62,7 +68,7 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
         // TÍTULO
         tituloHistorico = new JLabel("Histórico de Tendencia de Compra");
         tituloHistorico.setFont(fuente.fuente(2, true));
-        tituloHistorico.setBounds(180, 10, 700, 40);
+        tituloHistorico.setBounds(160, 10, 700, 40);
         containMayorTarjeta.add(tituloHistorico);
 
         // Tabla dentro de containInfo
@@ -98,14 +104,19 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
         contenedor.add(containMayorTarjeta);
     }
 
-    // MAIN de prueba
-    /*
-     * public static void main(String[] args) {
-     * PaginaHistoricoTendenciaCompra frame = new PaginaHistoricoTendenciaCompra();
-     * frame.setSize(1280, 720);
-     * frame.setLocationRelativeTo(null);
-     * frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-     * frame.setVisible(true);
-     * }
-     */
+    public void modificarTamaño(int opcion) {
+        switch (opcion) {
+            case 1:
+                containFechas.setSize(new Dimension(200, 175));
+                break;
+            case 2:
+                containFechas.setSize(new Dimension(200, 215));
+                break;
+            default:
+                System.out.println("Opcion no reconocida en la clase PaginaHistoricoTendenciaCompra");
+                break;
+        }
+        revalidate();
+        repaint();
+    }
 }
