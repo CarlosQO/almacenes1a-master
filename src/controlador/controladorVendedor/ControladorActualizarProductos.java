@@ -63,6 +63,13 @@ public class ControladorActualizarProductos implements ActionListener{
         if (infoProducto != null && !infoProducto.isEmpty()) {
             Producto p = infoProducto.get(0);
 
+            if (moduloActualizarDatosProductos.formularioActualizar != null) {
+                moduloActualizarDatosProductos.remove(moduloActualizarDatosProductos.formularioActualizar.getPanelFormulario());
+                moduloActualizarDatosProductos.formularioActualizar = null;
+                moduloActualizarDatosProductos.revalidate();
+                moduloActualizarDatosProductos.repaint();
+            }
+
             // Crear el formulario con categorías y estados
             moduloActualizarDatosProductos.formularioActualizar = new Formulario(
                 "Actualizacion", 
