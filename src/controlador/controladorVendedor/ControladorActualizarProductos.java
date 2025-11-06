@@ -89,6 +89,7 @@ public class ControladorActualizarProductos implements ActionListener{
                     moduloActualizarDatosProductos.formularioActualizar.getComboCategoria().setSelectedIndex(i);
                     break;
                 }
+                
             }
             
             //Seleccionar el estado correspondiente en el combo
