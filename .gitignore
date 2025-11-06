@@ -10,7 +10,6 @@
 /.idea/
 /.classpath
 /.project
-/.settings/
 
 # === Archivos temporales ===
 *.log
