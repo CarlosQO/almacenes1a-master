@@ -5,6 +5,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+import controladorAdministrador.PDF_Administrador.TendenciaCompraPDF;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -56,7 +58,12 @@ public class PaginaTendenciaCompra implements ActionListener {
             pTendencia.containInfo.setVisible(true);
         }
         if (e.getSource() == pTendencia.containFechas.descargar) {
-            System.out.println("Descargando informe de tendencia de compra...");
+            TendenciaCompraPDF tendenciaCompraPDF = new TendenciaCompraPDF();
+            tendenciaCompraPDF.generalHistoricoTendenciaCompraPDF(pTendencia.containFechas.getMesSeleccionado(),
+                    pTendencia.containFechas.getAñoSeleccionado(), listaTendenciaCompra);
+
+            JOptionPane.showMessageDialog(null,
+                    " Reporte PDF generado correctamente.\nSe guardó en la carpeta Descargas.");
         }
     }
 
