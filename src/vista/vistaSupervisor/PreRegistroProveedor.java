@@ -36,8 +36,8 @@ public class PreRegistroProveedor extends JFrame {
             txtPersonaTelefono, txtPersonaCorreo,
             txtNumeroDoc, txtNombre, txtDireccion, txtTelefono, txtCorreo,
             txtNit, txtNombreEntidad, txtTelefonoEntidad, txtCorreoEntidad;
-    private JComboBox<Producto> cboProductoPersona;
-    private JComboBox<Producto> cboProductoEmpresa;
+    private JComboBox<String> cboProductoPersona;
+    private JComboBox<String> cboProductoEmpresa;
     private JComboBox<MetodoPago> cboPersonaMedioPago, cboMedioPago;
     private MetodoPagoDao metodoPagoDao;
     private JButton btnAgregarProPersona, btnAgregarProEmpresa, btnEnviarPersona, btnEnviarEmpresa;
@@ -183,11 +183,12 @@ public class PreRegistroProveedor extends JFrame {
         return panelFormu;
     }
 
-    private void cargarProductosSinProveedor(JComboBox<Producto> comboBox) {
+    private void cargarProductosSinProveedor(JComboBox<String> comboBox) {
         comboBox.removeAllItems();
         List<Producto> productos = productoDao.listarProductosSinProveedor();
         for (Producto producto : productos) {
-            comboBox.addItem(producto);
+            comboBox.addItem(producto.getNombre());
+            System.out.println(producto.getNombre());
         }
 
         if (comboBox.getItemCount() > 0) {

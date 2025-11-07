@@ -1,4 +1,4 @@
-package controladorSupervisor;
+package controlador.controladorSupervisor;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;

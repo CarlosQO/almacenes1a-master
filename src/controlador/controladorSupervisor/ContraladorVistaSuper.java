@@ -1,4 +1,4 @@
-package controladorSupervisor;
+package controlador.controladorSupervisor;
 
 import java.awt.Color;
 import java.awt.Cursor;
