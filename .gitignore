@@ -23,11 +23,6 @@ Thumbs.db
 ehthumbs.db
 desktop.ini
 
-# === Archivos Java compilados ===
-*.class
-*.war
-*.ear
-
 # === Dependencias (si las descargas localmente) ===
 /dependencies/
 /node_modules/
