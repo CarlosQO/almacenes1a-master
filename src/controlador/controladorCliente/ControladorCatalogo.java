@@ -538,7 +538,7 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     public void cargarProductosACarrito() {
-        daoCarrito.validarStockItemsCarrito(idUsuario);
+        //daoCarrito.validarStockItemsCarrito(idUsuario);
         panelPrincipal.carritoContenedor.setVisible(true);
         panelPrincipal.contenedorTarjetasCorritas.removeAll();
         panelPrincipal.contenedorTarjetasCorritas.setBackground(new Color(0x93E6FF));
@@ -551,12 +551,6 @@ public class ControladorCatalogo implements ActionListener {
         }
 
         int numeroTarjetasC = obtenerCantidadCarrito(idUsuario);
-        // Siempre crear el scroll personalizado
-        panelPrincipal.contenedorTarjetasCorritas.setPreferredSize(new Dimension(300, 290));
-        scrollPersonalizado = new ScrollPersonalizado(panelPrincipal.contenedorTarjetasCorritas, "vertical", 300, 290);
-        scrollPersonalizado.setBounds(40, 60, 300, 290);
-        panelPrincipal.carritoContenedor.add(scrollPersonalizado);
-
         if (numeroTarjetasC > 0 && numeroTarjetasC > 2) {
             CalcularTamañoPanel calcCarrito = new CalcularTamañoPanel();
             int altoCalculadoCarrito = calcCarrito.calcularAltoPanel(
@@ -567,7 +561,12 @@ public class ControladorCatalogo implements ActionListener {
                     10 // padding final
             );
             panelPrincipal.contenedorTarjetasCorritas.setPreferredSize(new Dimension(300, altoCalculadoCarrito));
+            scrollPersonalizado = new ScrollPersonalizado(panelPrincipal.contenedorTarjetasCorritas, "vertical", 300, 290);
+            scrollPersonalizado.setBounds(40, 60, 300, 290);
+            panelPrincipal.carritoContenedor.add(scrollPersonalizado);
         } else if (numeroTarjetasC == 0) {
+            panelPrincipal.contenedorTarjetasCorritas.setBounds(40, 60, 300, 290);
+            panelPrincipal.carritoContenedor.add(panelPrincipal.contenedorTarjetasCorritas);
             // Agregar mensaje cuando el carrito está vacío
             JLabel mensajeVacio = new JLabel("No hay productos en el carrito");
             mensajeVacio.setFont(new Font("Times New Roman", Font.PLAIN, 16));
@@ -587,14 +586,17 @@ public class ControladorCatalogo implements ActionListener {
     public void agregarACarritoProductosDeCompras(int idProducto, int idUsuario, String imagen, int cantidad,
             double precioUnitario) {
         daoCarrito.agregarProductosAlCarrito(idProducto, idUsuario, imagen, cantidad, precioUnitario);
-        
+        if (panelPrincipal.carritoContenedor.isVisible()) {
+            cargarProductosACarrito();
+        }
     }
 
     public void agregarACarritoPromociones(int idPromocion, int idUsuario, String imagen, int cantidad,
             double precioUnitario) {
         daoCarrito.agregarPromocionAlCarrito(idPromocion, idUsuario, imagen, cantidad, precioUnitario);
-        // Si el carrito está visible, actualizar su contenido
-        
+        if (panelPrincipal.carritoContenedor.isVisible()) {
+            cargarProductosACarrito();
+        }
     }
 
     public double getValorTotal() {
