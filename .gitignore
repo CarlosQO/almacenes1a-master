@@ -6,7 +6,6 @@
 
 # === Carpetas del IDE ===
 /.nbproject/private/
-/.vscode/
 /.idea/
 /.classpath
 /.project
@@ -30,7 +29,6 @@ desktop.ini
 *.ear
 
 # === Dependencias (si las descargas localmente) ===
-/lib/
 /dependencies/
 /node_modules/
 
