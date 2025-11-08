@@ -3,12 +3,9 @@ package modelo.crudSeguimientoVendedor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import modelo.Conexion;
 
@@ -78,8 +75,6 @@ public class SeguimientoVenDao implements CrudSeguimientoVendedor {
                     GROUP BY u.nombre, u.documento
                     ORDER BY u.nombre ASC;
                 """;
-
-        System.out.println("Ejecutando SQL: " + sql);
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
 
