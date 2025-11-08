@@ -66,6 +66,7 @@ public class ControladorCatalogo implements ActionListener {
         panelPrincipal.contenedorTarjetasCorritas.removeAll();
 
         if (e.getSource() == panelPrincipal.catalogo) {
+            panelPrincipal.panelCentroContenido.removeAll();
             panelPrincipal.carritoContenedor.setVisible(false);
             actualizarPromocionesSiExisten();
             cargarProductos();
@@ -444,8 +445,8 @@ public class ControladorCatalogo implements ActionListener {
             protected void process(List<TarjetasProductoCarrito> chunks) {
                 for (TarjetasProductoCarrito tarjeta : chunks) {
                     panelCarritoTarjetas.add(tarjeta);
-                    panelCarritoTarjetas.revalidate();
-                    panelCarritoTarjetas.repaint();
+                    // panelCarritoTarjetas.revalidate();
+                    // panelCarritoTarjetas.repaint();
                 }
             }
 
@@ -538,9 +539,13 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     public void cargarProductosACarrito() {
-        //daoCarrito.validarStockItemsCarrito(idUsuario);
+        // daoCarrito.validarStockItemsCarrito(idUsuario);
         panelPrincipal.carritoContenedor.setVisible(true);
         panelPrincipal.contenedorTarjetasCorritas.removeAll();
+        if (scrollPersonalizado != null) {
+            panelPrincipal.carritoContenedor.remove(scrollPersonalizado); // quitar el scroll anterior
+            scrollPersonalizado = null;
+        }
         panelPrincipal.contenedorTarjetasCorritas.setBackground(new Color(0x93E6FF));
         panelPrincipal.contenedorTarjetasCorritas.setLayout(null);
 
@@ -561,7 +566,8 @@ public class ControladorCatalogo implements ActionListener {
                     10 // padding final
             );
             panelPrincipal.contenedorTarjetasCorritas.setPreferredSize(new Dimension(300, altoCalculadoCarrito));
-            scrollPersonalizado = new ScrollPersonalizado(panelPrincipal.contenedorTarjetasCorritas, "vertical", 300, 290);
+            scrollPersonalizado = new ScrollPersonalizado(panelPrincipal.contenedorTarjetasCorritas, "vertical", 300,
+                    290);
             scrollPersonalizado.setBounds(40, 60, 300, 290);
             panelPrincipal.carritoContenedor.add(scrollPersonalizado);
         } else if (numeroTarjetasC == 0) {
