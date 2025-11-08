@@ -12,6 +12,7 @@ import modelo.crudProveedor.Proveedor;
 import modelo.crudProveedor.ProveedorDao;
 import modelo.crudProveedorEmpresa.ProveedorEmpresa;
 import modelo.crudProveedorEmpresa.ProveedorEmpresaDao;
+import vista.componentes.Validaciones;
 import vista.vistaSupervisor.PreRegistroProveedor;
 
 public class ControladorProve implements ActionListener {
@@ -119,6 +120,41 @@ public class ControladorProve implements ActionListener {
         this.currentProviderId = id;
     }
 
+    private void validarYRegistrarProveedor(Proveedor nuevo) {
+        // 1. Validaciones genéricas
+        if (nuevo.getDocumento().isEmpty() || nuevo.getNombre().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe completar el número de documento y el nombre.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (nuevo.getMetodoDePago() == 0) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un método de pago.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 2. Validar si el documento ya existe en la base de datos
+        if (pdao.existeProveedorPorNit(nuevo.getDocumento())) {
+            JOptionPane.showMessageDialog(null, "Ya existe un proveedor registrado con este número de documento.",
+                    "Error de Duplicidad", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // 3. Si todo es válido, proceder con la inserción
+        int idInsert = pdao.setAgregar(nuevo);
+
+        if (idInsert > 0) {
+            setCurrentProviderId(idInsert);
+            asignarProductoGuardado(idInsert); // Asigna el producto si se seleccionó uno
+            JOptionPane.showMessageDialog(null, "Proveedor agregado correctamente.", "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo agregar el proveedor. Revise la conexión o los datos.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void insertarProveedorEmpresa() {
         if (vista == null) {
             JOptionPane.showMessageDialog(null, "Vista no inicializada", "Error", JOptionPane.ERROR_MESSAGE);
@@ -138,14 +174,48 @@ public class ControladorProve implements ActionListener {
         String repTelefono = vista.getRepresentanteTelefono();
         String repCorreo = vista.getRepresentanteCorreo();
 
-        if (nit.isEmpty() || nombreEntidad.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Debe completar NIT y nombre de la entidad.", "Validación",
+        // Validaciones de tipo de dato para Empresa
+        if (!Validaciones.validarCedula(nit)) {
+            JOptionPane.showMessageDialog(null, "El NIT no es válido. Debe contener entre 10 y 11 dígitos numéricos.",
+                    "Validación",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        if (medioPago == 0) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un método de pago.", "Validación",
+        if (!Validaciones.validarTelefono(telefonoEntidad)) {
+            JOptionPane.showMessageDialog(null, "El teléfono de la entidad no es válido.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarCorreo(correoEntidad)) {
+            JOptionPane.showMessageDialog(null, "El correo de la entidad no es válido.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarSoloLetras(repNombre)) {
+            JOptionPane.showMessageDialog(null, "El nombre del representante debe contener solo letras y espacios.",
+                    "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarCedula(repDocumento)) {
+            JOptionPane.showMessageDialog(null,
+                    "El documento del representante no es válido. Debe ser numérico (10-11 dígitos).", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarTelefono(repTelefono)) {
+            JOptionPane.showMessageDialog(null, "El teléfono del representante no es válido.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarCorreo(repCorreo)) {
+            JOptionPane.showMessageDialog(null, "El correo del representante no es válido.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // Validar que los datos del representante no estén vacíos
+        if (repDocumento.isEmpty() || repNombre.isEmpty() || repTelefono.isEmpty() || repCorreo.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe completar todos los datos del representante.", "Validación",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -161,31 +231,27 @@ public class ControladorProve implements ActionListener {
         nuevo.setCorreo(correoEntidad);
         nuevo.setEstado(3);
 
-        int idInsert = pdao.setAgregar(nuevo);
-        setCurrentProviderId(idInsert);
-        if (idInsert <= 0) {
-            JOptionPane.showMessageDialog(null, "No se pudo agregar la empresa en tabla proveedor.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        // Validar y registrar el proveedor base
+        validarYRegistrarProveedor(nuevo);
 
-        // 2) Insertar datos específicos en proveedor_empresa
-        ProveedorEmpresa pe = new ProveedorEmpresa();
-        pe.setIdProveedor(idInsert);
-        pe.setRepresentanteNombre(repNombre);
-        pe.setRepresentanteDocumento(repDocumento);
-        pe.setRepresentanteTelefono(repTelefono);
-        pe.setRepresentanteCorreo(repCorreo);
+        // Si el proveedor se insertó (currentProviderId > 0), registrar datos de la
+        // empresa
+        if (this.currentProviderId > 0) {
+            ProveedorEmpresa pe = new ProveedorEmpresa();
+            pe.setIdProveedor(this.currentProviderId);
+            pe.setRepresentanteNombre(repNombre);
+            pe.setRepresentanteDocumento(repDocumento);
+            pe.setRepresentanteTelefono(repTelefono);
+            pe.setRepresentanteCorreo(repCorreo);
 
-        int res = empresaDao.setAgregar(pe);
-        if (res > 0) {
-            asignarProductoGuardado(idInsert);
-            JOptionPane.showMessageDialog(null, "Empresa agregada correctamente.", "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
+            int res = empresaDao.setAgregar(pe);
+            if (res <= 0) {
+                JOptionPane.showMessageDialog(null,
+                        "El proveedor se registró, pero falló al guardar los datos del representante.", "Aviso",
+                        JOptionPane.WARNING_MESSAGE);
+            }
         } else {
-            JOptionPane.showMessageDialog(null, "La empresa se insertó en proveedor pero falló proveedor_empresa.",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
+            // El mensaje de error ya se mostró en validarYRegistrarProveedor
         }
     }
 
@@ -202,19 +268,28 @@ public class ControladorProve implements ActionListener {
         String telefono = vista.getPersonaTelefono();
         String correo = vista.getPersonaCorreo();
 
-        // Validaciones simples
-        if (documento.isEmpty() || nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Debe completar el número de documento y el nombre.", "Validación",
+        // Validaciones de tipo de dato para Persona Natural
+        if (!Validaciones.validarCedula(documento)) {
+            JOptionPane.showMessageDialog(null,
+                    "El número de documento no es válido. Debe contener entre 10 y 11 dígitos numéricos.", "Validación",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        if (medioPago == 0) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un método de pago.", "Validación",
+        if (!Validaciones.validarSoloLetras(nombre)) {
+            JOptionPane.showMessageDialog(null, "El nombre debe contener solo letras y espacios.", "Validación",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-
+        if (!Validaciones.validarTelefono(telefono)) {
+            JOptionPane.showMessageDialog(null, "El número de teléfono no es válido.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarCorreo(correo)) {
+            JOptionPane.showMessageDialog(null, "El formato del correo electrónico no es válido.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         Proveedor nuevo = new Proveedor();
         nuevo.setTipo("NATURAL");
         nuevo.setDocumento(documento);
@@ -225,16 +300,7 @@ public class ControladorProve implements ActionListener {
         nuevo.setCorreo(correo);
         nuevo.setEstado(3); // activo por defecto
 
-        int idInsert = pdao.setAgregar(nuevo);
-        if (idInsert > 0) {
-            asignarProductoGuardado(idInsert);
-            JOptionPane.showMessageDialog(null, "Proveedor agregado correctamente.", "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-            setCurrentProviderId(idInsert);
-            // opcional: limpiar campos
-        } else {
-            JOptionPane.showMessageDialog(null, "No se pudo agregar el proveedor. Revise la conexión o los datos.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        // Usar el nuevo método centralizado para validar y registrar
+        validarYRegistrarProveedor(nuevo);
     }
 }

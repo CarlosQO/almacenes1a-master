@@ -10,4 +10,6 @@ public interface CrudProveedor<T> {
     public int setActualizar(T tr);
 
     public int setEliminar(int id);
+
+    public boolean existeProveedorPorNit(String nit);
 }

@@ -107,4 +107,9 @@ public class ProveedorEmpresaDao implements CrudProveedor<ProveedorEmpresa> {
         return 0;
     }
 
+    @Override
+    public boolean existeProveedorPorNit(String nit) {
+        throw new UnsupportedOperationException("Unimplemented method 'existeProveedorPorNit'");
+    }
+
 }
