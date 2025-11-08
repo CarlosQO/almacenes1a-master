@@ -27,7 +27,7 @@ import vista.componentes.RoundedButton;
 public class PanelPrincipal extends JFrame {
     public JPanel panel, barra;
     public JButton catalogo, actividad, pedidos;
-    public JButton carrito;
+    public JButton carrito, cerrarCarrito;
     public JButton seguimientoOpcion, historialDeComprasOpcion;
     public DefaultTableModel modeloProductos;
     public JPanel panelCentroContenido, panelActividadCentrado, panelHistorialCentrado, panelSeguimientoCentrado;
@@ -192,14 +192,19 @@ public class PanelPrincipal extends JFrame {
         carritoContenedor.setBounds(900, 65, 370, 500);
         carritoContenedor.setPreferredSize(new Dimension(400, 500));
         // cerrar
-        JButton cerrarCarrito = new JButton("X");
+        cerrarCarrito = new JButton("X");
         cerrarCarrito.setBorderPainted(false);
         cerrarCarrito.setContentAreaFilled(false);
         cerrarCarrito.setLayout(null);
         cerrarCarrito.setBounds(0, 0, 70, 70);
         carritoContenedor.add(cerrarCarrito);
         // evento para cerrar
-        cerrarCarrito.addActionListener(e -> carritoContenedor.setVisible(false));
+
+        cerrarCarrito.addActionListener(e -> {
+            carritoContenedor.setVisible(false);
+            panelCentroContenido.revalidate();
+            panelCentroContenido.repaint();
+        });
 
         // Título "Mi Carrito"
         JLabel lblTitulo = new JLabel("Mi Carrito");

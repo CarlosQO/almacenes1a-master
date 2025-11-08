@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
 import modelo.crudCarrito.*;
@@ -60,14 +61,12 @@ public class ControladorCatalogo implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Asegurarse de limpiar el contenido central al cambiar de sección
-        panelPrincipal.panelCentroContenido.removeAll();
-
         panelPrincipal.panelCentroContenido.setBackground(Color.WHITE);
         panelPrincipal.setVisible(true);
         panelPrincipal.contenedorTarjetasCorritas.removeAll();
 
         if (e.getSource() == panelPrincipal.catalogo) {
+            panelPrincipal.carritoContenedor.setVisible(false);
             actualizarPromocionesSiExisten();
             cargarProductos();
         }
@@ -236,7 +235,7 @@ public class ControladorCatalogo implements ActionListener {
 
                         pasarela.getDialogo().setVisible(true);
                     });
-                    
+
                     // Calcular posición de la tarjeta
                     int posX = xInicial + (contador % columnas) * (anchoTarjeta + separacionX);
                     int posY = yInicial + (contador / columnas) * (altoTarjeta + separacionY);
@@ -452,11 +451,6 @@ public class ControladorCatalogo implements ActionListener {
 
             @Override
             protected void done() {
-                if (listaCarrito == null || listaCarrito.isEmpty()) {
-                    JLabel mensaje = new JLabel("No hay productos agregados en su carrito");
-                    mensaje.setBounds(30, 100, 250, 100);
-                    panelCarritoTarjetas.add(mensaje);
-                }
                 panelCarritoTarjetas.revalidate();
                 panelCarritoTarjetas.repaint();
             }
@@ -537,6 +531,10 @@ public class ControladorCatalogo implements ActionListener {
         scrollPersonalizado = new ScrollPersonalizado(panelPrincipal.panelTarjetasProductos, "vertical", 1000, 500);
         scrollPersonalizado.setBounds(0, 0, 1000, 600);
         panelPrincipal.panelCentroContenido.add(scrollPersonalizado);
+
+        panelPrincipal.panelCentroContenido.revalidate();
+        panelPrincipal.panelCentroContenido.repaint();
+
     }
 
     public void cargarProductosACarrito() {
@@ -553,6 +551,12 @@ public class ControladorCatalogo implements ActionListener {
         }
 
         int numeroTarjetasC = obtenerCantidadCarrito(idUsuario);
+        // Siempre crear el scroll personalizado
+        panelPrincipal.contenedorTarjetasCorritas.setPreferredSize(new Dimension(300, 290));
+        scrollPersonalizado = new ScrollPersonalizado(panelPrincipal.contenedorTarjetasCorritas, "vertical", 300, 290);
+        scrollPersonalizado.setBounds(40, 60, 300, 290);
+        panelPrincipal.carritoContenedor.add(scrollPersonalizado);
+
         if (numeroTarjetasC > 0 && numeroTarjetasC > 2) {
             CalcularTamañoPanel calcCarrito = new CalcularTamañoPanel();
             int altoCalculadoCarrito = calcCarrito.calcularAltoPanel(
@@ -563,14 +567,13 @@ public class ControladorCatalogo implements ActionListener {
                     10 // padding final
             );
             panelPrincipal.contenedorTarjetasCorritas.setPreferredSize(new Dimension(300, altoCalculadoCarrito));
-            scrollPersonalizado = new ScrollPersonalizado(panelPrincipal.contenedorTarjetasCorritas, "vertical", 300,
-                    290);
-            scrollPersonalizado.setBounds(40, 60, 300, 290);
-            panelPrincipal.carritoContenedor.add(scrollPersonalizado);
-
-        } else {
-            panelPrincipal.contenedorTarjetasCorritas.setBounds(40, 60, 300, 290);
-            panelPrincipal.carritoContenedor.add(panelPrincipal.contenedorTarjetasCorritas);
+        } else if (numeroTarjetasC == 0) {
+            // Agregar mensaje cuando el carrito está vacío
+            JLabel mensajeVacio = new JLabel("No hay productos en el carrito");
+            mensajeVacio.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+            mensajeVacio.setHorizontalAlignment(SwingConstants.CENTER);
+            mensajeVacio.setBounds(50, 120, 200, 30);
+            panelPrincipal.contenedorTarjetasCorritas.add(mensajeVacio);
         }
 
         // Mostrar el total
@@ -584,11 +587,14 @@ public class ControladorCatalogo implements ActionListener {
     public void agregarACarritoProductosDeCompras(int idProducto, int idUsuario, String imagen, int cantidad,
             double precioUnitario) {
         daoCarrito.agregarProductosAlCarrito(idProducto, idUsuario, imagen, cantidad, precioUnitario);
+        
     }
 
     public void agregarACarritoPromociones(int idPromocion, int idUsuario, String imagen, int cantidad,
             double precioUnitario) {
         daoCarrito.agregarPromocionAlCarrito(idPromocion, idUsuario, imagen, cantidad, precioUnitario);
+        // Si el carrito está visible, actualizar su contenido
+        
     }
 
     public double getValorTotal() {
@@ -722,8 +728,8 @@ public class ControladorCatalogo implements ActionListener {
     // metodos de pago
     public void mostrarDialogoTarjeta(String tipoTrajeta, double valor, List<ProductosCarrito> productos,
             List<PromocionCarrito> promociones) {
-            tarjeta = new Tarjetas(frame, tipoTrajeta);
-            tarjeta.btnFinalizar.addActionListener(e -> {
+        tarjeta = new Tarjetas(frame, tipoTrajeta);
+        tarjeta.btnFinalizar.addActionListener(e -> {
             if (tarjeta.validarCamposTarjeta()) {
                 // Obtener datos
                 String numeroTarjeta = tarjeta.getTxtTarjeta().getText().trim();
@@ -942,5 +948,5 @@ public class ControladorCatalogo implements ActionListener {
         ControladorPQRS cpqrs = new ControladorPQRS(menu);
         CrontoladorManejarMenu ccerrar = new CrontoladorManejarMenu(menu);
     }
-    //src/productos/CamisasFormalesHombre/camisa MangaLarga Blanca.jpg
+    // src/productos/CamisasFormalesHombre/camisa MangaLarga Blanca.jpg
 }
