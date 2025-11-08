@@ -379,7 +379,9 @@ public class Registro extends JFrame {
                 }
 
                 if (!Validaciones.validarDireccion(inputDireccion.getText())) {
-                        JOptionPane.showMessageDialog(null, "La direccion no es valida", "",
+                        JOptionPane.showMessageDialog(null,
+                                        "La direccion no es valida, debe tener al menos 5 caracteres, una letra y un numero",
+                                        "",
                                         JOptionPane.WARNING_MESSAGE);
                         return false;
                 }

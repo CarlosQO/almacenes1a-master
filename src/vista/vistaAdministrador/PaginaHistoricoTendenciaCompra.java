@@ -2,6 +2,8 @@ package vista.vistaAdministrador;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -26,6 +28,9 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
 
     public PaginaHistoricoTendenciaCompra() {
         super("Histórico de Tendencia de Compra");
+        setSize(1300, 700);
+        setLocationRelativeTo(null);
+        setResizable(false);
         contenedor = getContentPane();
         contenedor.setLayout(null);
         contenedor.setBackground(Color.white);
@@ -48,12 +53,13 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
 
         // CONTENEDOR DE TARJETAS
         containInfo = new RoundedPanel(20, 0xF8F9FB);
+        containInfo.setVisible(false);
         containInfo.setLayout(null);
         containInfo.setBackground(new Color(0xF8F9FB));
         containInfo.setShadowSize(1);
         containInfo.setBounds(2, 50, 940, 510);
         containMayorTarjeta.add(containInfo);
-        //agregar la fecha de la consulta
+        // agregar la fecha de la consulta
         fecha = new JLabel();
         fecha.setFont(fuente.fuente(4, true));
         fecha.setBounds(100, 20, 720, 40);
@@ -62,11 +68,11 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
         // TÍTULO
         tituloHistorico = new JLabel("Histórico de Tendencia de Compra");
         tituloHistorico.setFont(fuente.fuente(2, true));
-        tituloHistorico.setBounds(180, 10, 700, 40);
+        tituloHistorico.setBounds(160, 10, 700, 40);
         containMayorTarjeta.add(tituloHistorico);
-     
-        //  Tabla dentro de containInfo
-        String[] columnas = {"Id Producto","Producto", "Cantidad Venta","Valor Und","Valor Total"};
+
+        // Tabla dentro de containInfo
+        String[] columnas = { "Id Producto", "Producto", "Cantidad Venta", "Valor Und", "Valor Total" };
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -79,7 +85,7 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
         tablaTendencia.getTableHeader().setFont(fuente.fuente(5, true));
         tablaTendencia.getColumnModel().setColumnMargin(10);
 
-        tablaTendencia.setRowSelectionAllowed(false);   // No permite seleccionar filas
+        tablaTendencia.setRowSelectionAllowed(false); // No permite seleccionar filas
         tablaTendencia.setColumnSelectionAllowed(false); // No permite seleccionar columnas
         tablaTendencia.setCellSelectionEnabled(false);
 
@@ -94,17 +100,23 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
         scrollTabla = new JScrollPane(tablaTendencia);
         scrollTabla.setBounds(80, 80, 800, 390);
         containInfo.add(scrollTabla);
-        
-        
+
         contenedor.add(containMayorTarjeta);
     }
 
-    // MAIN de prueba
-    public static void main(String[] args) {
-        PaginaHistoricoTendenciaCompra frame = new PaginaHistoricoTendenciaCompra();
-        frame.setSize(1280, 720);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+    public void modificarTamaño(int opcion) {
+        switch (opcion) {
+            case 1:
+                containFechas.setSize(new Dimension(200, 175));
+                break;
+            case 2:
+                containFechas.setSize(new Dimension(200, 215));
+                break;
+            default:
+                System.out.println("Opcion no reconocida en la clase PaginaHistoricoTendenciaCompra");
+                break;
+        }
+        revalidate();
+        repaint();
     }
 }

@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-public class PanelesModal extends JFrame {
+public class PaginaListarConfigRolModal extends JFrame {
     public JTextField numeCedula;
     public JButton buscar, guardarCambios;
     private Container container;
@@ -26,7 +26,7 @@ public class PanelesModal extends JFrame {
     public JTextField numeId, numeNombres, numeApellidos, numeTipoRol;
     public JComboBox tipoDeRol;
 
-    public PanelesModal() {
+    public PaginaListarConfigRolModal() {
         container = getContentPane();
         miflow = new FlowLayout();
         container.setLayout(miflow);
@@ -160,8 +160,9 @@ public class PanelesModal extends JFrame {
             return UIManager.getFont("Label.font");
         }
     }
-    public void limpiarCampos(){
-        //numeId, numeNombres, numeApellidos, numeTipoRol;
+
+    public void limpiarCampos() {
+        // numeId, numeNombres, numeApellidos, numeTipoRol;
         numeId.setText("");
         numeNombres.setText("");
         numeApellidos.setText("");

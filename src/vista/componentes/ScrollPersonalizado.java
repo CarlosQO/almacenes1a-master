@@ -107,4 +107,28 @@ public class ScrollPersonalizado extends JPanel {
         contenido.setLocation(nuevoX, nuevoY);
         repaint();
     }
+
+    public void habilitarArrastreEnHijos(Component componente) {
+        if (componente instanceof Container contenedor) {
+            for (Component hijo : contenedor.getComponents()) {
+                habilitarArrastreEnHijos(hijo);
+            }
+        }
+
+        if (componente != this) {
+            componente.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, ScrollPersonalizado.this));
+                }
+            });
+
+            componente.addMouseMotionListener(new MouseMotionAdapter() {
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, ScrollPersonalizado.this));
+                }
+            });
+        }
+    }
 }
