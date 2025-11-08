@@ -16,13 +16,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import java.awt.event.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import vista.componentes.Header;
+import vista.vistaSupervisor.componentes.PlaceholderSupport;
 import vista.vistaSupervisor.componentes.RoundedPanel;
 
 public class SeguimientoVendedor extends JFrame {
@@ -94,27 +94,7 @@ public class SeguimientoVendedor extends JFrame {
 
         txtDocumento = new JTextField();
         txtDocumento.setBounds(85, 100, 200, 40);
-        // Placeholder for documento
-        final String placeholderDoc = "12345678";
-        txtDocumento.setText(placeholderDoc);
-        txtDocumento.setForeground(Color.GRAY);
-        txtDocumento.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (txtDocumento.getText().equals(placeholderDoc)) {
-                    txtDocumento.setText("");
-                    txtDocumento.setForeground(Color.BLACK);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (txtDocumento.getText().trim().isEmpty()) {
-                    txtDocumento.setText(placeholderDoc);
-                    txtDocumento.setForeground(Color.GRAY);
-                }
-            }
-        });
+        PlaceholderSupport.setPlaceholder(txtDocumento, "Ingrese el documento");
         panelRO.add(txtDocumento);
 
         lAño = new JLabel("Año");
@@ -218,23 +198,23 @@ public class SeguimientoVendedor extends JFrame {
     }
 
     // Getters for controller
-    public javax.swing.JButton getBtnBR() {
+    public JButton getBtnBR() {
         return btnBR;
     }
 
-    public javax.swing.JTextField getTxtDocumento() {
+    public JTextField getTxtDocumento() {
         return txtDocumento;
     }
 
-    public javax.swing.JTable getTablaSV() {
+    public JTable getTablaSV() {
         return tablaSV;
     }
 
-    public javax.swing.JComboBox<Integer> getCBAño() {
+    public JComboBox<Integer> getCBAño() {
         return cBAño;
     }
 
-    public javax.swing.JComboBox<String> getCBMes() {
+    public JComboBox<String> getCBMes() {
         return cBMes;
     }
 }
