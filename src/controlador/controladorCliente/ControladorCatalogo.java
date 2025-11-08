@@ -17,26 +17,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
-import modelo.crudCarrito.DaoCarrito;
-import modelo.crudCarrito.ProductosCarrito;
-import modelo.crudCarrito.PromocionCarrito;
-import modelo.crudProducto.Producto;
-import modelo.crudProducto.ProductoDao;
-import modelo.crudPromociones.Promocion;
-import modelo.crudPromociones.PromocionDao;
-import modelo.pasarelaDePagosModelo.Factory;
-import modelo.pasarelaDePagosModelo.ProcesoDePago;
-import modelo.pasarelaDePagosModelo.TipoDePago;
+import modelo.crudCarrito.*;
+import modelo.crudProducto.*;
+import modelo.crudPromociones.*;
+import modelo.pasarelaDePagosModelo.*;
 import vista.componentes.CalcularTamañoPanel;
 import vista.componentes.ScrollPersonalizado;
 import vista.vistaCliente.PanelPrincipal;
-import vista.vistaCliente.pasarelaVista.BilleterElectronica;
-import vista.vistaCliente.pasarelaVista.Consignacion;
-import vista.vistaCliente.pasarelaVista.PasarelaPagosVista;
-import vista.vistaCliente.pasarelaVista.Tarjetas;
-import vista.vistaCliente.tarjetas.TarjetaProducto;
-import vista.vistaCliente.tarjetas.TarjetaPromocion;
-import vista.vistaCliente.tarjetas.TarjetasProductoCarrito;
+import vista.vistaCliente.pasarelaVista.*;
+import vista.vistaCliente.tarjetas.*;
 
 public class ControladorCatalogo implements ActionListener {
     private JFrame frame;
@@ -50,9 +39,7 @@ public class ControladorCatalogo implements ActionListener {
     private Consignacion tarjetaConsignacion;
     private BilleterElectronica tarjetaBilletera;
     private Factory factory;
-    private Promocion promocion;
     private PromocionDao daoPromociones;
-    private boolean pagoExitoso;// resultadp del pago
 
     public ControladorCatalogo(PanelPrincipal panelPrincipal) {
         this.panelPrincipal = panelPrincipal;
@@ -734,8 +721,8 @@ public class ControladorCatalogo implements ActionListener {
     // metodos de pago
     public void mostrarDialogoTarjeta(String tipoTrajeta, double valor, List<ProductosCarrito> productos,
             List<PromocionCarrito> promociones) {
-        tarjeta = new Tarjetas(frame, tipoTrajeta);
-        tarjeta.btnFinalizar.addActionListener(e -> {
+            tarjeta = new Tarjetas(frame, tipoTrajeta);
+            tarjeta.btnFinalizar.addActionListener(e -> {
             if (tarjeta.validarCamposTarjeta()) {
                 // Obtener datos
                 String numeroTarjeta = tarjeta.getTxtTarjeta().getText().trim();
