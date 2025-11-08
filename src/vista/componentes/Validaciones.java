@@ -1,5 +1,7 @@
 package vista.componentes;
 
+import java.util.regex.Pattern;
+
 public class Validaciones {
 
     public static boolean validarSoloLetras(String texto) {
@@ -67,4 +69,23 @@ public class Validaciones {
         return true;
     }
 
+    public static boolean validarNIT(String nit) {
+        return Pattern.matches("^\\d{5,12}(-\\d)?$", nit);
+    }
+
+    public static boolean validarLetras(String texto) {
+        return Pattern.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$", texto);
+    }
+
+    public static boolean validarNumeroCuenta(String texto) {
+        return Pattern.matches("^[45]\\d{12,15}$", texto);
+    }
+
+    public static boolean validarNumeros(String texto) {
+        return Pattern.matches("^\\d+$", texto);
+    }
+
+    public static boolean validarCVV(String texto) {
+        return Pattern.matches("^\\d{3,4}", texto);
+    }
 }
