@@ -10,4 +10,10 @@ public interface CrudProveedor<T> {
     public int setActualizar(T tr);
 
     public int setEliminar(int id);
+
+    public List<T> listarProveedorPendiente();
+
+    public List<T> listarProveedorActivos();
+
+    public List<T> listarProveedorInactivo();
 }
