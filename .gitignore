@@ -34,3 +34,4 @@ desktop.ini
 # === Archivos específicos que no quieres subir ===
 build.xml
 manifest.mf
+dist/almacenes1a.jar
