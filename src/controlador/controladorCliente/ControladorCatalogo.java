@@ -187,6 +187,7 @@ public class ControladorCatalogo implements ActionListener {
                 if (obtenerCantidadPromociones() > 0) {
                     yInicial = 100;
                 }
+
                 int anchoTarjeta = 220, altoTarjeta = 330;
                 int separacionX = 50, separacionY = 50;
                 int columnas = 3; // queremos máximo 3 tarjetas por fila
@@ -235,7 +236,7 @@ public class ControladorCatalogo implements ActionListener {
 
                         pasarela.getDialogo().setVisible(true);
                     });
-
+                    
                     // Calcular posición de la tarjeta
                     int posX = xInicial + (contador % columnas) * (anchoTarjeta + separacionX);
                     int posY = yInicial + (contador / columnas) * (altoTarjeta + separacionY);
@@ -941,4 +942,5 @@ public class ControladorCatalogo implements ActionListener {
         ControladorPQRS cpqrs = new ControladorPQRS(menu);
         CrontoladorManejarMenu ccerrar = new CrontoladorManejarMenu(menu);
     }
+    //src/productos/CamisasFormalesHombre/camisa MangaLarga Blanca.jpg
 }
