@@ -30,16 +30,14 @@ public class ControladorSeguimientoVendedor implements ActionListener {
         if (PlaceholderSupport.isPlaceholderVisible(view.getTxtDocumento(), "Ingrese el documento")) {
             documento = "";
         }
-        /*
-         * // Validación solo si el campo tiene algo
-         * if (!documento.isEmpty() && !Validaciones.validarCedula(documento)) {
-         * JOptionPane.showMessageDialog(view,
-         * "El número de documento no es válido. Debe ser numérico y tener entre 10 y 11 dígitos."
-         * ,
-         * "Validación", JOptionPane.WARNING_MESSAGE);
-         * return;
-         * }
-         */
+
+        // Validación solo si el campo tiene algo
+        if (!documento.isEmpty() && !Validaciones.validarCedula(documento)) {
+            JOptionPane.showMessageDialog(view,
+                    "El número de documento no es válido. Debe ser numérico y tener entre 10 y 11 dígitos.",
+                    "Validación", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         int año = view.getCBAño().getItemAt(view.getCBAño().getSelectedIndex());
         int mes = view.getCBMes().getSelectedIndex() + 1;
