@@ -88,4 +88,19 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
         return 0;
     }
 
+    @Override
+    public List<Proveedor> listarProveedorPendiente() {
+        return null;
+    }
+
+    @Override
+    public List<Proveedor> listarProveedorActivos() {
+        return null;
+    }
+
+    @Override
+    public List<Proveedor> listarProveedorInactivo() {
+        return null;
+    }
+
 }
