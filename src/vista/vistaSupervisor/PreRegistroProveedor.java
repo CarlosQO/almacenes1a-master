@@ -2,20 +2,26 @@ package vista.vistaSupervisor;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.io.InputStream;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.border.TitledBorder;
 
 import modelo.crudMetodoDePago.MetodoPago;
@@ -36,8 +42,9 @@ public class PreRegistroProveedor extends JFrame {
             txtPersonaTelefono, txtPersonaCorreo,
             txtNumeroDoc, txtNombre, txtDireccion, txtTelefono, txtCorreo,
             txtNit, txtNombreEntidad, txtTelefonoEntidad, txtCorreoEntidad;
-    private JComboBox<String> cboProductoPersona;
-    private JComboBox<String> cboProductoEmpresa;
+    private JComboBox<Producto> cboProductoPersona;
+    private JComboBox<Producto> cboProductoEmpresa;
+    private Map<String, Producto> productosPorNombre;
     private JComboBox<MetodoPago> cboPersonaMedioPago, cboMedioPago;
     private MetodoPagoDao metodoPagoDao;
     private JButton btnAgregarProPersona, btnAgregarProEmpresa, btnEnviarPersona, btnEnviarEmpresa;
@@ -141,6 +148,17 @@ public class PreRegistroProveedor extends JFrame {
 
         cboProductoPersona = new JComboBox<>();
         cboProductoPersona.setBorder(new TitledBorder("Productos"));
+        cboProductoPersona.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Producto) {
+                    setText(((Producto) value).getNombre());
+                }
+                return this;
+            }
+        });
         cargarProductosSinProveedor(cboProductoPersona);
         btnAgregarProPersona = new JButton("Agregar");
         btnAgregarProPersona.setPreferredSize(new Dimension(80, 38));
@@ -183,12 +201,11 @@ public class PreRegistroProveedor extends JFrame {
         return panelFormu;
     }
 
-    private void cargarProductosSinProveedor(JComboBox<String> comboBox) {
+    private void cargarProductosSinProveedor(JComboBox<Producto> comboBox) {
         comboBox.removeAllItems();
         List<Producto> productos = productoDao.listarProductosSinProveedor();
         for (Producto producto : productos) {
-            comboBox.addItem(producto.getNombre());
-            System.out.println(producto.getNombre());
+            comboBox.addItem(producto);
         }
 
         if (comboBox.getItemCount() > 0) {
@@ -217,21 +234,16 @@ public class PreRegistroProveedor extends JFrame {
     }
 
     public void asignarProveedorAProducto(int idProveedor) {
-        System.out.println("Intentando asignar producto al proveedor: " + idProveedor);
         Producto selectedProducto = getProductoSeleccionado();
         if (selectedProducto == null) {
-            System.out.println("Error: No hay producto seleccionado");
             JOptionPane.showMessageDialog(this, "Por favor seleccione un producto", "Error",
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            System.out.println("Producto seleccionado: ID=" + selectedProducto.getId() + ", Nombre="
-                    + selectedProducto.getNombre());
 
             if (productoDao.asignarProveedor(selectedProducto.getId(), idProveedor)) {
-                System.out.println("Asignación exitosa");
                 JOptionPane.showMessageDialog(this, "Producto asignado exitosamente", "Éxito",
                         JOptionPane.INFORMATION_MESSAGE);
                 // Recargar ambas listas por seguridad
@@ -240,12 +252,10 @@ public class PreRegistroProveedor extends JFrame {
                 if (cboProductoEmpresa != null)
                     cargarProductosSinProveedor(cboProductoEmpresa);
             } else {
-                System.out.println("Error en la asignación");
                 JOptionPane.showMessageDialog(this, "Error al asignar el producto", "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
-            System.out.println("Error inesperado: " + e.getMessage());
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error inesperado al asignar el producto: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -279,6 +289,17 @@ public class PreRegistroProveedor extends JFrame {
         txtNombreEntidad.setBorder(new TitledBorder("Nombre Entidad"));
         cboProductoEmpresa = new JComboBox<>();
         cboProductoEmpresa.setBorder(new TitledBorder("Productos"));
+        cboProductoEmpresa.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Producto) {
+                    setText(((Producto) value).getNombre());
+                }
+                return this;
+            }
+        });
         cargarProductosSinProveedor(cboProductoEmpresa);
         btnAgregarProEmpresa = new JButton("Agregar");
         btnAgregarProEmpresa.setPreferredSize(new Dimension(120, 38));

@@ -106,17 +106,16 @@ public class ControladorProve implements ActionListener {
     private void asignarProductoGuardado(int idProveedor) {
         if (productoSeleccionado != null) {
             if (productoDao.asignarProveedor(productoSeleccionado.getId(), idProveedor)) {
-                System.out.println("Producto asignado exitosamente al proveedor: " + idProveedor);
                 productoSeleccionado = null; // Limpiar después de asignar
                 vista.actualizarListaProductos(); // Actualizar la lista de productos
             } else {
-                System.out.println("Error al asignar el producto al proveedor");
+                JOptionPane.showMessageDialog(null, "Error al asignar el producto al proveedor", "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
     public void setCurrentProviderId(int id) {
-        System.out.println("Estableciendo ID del proveedor actual: " + id);
         this.currentProviderId = id;
     }
 
@@ -160,7 +159,7 @@ public class ControladorProve implements ActionListener {
         nuevo.setDireccion(direccion);
         nuevo.setTelefono(telefonoEntidad);
         nuevo.setCorreo(correoEntidad);
-        nuevo.setEstado(1);
+        nuevo.setEstado(3);
 
         int idInsert = pdao.setAgregar(nuevo);
         setCurrentProviderId(idInsert);
@@ -198,9 +197,6 @@ public class ControladorProve implements ActionListener {
 
         String documento = vista.getPersonaNumeroDoc();
         String nombre = vista.getPersonaNombre();
-
-        System.out.println("Documento: [" + documento + "]");
-        System.out.println("Nombre: [" + nombre + "]");
         int medioPago = vista.getPersonaMedioDePago();
         String direccion = vista.getPersonaDireccion();
         String telefono = vista.getPersonaTelefono();
@@ -227,7 +223,7 @@ public class ControladorProve implements ActionListener {
         nuevo.setDireccion(direccion);
         nuevo.setTelefono(telefono);
         nuevo.setCorreo(correo);
-        nuevo.setEstado(1); // activo por defecto
+        nuevo.setEstado(3); // activo por defecto
 
         int idInsert = pdao.setAgregar(nuevo);
         if (idInsert > 0) {
