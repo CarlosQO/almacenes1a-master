@@ -19,7 +19,7 @@ public class PaginaAprobarProveedor extends JFrame {
     private Header header;
     public JPanel containInfo;
     private Fuente fuente = new Fuente();
-    public JTable tablaVentas;
+    public JTable tablaProveedores;
     public DefaultTableModel modeloTabla;
     private JScrollPane scrollTabla;
 
@@ -61,26 +61,27 @@ public class PaginaAprobarProveedor extends JFrame {
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false;
+                return column == 6
             }
+
         };
-        tablaVentas = new JTable(modeloTabla);
-        tablaVentas.getTableHeader().setPreferredSize(new java.awt.Dimension(0, 45));
-        tablaVentas.getTableHeader().setFont(fuente.fuente(5, true));
-        tablaVentas.getColumnModel().setColumnMargin(10);
-        tablaVentas.setRowSelectionAllowed(false); // No permite seleccionar filas
-        tablaVentas.setColumnSelectionAllowed(false); // No permite seleccionar columnas
-        tablaVentas.setCellSelectionEnabled(false);
+        tablaProveedores = new JTable(modeloTabla);
+        tablaProveedores.getTableHeader().setPreferredSize(new java.awt.Dimension(0, 45));
+        tablaProveedores.getTableHeader().setFont(fuente.fuente(5, true));
+        tablaProveedores.getColumnModel().setColumnMargin(10);
+        tablaProveedores.setRowSelectionAllowed(false); // No permite seleccionar filas
+        tablaProveedores.setColumnSelectionAllowed(false); // No permite seleccionar columnas
+        tablaProveedores.setCellSelectionEnabled(false);
 
         // Estilo visual
-        tablaVentas.getTableHeader().setReorderingAllowed(false);
-        tablaVentas.getTableHeader().setResizingAllowed(false);
-        tablaVentas.setRowHeight(30);
-        tablaVentas.setBackground(new Color(0xD7EEFF)); // color celeste suave
-        tablaVentas.setGridColor(Color.BLACK);
+        tablaProveedores.getTableHeader().setReorderingAllowed(false);
+        tablaProveedores.getTableHeader().setResizingAllowed(false);
+        tablaProveedores.setRowHeight(30);
+        tablaProveedores.setBackground(new Color(0xD7EEFF)); // color celeste suave
+        tablaProveedores.setGridColor(Color.BLACK);
 
         // ScrollPane dentro de containInfo
-        scrollTabla = new JScrollPane(tablaVentas);
+        scrollTabla = new JScrollPane(tablaProveedores);
         scrollTabla.setBounds(0, 0, containInfo.getWidth(), containInfo.getHeight());
         containInfo.add(scrollTabla);
 

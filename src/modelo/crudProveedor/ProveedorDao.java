@@ -91,7 +91,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
     @Override
     public List<Proveedor> listarProveedorPendiente() {
         List<Proveedor> proveedores = new ArrayList<>();
-        String sql = "SELECT * FROM proveedor WHERE estado = 3";
+        String sql = "SELECT proveedor.*, producto.nombre FROM proveedor INNER JOIN producto ON proveedor.id = producto.id_proveedor WHERE proveedor.estado = 3";
         try {
             Connection con = Conexion.getInstance().getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
@@ -119,7 +119,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
     @Override
     public List<Proveedor> listarProveedorActivos() {
         List<Proveedor> proveedores = new ArrayList<>();
-        String sql = "SELECT * FROM proveedor WHERE estado = 1";
+        String sql = "SELECT proveedor.*, producto.nombre FROM proveedor INNER JOIN producto ON proveedor.id = producto.id_proveedor WHERE proveedor.estado = 1";
         try {
             Connection con = Conexion.getInstance().getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
@@ -147,7 +147,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
     @Override
     public List<Proveedor> listarProveedorInactivo() {
         List<Proveedor> proveedores = new ArrayList<>();
-        String sql = "SELECT * FROM proveedor WHERE estado = 2";
+        String sql = "SELECT proveedor.*, producto.nombre FROM proveedor INNER JOIN producto ON proveedor.id = producto.id_proveedor WHERE proveedor.estado = 2";
         try {
             Connection con = Conexion.getInstance().getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
@@ -163,6 +163,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
                 proveedor.setTelefono(rs.getString(7));
                 proveedor.setCorreo(rs.getString(8));
                 proveedor.setEstado(rs.getInt(9));
+                proveedor.setProducto(rs.getString(10));
                 proveedores.add(proveedor);
             }
             return proveedores;
