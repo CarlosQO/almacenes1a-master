@@ -53,7 +53,7 @@ public class PaginaAprobarProveedor extends JFrame {
         containInfo = new JPanel();
         containInfo.setLayout(null);
         containInfo.setBackground(Color.white);
-        containInfo.setBounds(title.getX(), title.getHeight() + title.getY() + 50, 940, 370);
+        containInfo.setBounds(title.getX(), title.getHeight() + title.getY() + 50, 940 + 170, 370);
         // Tabla dentro de containInfo
         String[] columnas = { "<html><p>Nombres<br>Completos</p></html>", "Cedula",
                 "<html><p>Producto/<br>Servicio</p></html>",
@@ -61,11 +61,14 @@ public class PaginaAprobarProveedor extends JFrame {
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 6
+                return column >= 0 && column < getColumnCount() && column == 6;
             }
 
         };
         tablaProveedores = new JTable(modeloTabla);
+        tablaProveedores.getColumnModel().getColumn(1).setPreferredWidth(20);
+        tablaProveedores.getColumnModel().getColumn(4).setPreferredWidth(10);
+        tablaProveedores.getColumnModel().getColumn(6).setPreferredWidth(140);
         tablaProveedores.getTableHeader().setPreferredSize(new java.awt.Dimension(0, 45));
         tablaProveedores.getTableHeader().setFont(fuente.fuente(5, true));
         tablaProveedores.getColumnModel().setColumnMargin(10);
@@ -87,4 +90,12 @@ public class PaginaAprobarProveedor extends JFrame {
 
         contenedor.add(containInfo);
     }
+
+    /*
+     * public static void main(String[] args) {
+     * JFrame frame = new PaginaAprobarProveedor();
+     * frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+     * frame.setVisible(true);
+     * }
+     */
 }
