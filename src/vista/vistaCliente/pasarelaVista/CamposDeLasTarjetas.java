@@ -1,10 +1,13 @@
 package vista.vistaCliente.pasarelaVista;
 
 import java.awt.Font;
+import java.util.Map;
+
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.util.List;
 
 public class CamposDeLasTarjetas {
     private Font fuenteLabel = new Font("Arial", Font.BOLD, 13);
@@ -105,8 +108,9 @@ public class CamposDeLasTarjetas {
     /** Agrega el combo de año */
     public JComboBox<String> agregarComboAnio(JPanel panel, int x, int y, int anioActual) {
         JComboBox<String> cbAnio = new JComboBox<>();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++){
             cbAnio.addItem(String.valueOf(anioActual + i));
+        }
         cbAnio.setName("cbAnio");
         cbAnio.setBounds(x, y, 80, 25);
         panel.add(cbAnio);
@@ -114,20 +118,28 @@ public class CamposDeLasTarjetas {
     }
 
     /** Agrega un combo de tipo de documento a partir de un arreglo */
-    public JComboBox<String> agregarComboTipoDocumento(JPanel panel, int x, int y, String[] tipos) {
+    public JComboBox<String> agregarComboTipoDocumento(JPanel panel, int x, int y, List<Map<Integer, String>> tipos) {
         JLabel lbl = new JLabel("Tipo de documento*");
         lbl.setFont(fuenteLabel);
         lbl.setBounds(x, y, 200, 20);
         panel.add(lbl);
 
         JComboBox<String> cbTipoDoc = new JComboBox<>();
-        for (String tipo : tipos)
-            cbTipoDoc.addItem(tipo);
+
+        // 🔹 Solo recorremos los valores (String) del mapa
+        for (Map<Integer, String> tipo : tipos) {
+            for (String valor : tipo.values()) {
+                cbTipoDoc.addItem(valor);
+            }
+        }
+
         cbTipoDoc.setName("cbTipoDocumento");
-        cbTipoDoc.setBounds(x + 200, y, 100, 25);
+        cbTipoDoc.setBounds(x + 200, y, 150, 25);
         panel.add(cbTipoDoc);
+
         return cbTipoDoc;
     }
+
 
     /** Agrega un combo genérico (por ejemplo banco o tipo de cuenta) */
     public JComboBox<String> agregarComboGenerico(JPanel panel, int x, int y, String etiqueta, String[] opciones,
@@ -138,8 +150,9 @@ public class CamposDeLasTarjetas {
         panel.add(lbl);
 
         JComboBox<String> combo = new JComboBox<>();
-        for (String opcion : opciones)
-            combo.addItem(opcion);
+        for (String opcion : opciones){
+           combo.addItem(opcion); 
+        }  
         combo.setName(nombre);
         combo.setBounds(x + 200, y, 150, 25);
         panel.add(combo);

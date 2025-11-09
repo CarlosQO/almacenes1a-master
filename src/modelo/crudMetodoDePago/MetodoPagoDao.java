@@ -30,4 +30,27 @@ public class MetodoPagoDao {
 
         return metodos;
     }
+
+    public int buscarMetodoDePagoPorId(String nombreMetodoDePago) {
+        String sql = "SELECT id FROM metodo_pago WHERE nombre = ? LIMIT 1";
+
+        try (
+            Connection con = Conexion.getInstance().getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+            ps.setString(1, nombreMetodoDePago);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id"); //  Retorna el ID si existe
+            } else {
+                return 0; //No existe el mtodo de pago
+            }
+        } 
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+            return -1; // Error en la consulta o conexión
+        }
+    }
+
 }

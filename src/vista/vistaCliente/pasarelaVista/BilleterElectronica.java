@@ -2,6 +2,11 @@ package vista.vistaCliente.pasarelaVista;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -20,9 +25,9 @@ public class BilleterElectronica {
     public JButton btnConsignarBilletera;
     public CiudadesDepartamentosColombia ciudadesDepartamentosColombia;
     public JLabel montoConsignacion, agregarMonto;
-    public String[] tiposDoc;
+    public List<Map<Integer, String>> tiposDoc;
 
-    public BilleterElectronica(JFrame frame, String[] tiposDoc) {
+    public BilleterElectronica(JFrame frame, List<Map<Integer, String>> tiposDoc) {
         dialogoBilleteraElectronica = new JDialog(frame, "Billetera Electronica", true);
         dialogoBilleteraElectronica.setTitle("Billetera Electrónica");
         dialogoBilleteraElectronica.setModal(true);
@@ -166,11 +171,11 @@ public class BilleterElectronica {
         this.cbTipoDocBilletera = cbTipoDocBilletera;
     }
 
-    public String[] getTiposDoc() {
+    public List<Map<Integer, String>> getTiposDoc() {
         return tiposDoc;
     }
 
-    public void setTiposDoc(String[] tiposDoc) {
+    public void setTiposDoc(List<Map<Integer, String>> tiposDoc) {
         this.tiposDoc = tiposDoc;
     }
     
@@ -185,7 +190,20 @@ public class BilleterElectronica {
         btnAbrirTarjeta.setBounds(200, 150, 200, 50);
         frame.add(btnAbrirTarjeta);
         
-        String[] tiposDoc = {"CC", "NIT"};
+        List<Map<Integer, String>> tiposDoc = new ArrayList<>();
+
+Map<Integer, String> tipo1 = new HashMap<>();
+tipo1.put(1, "Cédula de ciudadanía");
+
+Map<Integer, String> tipo2 = new HashMap<>();
+tipo2.put(2, "Tarjeta de identidad");
+
+Map<Integer, String> tipo3 = new HashMap<>();
+tipo3.put(3, "Pasaporte");
+
+tiposDoc.add(tipo1);
+tiposDoc.add(tipo2);
+tiposDoc.add(tipo3);
 
         // Acción del botón
         btnAbrirTarjeta.addActionListener(e -> {

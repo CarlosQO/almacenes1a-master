@@ -5,6 +5,11 @@ import java.awt.Font;
 import javax.swing.*;
 import vista.componentes.Validaciones;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Consignacion {
     public JTextField txtNombreConsignacion, txtDocumentoConsignacion, txtNumCuenta, txtDireccion;
     public JComboBox<String> cbTipoDocConsignacion, cbBancoConsignacion, cbTipoCuenta, cbDepartamento, cbCiudad;
@@ -14,7 +19,7 @@ public class Consignacion {
     public double total;
     public CiudadesDepartamentosColombia ciudadesDepartamentosColombia; 
 
-    public Consignacion(JFrame frame, double total) {
+    public Consignacion(JFrame frame, double total, List<Map<Integer, String>> tiposDoc) {
         this.total = total;
 
         // Crear diálogo
@@ -42,7 +47,6 @@ public class Consignacion {
         // Campos
         txtNombreConsignacion = campos.agregarCampoNombreTitular(panel, 20, 10);
 
-        String[] tiposDoc = {"CC", "NIT"};
         cbTipoDocConsignacion = campos.agregarComboTipoDocumento(panel, 20, 50, tiposDoc);
 
 
@@ -262,7 +266,21 @@ public class Consignacion {
 
         // Crear instancia de la ventana de consignación
         double total = 150000; // ejemplo de monto total
-        Consignacion consignacion = new Consignacion(frame, total);
+        List<Map<Integer, String>> tiposDoc = new ArrayList<>();
+
+        Map<Integer, String> tipo1 = new HashMap<>();
+        tipo1.put(1, "Cédula de ciudadanía");
+
+        Map<Integer, String> tipo2 = new HashMap<>();
+        tipo2.put(2, "Tarjeta de identidad");
+
+        Map<Integer, String> tipo3 = new HashMap<>();
+        tipo3.put(3, "Pasaporte");
+
+        tiposDoc.add(tipo1);
+        tiposDoc.add(tipo2);
+        tiposDoc.add(tipo3);
+        Consignacion consignacion = new Consignacion(frame, total, tiposDoc);
 
         // Mostrar el diálogo
         consignacion.dialogoConsignacion.setVisible(true);

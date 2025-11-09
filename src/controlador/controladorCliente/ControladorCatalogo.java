@@ -7,7 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,8 +21,12 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
 import modelo.crudCarrito.*;
+import modelo.crudDocumento.Documento;
+import modelo.crudDocumento.DocumentoDao;
+import modelo.crudMetodoDePago.MetodoPagoDao;
 import modelo.crudProducto.*;
 import modelo.crudPromociones.*;
+import modelo.crudMetodoPago.*;
 import modelo.pasarelaDePagosModelo.*;
 import vista.componentes.CalcularTamañoPanel;
 import vista.componentes.ScrollPersonalizado;
@@ -41,6 +47,7 @@ public class ControladorCatalogo implements ActionListener {
     private BilleterElectronica tarjetaBilletera;
     private Factory factory;
     private PromocionDao daoPromociones;
+    private MetodoPagoDao daoMetodoPago;
 
     public ControladorCatalogo(PanelPrincipal panelPrincipal) {
         this.panelPrincipal = panelPrincipal;
@@ -756,44 +763,50 @@ public class ControladorCatalogo implements ActionListener {
                 // Procesar pago
                 TipoDePago tipoPagoEnum;
                 int idMetodo = 0;
-                if (tipoTrajeta.equalsIgnoreCase("credito")) {
+                 if (tipoTrajeta.equalsIgnoreCase("de Credito")) {
                     tipoPagoEnum = TipoDePago.TARJETA_CREDITO;
-                    idMetodo = 1;
-                } else if (tipoTrajeta.equalsIgnoreCase("debito")) {
+                    idMetodo = daoMetodoPago.buscarMetodoDePagoPorId("Tarjeta de Credito");
+                } else if (tipoTrajeta.equalsIgnoreCase("Debito")) {
                     tipoPagoEnum = TipoDePago.TARJETA_DEBITO;
-                    idMetodo = 2;
+                    idMetodo = daoMetodoPago.buscarMetodoDePagoPorId("Tarjeta Debito");
                 } else {
                     JOptionPane.showMessageDialog(null, "Tipo de tarjeta no válido.");
                     return;
                 }
 
                 // Procesar pago con el tipo correcto
-                ProcesoDePago pago = factory.obtenerPago(tipoPagoEnum);
+                if(idMetodo>0){
+                    ProcesoDePago pago = factory.obtenerPago(tipoPagoEnum);
 
-                if (pago.pagar(valor) == 1) {
-                    procesarFactura(idUsuario, idMetodo, valor, productos, promociones);
-                    // guardarventa
-                    for (ProductosCarrito p : productos) {
-                        guardarVenta(p.getIdProducto(), p.getCantidadProducto());
-                        disminuirStockProductosReal(p.getIdProducto(), p.getCantidadProducto());
-                    }
-
-                    for (PromocionCarrito promo : promociones) {
-                        // Obtener los IDs de los productos que pertenecen a esa promoción
-                        List<Integer> idsProductos = getIdsProductosPromociones(promo.getIdPromocion());
-                        // Registrar la venta de cada producto real
-                        for (int idProducto : idsProductos) {
-                            guardarVenta(idProducto, promo.getCantidadPromocion());// guardar la venta
-                            disminuirStockProductosReal(idProducto, promo.getCantidadPromocion()); // disminuirStock
+                    if (pago.pagar(valor) == 1) {
+                        procesarFactura(idUsuario, idMetodo, valor, productos, promociones);
+                        // guardarventa
+                        for (ProductosCarrito p : productos) {
+                            guardarVenta(p.getIdProducto(), p.getCantidadProducto());
+                            disminuirStockProductosReal(p.getIdProducto(), p.getCantidadProducto());
                         }
-                        // Disminuir el stock de la promoción
-                        disminuirStockPromocionReal(promo.getIdPromocion(), promo.getCantidadPromocion());
-                    }
 
-                    actualizarPromocionesSiExisten();
-                    cargarProductos();
-                    limpiarCarrito(idUsuario);
-                    tarjeta.dialogoTarjeta.dispose();
+                        for (PromocionCarrito promo : promociones) {
+                            // Obtener los IDs de los productos que pertenecen a esa promoción
+                            List<Integer> idsProductos = getIdsProductosPromociones(promo.getIdPromocion());
+                            // Registrar la venta de cada producto real
+                            for (int idProducto : idsProductos) {
+                                guardarVenta(idProducto, promo.getCantidadPromocion());// guardar la venta
+                                disminuirStockProductosReal(idProducto, promo.getCantidadPromocion()); // disminuirStock
+                            }
+                            // Disminuir el stock de la promoción
+                            disminuirStockPromocionReal(promo.getIdPromocion(), promo.getCantidadPromocion());
+                        }
+
+                        actualizarPromocionesSiExisten();
+                        cargarProductos();
+                        limpiarCarrito(idUsuario);
+                        tarjeta.dialogoTarjeta.dispose();
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, 
+                        "Se produjo un error al conectar con la pasarela de pago.","Error de conexión", JOptionPane.ERROR_MESSAGE
+                    );
                 }
             }
         });
@@ -802,8 +815,8 @@ public class ControladorCatalogo implements ActionListener {
 
     public void mostrarDialogoConsignacion(double valor, List<ProductosCarrito> productos,
             List<PromocionCarrito> promociones) {
-        tarjetaConsignacion = new Consignacion(frame, valor);
-        tarjetaConsignacion.btnConsignar.addActionListener(eConsignar -> {
+            tarjetaConsignacion = new Consignacion(frame, valor, cargarTiposDocumento());
+            tarjetaConsignacion.btnConsignar.addActionListener(eConsignar -> {
             boolean validacionesConsignacion = tarjetaConsignacion.validarCamposConsignacion();
             if (validacionesConsignacion) {
                 String nombreConsignacion = tarjetaConsignacion.getTxtNombreConsignacion().getText().trim();
@@ -824,29 +837,36 @@ public class ControladorCatalogo implements ActionListener {
 
                 ProcesoDePago pagoConsignacion = factory.obtenerPago(TipoDePago.CONSIGNACION);
                 if (pagoConsignacion.pagar(valor) == 1) {
-                    procesarFactura(idUsuario, 3, valor, productos, promociones);
-                    // guardarventa
-                    for (ProductosCarrito p : productos) {
-                        guardarVenta(p.getIdProducto(), p.getCantidadProducto());
-                        disminuirStockProductosReal(p.getIdProducto(), p.getCantidadProducto());
-                    }
-
-                    for (PromocionCarrito promo : promociones) {
-                        // Obtener los IDs de los productos que pertenecen a esa promoción
-                        List<Integer> idsProductos = getIdsProductosPromociones(promo.getIdPromocion());
-                        // Registrar la venta de cada producto real
-                        for (int idProducto : idsProductos) {
-                            guardarVenta(idProducto, promo.getCantidadPromocion());// guardar la venta
-                            disminuirStockProductosReal(idProducto, promo.getCantidadPromocion()); // disminuirStock
+                    int idMetodo = daoMetodoPago.buscarMetodoDePagoPorId("Consignacion");
+                    if(idMetodo>0){
+                        procesarFactura(idUsuario, idMetodo, valor, productos, promociones);
+                        // guardarventa
+                        for (ProductosCarrito p : productos) {
+                            guardarVenta(p.getIdProducto(), p.getCantidadProducto());
+                            disminuirStockProductosReal(p.getIdProducto(), p.getCantidadProducto());
                         }
-                        // Disminuir el stock de la promoción
-                        disminuirStockPromocionReal(promo.getIdPromocion(), promo.getCantidadPromocion());
-                    }
 
-                    actualizarPromocionesSiExisten();
-                    cargarProductos();
-                    limpiarCarrito(idUsuario);
-                    tarjetaConsignacion.dialogoConsignacion.dispose();
+                        for (PromocionCarrito promo : promociones) {
+                            // Obtener los IDs de los productos que pertenecen a esa promoción
+                            List<Integer> idsProductos = getIdsProductosPromociones(promo.getIdPromocion());
+                            // Registrar la venta de cada producto real
+                            for (int idProducto : idsProductos) {
+                                guardarVenta(idProducto, promo.getCantidadPromocion());// guardar la venta
+                                disminuirStockProductosReal(idProducto, promo.getCantidadPromocion()); // disminuirStock
+                            }
+                            // Disminuir el stock de la promoción
+                            disminuirStockPromocionReal(promo.getIdPromocion(), promo.getCantidadPromocion());
+                        }
+
+                        actualizarPromocionesSiExisten();
+                        cargarProductos();
+                        limpiarCarrito(idUsuario);
+                        tarjetaConsignacion.dialogoConsignacion.dispose();
+                    }else{
+                        JOptionPane.showMessageDialog(null, 
+                        "Se produjo un error al conectar con la pasarela de pago.","Error de conexión", JOptionPane.ERROR_MESSAGE
+                        );
+                    }
                 }
             }
         });
@@ -855,8 +875,8 @@ public class ControladorCatalogo implements ActionListener {
 
     public void mostrarDiaologoBilleteraElectronica(double valortotal, List<ProductosCarrito> productos,
             List<PromocionCarrito> promociones) {
-        tarjetaBilletera = new BilleterElectronica(frame);
-        tarjetaBilletera.btnConsignarBilletera.addActionListener(eBilletera -> {
+            tarjetaBilletera = new BilleterElectronica(frame, cargarTiposDocumento());
+            tarjetaBilletera.btnConsignarBilletera.addActionListener(eBilletera -> {
             boolean validacionesBilleteraElectronica = tarjetaBilletera.validarCamposBilletera();
             if (validacionesBilleteraElectronica) {
                 String bancoBilletera = tarjetaBilletera.getCbBancoBilletera().getSelectedItem().toString();
@@ -875,36 +895,57 @@ public class ControladorCatalogo implements ActionListener {
                     // Validar y eliminar productos o promociones sin stock o inactivos
                     daoCarrito.validarStockItemsCarrito(idUsuario);
 
-                    // Procesar factura
-                    procesarFactura(idUsuario, 4, valortotal, productos, promociones);
+                    int idMetodo = daoMetodoPago.buscarMetodoDePagoPorId("Billetera Electronica");
+                    if(idMetodo>0){
+                        // Procesar factura
+                        procesarFactura(idUsuario, idMetodo, valortotal, productos, promociones);
 
-                    // Registrar ventas y disminuir stock real de productos
-                    for (ProductosCarrito p : productos) {
-                        guardarVenta(p.getIdProducto(), p.getCantidadProducto());
-                        disminuirStockProductosReal(p.getIdProducto(), p.getCantidadProducto());
-                    }
-
-                    // Disminuir stock real de promociones y guardar venta productos de la promo
-                    for (PromocionCarrito promo : promociones) {
-                        // Obtener los IDs de los productos que pertenecen a esa promoción
-                        List<Integer> idsProductos = getIdsProductosPromociones(promo.getIdPromocion());
-                        // Registrar la venta de cada producto real
-                        for (int idProducto : idsProductos) {
-                            guardarVenta(idProducto, promo.getCantidadPromocion());// guardar la venta
-                            disminuirStockProductosReal(idProducto, promo.getCantidadPromocion()); // disminuirStock
+                        // Registrar ventas y disminuir stock real de productos
+                        for (ProductosCarrito p : productos) {
+                            guardarVenta(p.getIdProducto(), p.getCantidadProducto());
+                            disminuirStockProductosReal(p.getIdProducto(), p.getCantidadProducto());
                         }
-                        // Disminuir el stock de la promoción
-                        disminuirStockPromocionReal(promo.getIdPromocion(), promo.getCantidadPromocion());
-                    }
 
-                    actualizarPromocionesSiExisten();
-                    cargarProductos();
-                    limpiarCarrito(idUsuario);// Limpiar carrito
-                    tarjetaBilletera.dialogoBilleteraElectronica.dispose();
+                        // Disminuir stock real de promociones y guardar venta productos de la promo
+                        for (PromocionCarrito promo : promociones) {
+                            // Obtener los IDs de los productos que pertenecen a esa promoción
+                            List<Integer> idsProductos = getIdsProductosPromociones(promo.getIdPromocion());
+                            // Registrar la venta de cada producto real
+                            for (int idProducto : idsProductos) {
+                                guardarVenta(idProducto, promo.getCantidadPromocion());// guardar la venta
+                                disminuirStockProductosReal(idProducto, promo.getCantidadPromocion()); // disminuirStock
+                            }
+                            // Disminuir el stock de la promoción
+                            disminuirStockPromocionReal(promo.getIdPromocion(), promo.getCantidadPromocion());
+                        }
+
+                        actualizarPromocionesSiExisten();
+                        cargarProductos();
+                        limpiarCarrito(idUsuario);// Limpiar carrito
+                        tarjetaBilletera.dialogoBilleteraElectronica.dispose();
+                    }else{
+                        JOptionPane.showMessageDialog(null, 
+                            "Se produjo un error al conectar con la pasarela de pago.","Error de conexión", JOptionPane.ERROR_MESSAGE
+                        );
+                    }
                 }
             }
         });
         tarjetaBilletera.dialogoBilleteraElectronica.setVisible(true);
+    }
+
+    public List<Map<Integer, String>> cargarTiposDocumento() {
+        DocumentoDao dao = new DocumentoDao();
+        List<Documento> documentos = dao.listar();
+
+        List<Map<Integer, String>> tiposDoc = new ArrayList<>();
+
+        for (Documento doc : documentos) {
+            Map<Integer, String> mapa = new HashMap<>();
+            mapa.put(doc.getId(), doc.getNombre());
+            tiposDoc.add(mapa);
+        }
+        return tiposDoc;
     }
 
     // procesos para la venta
