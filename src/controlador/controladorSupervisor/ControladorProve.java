@@ -187,6 +187,7 @@ public class ControladorProve implements ActionListener {
         int idInsert = pdao.setAgregar(nuevo);
 
         if (idInsert > 0) {
+            this.currentProviderId = idInsert;
             JOptionPane.showMessageDialog(null, "Proveedor agregado correctamente.", "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
             if (productoSeleccionado != null) {
