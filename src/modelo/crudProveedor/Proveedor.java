@@ -10,9 +10,10 @@ public class Proveedor {
     private String telefono;
     private String correo;
     private int estado;
+    private int idProducto;
 
     public Proveedor(int id, String tipo, String nombre, String documento, int metodoDePago, String direccion,
-            String telefono, String correo, int estado) {
+            String telefono, String correo, int estado, int idProducto) {
         this.id = id;
         this.tipo = tipo;
         this.nombre = nombre;
@@ -22,6 +23,7 @@ public class Proveedor {
         this.telefono = telefono;
         this.correo = correo;
         this.estado = estado;
+        this.idProducto = idProducto;
     }
 
     public Proveedor() {
@@ -98,6 +100,14 @@ public class Proveedor {
 
     public String getTipo() {
         return tipo;
+    }
+
+    public int getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
     }
 
 }

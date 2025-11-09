@@ -1,7 +1,7 @@
 package modelo.crudProducto;
 
 public class Producto {
-    private int id, idCategoria, idEstado, cantidad, idProveedor;
+    private int id, idCategoria, idEstado, cantidad;
     private String nombre, talla, imagen, descripcion, fechaRegistro, categoria, estado;
     private Double precio;
 
@@ -116,13 +116,5 @@ public class Producto {
 
     public void setPrecio(Double precio) {
         this.precio = precio;
-    }
-
-    public int getIdProveedor() {
-        return idProveedor;
-    }
-
-    public void setIdProveedor(int idProveedor) {
-        this.idProveedor = idProveedor;
     }
 }
