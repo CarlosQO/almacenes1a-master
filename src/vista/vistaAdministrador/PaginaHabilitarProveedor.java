@@ -21,6 +21,7 @@ public class PaginaHabilitarProveedor extends JFrame {
     private Fuente fuente = new Fuente();
     public JXTextField busqueda;
     public RoundedJXButton buscar;
+    private RoundedPanel panelBusqueda;
 
     public PaginaHabilitarProveedor() {
         super("Habilitar proveedor");
@@ -48,13 +49,24 @@ public class PaginaHabilitarProveedor extends JFrame {
                 40);
         contenedor.add(title);
 
+        panelBusqueda = new RoundedPanel(20, 0x000000);
+        panelBusqueda.setBounds(title.getX(), header.getHeight() + header.getY() + 100, 300, 50);
+        panelBusqueda.setLayout(null);
+        panelBusqueda.setShadowSize(1);
+
         busqueda = new JXTextField();
         limitarCaracteres(busqueda, 10);
         busqueda.setFont(fuente.fuente(3, false));
-        busqueda.setMargin(new java.awt.Insets(0, 10, 0, 10));
+        busqueda.setBackground(null);
+        busqueda.setOpaque(false);
+        busqueda.setBorder(null);
+        busqueda.setPrompt("Documento o NIT");
+        busqueda.setPromptForeground(new Color(128, 128, 128));
         limitarCaracteres(busqueda, 20);
-        busqueda.setBounds(title.getX(), header.getHeight() + header.getY() + 100, 400, 40);
-        contenedor.add(busqueda);
+        busqueda.setBounds(1, 0, 250, 40);
+        panelBusqueda.add(busqueda);
+
+        contenedor.add(panelBusqueda);
     }
 
     public static void main(String[] args) {
