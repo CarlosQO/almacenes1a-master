@@ -25,9 +25,9 @@ public class BilleterElectronica {
     public JButton btnConsignarBilletera;
     public CiudadesDepartamentosColombia ciudadesDepartamentosColombia;
     public JLabel montoConsignacion, agregarMonto;
-    public List<Map<Integer, String>> tiposDoc;
+    public List<Map<Integer, String>> tiposDoc, bancos;
 
-    public BilleterElectronica(JFrame frame, List<Map<Integer, String>> tiposDoc) {
+    public BilleterElectronica(JFrame frame, List<Map<Integer, String>> tiposDoc, List<Map<Integer, String>> bancos) {
         dialogoBilleteraElectronica = new JDialog(frame, "Billetera Electronica", true);
         dialogoBilleteraElectronica.setTitle("Billetera Electrónica");
         dialogoBilleteraElectronica.setModal(true);
@@ -51,8 +51,7 @@ public class BilleterElectronica {
         CamposDeLasTarjetas campos = new CamposDeLasTarjetas();
 
         // Banco
-        String[] bancos = {"Bancolombia", "Davivienda", "BBVA", "Banco de Bogotá"};
-        cbBancoBilletera = campos.agregarComboGenerico(panel, 20, 10, "Elige un Banco*", bancos, "cbBancoBilletera");
+        cbBancoBilletera = campos.agregarComboBanco(panel, 20, 10, "Elige un Banco*", bancos, "cbBancoBilletera");
 
         // Tipo de documento
         cbTipoDocBilletera = campos.agregarComboTipoDocumento(panel, 20, 50, tiposDoc);
@@ -104,67 +103,67 @@ public class BilleterElectronica {
     }
     
     public boolean validarCamposBilletera() {
-    String errores = "";
+        String errores = "";
 
-    // Documento
-    String tipoDoc = (String) cbTipoDocBilletera.getSelectedItem();
-    String documento = txtDocumentoBilletera.getText().trim();
+        // Documento
+        String tipoDoc = (String) cbTipoDocBilletera.getSelectedItem();
+        String documento = txtDocumentoBilletera.getText().trim();
 
-    if (tipoDoc == null || tipoDoc.equals("Seleccione tipo de documento")) {
-        errores += "- Debe seleccionar un tipo de documento.\n";
-    } else {
-        if (documento.isEmpty()) {
-            errores += "- El número de documento no puede estar vacío.\n";
+        if (tipoDoc == null || tipoDoc.equals("Seleccione tipo de documento")) {
+            errores += "- Debe seleccionar un tipo de documento.\n";
         } else {
-            if (tipoDoc.equals("CC") || tipoDoc.equals("TI")) {
-                if (!Validaciones.validarCedula(documento)) {
-                    errores += "- Cédula o tarjeta de identidad inválida (debe tener entre 9 y 11 dígitos).\n";
-                }
-            } else if (tipoDoc.equals("NIT")) {
-                if (!Validaciones.validarNIT(documento)) {
-                    errores += "- NIT inválido (Ej: 900123456 o 900123456-7).\n";
+            if (documento.isEmpty()) {
+                errores += "- El número de documento no puede estar vacío.\n";
+            } else {
+                if (tipoDoc.equals("CC") || tipoDoc.equals("TI")) {
+                    if (!Validaciones.validarCedula(documento)) {
+                        errores += "- Cédula o tarjeta de identidad inválida (debe tener entre 9 y 11 dígitos).\n";
+                    }
+                } else if (tipoDoc.equals("NIT")) {
+                    if (!Validaciones.validarNIT(documento)) {
+                        errores += "- NIT inválido (Ej: 900123456 o 900123456-7).\n";
+                    }
                 }
             }
         }
+
+
+        // Banco
+        String banco = (String) cbBancoBilletera.getSelectedItem();
+        if (banco == null || banco.equals("Seleccione un banco")) {
+            errores += "- Debe seleccionar un banco.\n";
+        }
+
+        // Departamento
+        String departamento = (String) cbDepartamento.getSelectedItem();
+        if (departamento == null || departamento.equals("Seleccione un departamento")) {
+            errores += "- Debe seleccionar un departamento.\n";
+        }
+
+        // Ciudad
+        String ciudad = (String) cbCiudad.getSelectedItem();
+        if (ciudad == null || ciudad.equals("Seleccione una ciudad")) {
+            errores += "- Debe seleccionar una ciudad.\n";
+        }
+
+        // Dirección
+        String direccion = txtDireccion.getText().trim();
+        if (direccion.isEmpty()) {
+            errores += "- La dirección no puede estar vacía.\n";
+        } else if (!Validaciones.validarDireccion(direccion)) {
+            errores += "- Dirección inválida. Debe contener letras y números (Ej: Calle 45 #12-34).\n";
+        }
+
+
+        // Mostrar todos los errores juntos si existen
+        if (!errores.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Se encontraron los siguientes errores:\n\n" + errores,
+                    "Errores en el formulario", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return true;
     }
-
-
-    // Banco
-    String banco = (String) cbBancoBilletera.getSelectedItem();
-    if (banco == null || banco.equals("Seleccione un banco")) {
-        errores += "- Debe seleccionar un banco.\n";
-    }
-
-    // Departamento
-    String departamento = (String) cbDepartamento.getSelectedItem();
-    if (departamento == null || departamento.equals("Seleccione un departamento")) {
-        errores += "- Debe seleccionar un departamento.\n";
-    }
-
-    // Ciudad
-    String ciudad = (String) cbCiudad.getSelectedItem();
-    if (ciudad == null || ciudad.equals("Seleccione una ciudad")) {
-        errores += "- Debe seleccionar una ciudad.\n";
-    }
-
-    // Dirección
-    String direccion = txtDireccion.getText().trim();
-    if (direccion.isEmpty()) {
-        errores += "- La dirección no puede estar vacía.\n";
-    } else if (!Validaciones.validarDireccion(direccion)) {
-        errores += "- Dirección inválida. Debe contener letras y números (Ej: Calle 45 #12-34).\n";
-    }
-
-
-    // Mostrar todos los errores juntos si existen
-    if (!errores.isEmpty()) {
-        JOptionPane.showMessageDialog(null, "Se encontraron los siguientes errores:\n\n" + errores,
-                "Errores en el formulario", JOptionPane.WARNING_MESSAGE);
-        return false;
-    }
-
-    return true;
-}
 
 
     
@@ -232,7 +231,7 @@ tiposDoc.add(tipo3);
 
         // Acción del botón
         btnAbrirTarjeta.addActionListener(e -> {
-            BilleterElectronica tarjeta = new BilleterElectronica(frame, tiposDoc);
+            BilleterElectronica tarjeta = new BilleterElectronica(frame, tiposDoc, tiposDoc);
             tarjeta.dialogoBilleteraElectronica.setVisible(true);
         });
 

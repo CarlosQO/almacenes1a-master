@@ -20,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
+import modelo.crudBancos.Banco;
+import modelo.crudBancos.DaoBancos;
 import modelo.crudCarrito.*;
 import modelo.crudDocumento.Documento;
 import modelo.crudDocumento.DocumentoDao;
@@ -801,6 +803,8 @@ public class ControladorCatalogo implements ActionListener {
                         cargarProductos();
                         limpiarCarrito(idUsuario);
                         tarjeta.dialogoTarjeta.dispose();
+                        pasarela.getDialogo().setVisible(false);
+                        
                     }
                 }else{
                     JOptionPane.showMessageDialog(null, 
@@ -814,7 +818,7 @@ public class ControladorCatalogo implements ActionListener {
 
     public void mostrarDialogoConsignacion(double valor, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
 
-            tarjetaConsignacion = new Consignacion(frame, valor, cargarTiposDocumento());
+            tarjetaConsignacion = new Consignacion(frame, valor, cargarTiposDocumento(), listarBancos());
 
             tarjetaConsignacion.btnConsignar.addActionListener(eConsignar -> {
             boolean validacionesConsignacion = tarjetaConsignacion.validarCamposConsignacion();
@@ -862,6 +866,7 @@ public class ControladorCatalogo implements ActionListener {
                         cargarProductos();
                         limpiarCarrito(idUsuario);
                         tarjetaConsignacion.dialogoConsignacion.dispose();
+                        pasarela.getDialogo().setVisible(false);
                     }else{
                         JOptionPane.showMessageDialog(null, 
                         "Se produjo un error al conectar con la pasarela de pago.","Error de conexión", JOptionPane.ERROR_MESSAGE
@@ -874,7 +879,7 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     public void mostrarDiaologoBilleteraElectronica(double valortotal, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
-        tarjetaBilletera = new BilleterElectronica(frame, cargarTiposDocumento());
+        tarjetaBilletera = new BilleterElectronica(frame, cargarTiposDocumento(), listarBancos());
 
         tarjetaBilletera.btnConsignarBilletera.addActionListener(eBilletera -> {
             boolean validacionesBilleteraElectronica = tarjetaBilletera.validarCamposBilletera();
@@ -924,6 +929,7 @@ public class ControladorCatalogo implements ActionListener {
                         cargarProductos();
                         limpiarCarrito(idUsuario);// Limpiar carrito
                         tarjetaBilletera.dialogoBilleteraElectronica.dispose();
+                        pasarela.getDialogo().setVisible(false);
                     }else{
                         JOptionPane.showMessageDialog(null, 
                             "Se produjo un error al conectar con la pasarela de pago.","Error de conexión", JOptionPane.ERROR_MESSAGE
@@ -936,18 +942,42 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     public List<Map<Integer, String>> cargarTiposDocumento() {
-        DocumentoDao dao = new DocumentoDao();
-        List<Documento> documentos = dao.listar();
+        DocumentoDao daoDocumento = new DocumentoDao();
+        List<Documento> documentos = daoDocumento.listar();
 
         List<Map<Integer, String>> tiposDoc = new ArrayList<>();
 
-        for (Documento doc : documentos) {
-            Map<Integer, String> mapa = new HashMap<>();
-            mapa.put(doc.getId(), doc.getNombre());
-            tiposDoc.add(mapa);
+        try {
+            for (Documento doc : documentos) {
+                Map<Integer, String> mapa = new HashMap<>();
+                mapa.put(doc.getId(), doc.getNombre());
+                tiposDoc.add(mapa);
+            }
+        }catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener la lista de tipos de documento: " + e.getMessage());
         }
         return tiposDoc;
     }
+
+    public List<Map<Integer, String>> listarBancos() {
+        DaoBancos daoBancos = new DaoBancos();
+        List<Banco> bancos = daoBancos.listarBancos();
+
+        List<Map<Integer, String>> listaBancos = new ArrayList<>();
+
+        try {
+            for(Banco banco: bancos){
+                Map<Integer, String> mapa = new HashMap<>();
+                mapa.put(banco.getIdBanco(), banco.getNombreBanco());
+                listaBancos.add(mapa);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener la lista de bancos: " + e.getMessage());
+        }
+
+        return listaBancos;
+    }
+
 
     // procesos para la venta
     public void procesarFactura(int idUsuario, int idMetodoPago, double total, List<ProductosCarrito> productos,

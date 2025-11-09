@@ -19,7 +19,7 @@ public class Consignacion {
     public double total;
     public CiudadesDepartamentosColombia ciudadesDepartamentosColombia; 
 
-    public Consignacion(JFrame frame, double total, List<Map<Integer, String>> tiposDoc) {
+    public Consignacion(JFrame frame, double total, List<Map<Integer, String>> tiposDoc, List<Map<Integer, String>>bancos) {
         this.total = total;
 
         // Crear diálogo
@@ -54,8 +54,7 @@ public class Consignacion {
         txtDocumentoConsignacion = campos.agregarCampoDocumento(panel, 20, 90);
         panel.add(txtDocumentoConsignacion);
 
-        String[] bancos = {"Bancolombia", "Davivienda", "BBVA", "Banco de Bogotá", "Nequi"};
-        cbBancoConsignacion = campos.agregarComboGenerico(panel, 20, 130, "Elige un banco*", bancos, "cbBancoConsignacion");
+        cbBancoConsignacion = campos.agregarComboBanco(panel, 20, 130, "Elige un banco*", bancos, "cbBancoConsignacion");
 
         String[] tiposCuenta = {"Ahorros", "Corriente"};
         cbTipoCuenta = campos.agregarComboGenerico(panel, 20, 170, "Tipo de cuenta*", tiposCuenta, "cbTipoCuenta");
@@ -302,7 +301,7 @@ public class Consignacion {
         tiposDoc.add(tipo1);
         tiposDoc.add(tipo2);
         tiposDoc.add(tipo3);
-        Consignacion consignacion = new Consignacion(frame, total, tiposDoc);
+        Consignacion consignacion = new Consignacion(frame, total, tiposDoc, tiposDoc);
 
         // Mostrar el diálogo
         consignacion.dialogoConsignacion.setVisible(true);
