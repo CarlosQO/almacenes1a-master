@@ -12,15 +12,18 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
     private final RoundedJXButton btnAprobar;
     private final RoundedJXButton btnRechazar;
     private int idProveedorActual;
+    private AccionProveedorListener listener;
 
-    public AccionesRendererEditor() {
+    public AccionesRendererEditor(AccionProveedorListener listener) {
         panel = new JPanel();
         panel.setLayout(null);
-        panel.setOpaque(false); // 🔹 Hace el panel completamente transparente
-        panel.setBorder(null); // 🔹 Sin borde
+        panel.setOpaque(false);
+        panel.setBorder(null);
 
         btnAprobar = new RoundedJXButton("Aprobar");
         btnRechazar = new RoundedJXButton("Rechazar");
+        btnAprobar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnRechazar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         btnAprobar.setBounds(0, 3, 90, 28);
         btnAprobar.setBaseColor(new Color(46, 204, 113)); // Verde
@@ -41,10 +44,22 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
                     "Confirmar Aprobación",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                proveedorDao.CambiarEstado(idProveedorActual, 1);
-                JOptionPane.showMessageDialog(null, "Proveedor aprobado correctamente.");
+                int result = proveedorDao.CambiarEstado(idProveedorActual, 1);
+                if (result != 0) {
+                    JOptionPane.showMessageDialog(null, "Se actualizó correctamente el estado del proveedor");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo actualizar el estado del proveedor");
+                }
+
+                // ✅ Finaliza la edición antes de recargar la tabla
+                SwingUtilities.invokeLater(() -> {
+                    stopCellEditing();
+                    if (listener != null)
+                        listener.onProveedorActualizado();
+                });
+            } else {
+                stopCellEditing();
             }
-            stopCellEditing();
         });
 
         // Evento botón Rechazar
@@ -55,8 +70,15 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 JOptionPane.showMessageDialog(null, "Proveedor rechazado correctamente.");
+
+                SwingUtilities.invokeLater(() -> {
+                    stopCellEditing();
+                    if (listener != null)
+                        listener.onProveedorActualizado();
+                });
+            } else {
+                stopCellEditing();
             }
-            stopCellEditing();
         });
     }
 

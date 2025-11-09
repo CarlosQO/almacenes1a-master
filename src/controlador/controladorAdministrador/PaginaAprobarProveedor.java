@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import controladorAdministrador.action.AccionesRendererEditor;
@@ -30,19 +28,29 @@ public class PaginaAprobarProveedor implements ActionListener {
     private List<Proveedor> proveedores = new ArrayList<>();
 
     private void cargarProveedoresInactivos() {
-        // Tomar el modelo actual (NO crear uno nuevo)
         DefaultTableModel modelo = (DefaultTableModel) paginaAprobarProveedor.tablaProveedores.getModel();
-        modelo.setRowCount(0); // Limpia filas pero mantiene el diseño original
+        modelo.setRowCount(0);
 
-        proveedores = prDao.listarProveedorInactivo();
+        proveedores = prDao.listarProveedorPendiente();
 
         if (proveedores.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No hay proveedores inactivos");
-            paginaAprobarProveedor.containInfo.setVisible(false);
-            return;
-        }
+            // JOptionPane.showMessageDialog(null, "No hay proveedores inactivos");
+            if (!paginaAprobarProveedor.noHayProvee.isVisible()) {
+                paginaAprobarProveedor.noHayProvee.setVisible(true);
+            }
 
-        paginaAprobarProveedor.containInfo.setVisible(true);
+            if (paginaAprobarProveedor.containInfo.isVisible()) {
+                paginaAprobarProveedor.containInfo.setVisible(false);
+            }
+            return;
+        } else {
+            if (!paginaAprobarProveedor.containInfo.isVisible()) {
+                paginaAprobarProveedor.containInfo.setVisible(true);
+            }
+            if (paginaAprobarProveedor.noHayProvee.isVisible()) {
+                paginaAprobarProveedor.noHayProvee.setVisible(false);
+            }
+        }
 
         for (Proveedor proveedor : proveedores) {
             Object[] datos = {
@@ -57,20 +65,19 @@ public class PaginaAprobarProveedor implements ActionListener {
             modelo.addRow(datos);
         }
 
-        // Aplica el renderer/editor SOLO a la columna "Acciones" (sin tocar el resto
-        // del modelo)
-        int colAcciones = paginaAprobarProveedor.tablaProveedores.getColumnCount() - 1; // Última columna
+        int totalCols = paginaAprobarProveedor.tablaProveedores.getColumnCount();
+        if (totalCols > 6) {
+            paginaAprobarProveedor.tablaProveedores.getColumnModel()
+                    .getColumn(6)
+                    .setCellRenderer(new AccionesRendererEditor(() -> cargarProveedoresInactivos()));
 
-        paginaAprobarProveedor.tablaProveedores.getColumnModel()
-                .getColumn(colAcciones)
-                .setCellRenderer(new AccionesRendererEditor());
+            paginaAprobarProveedor.tablaProveedores.getColumnModel()
+                    .getColumn(6)
+                    .setCellEditor(new AccionesRendererEditor(() -> cargarProveedoresInactivos()));
 
-        paginaAprobarProveedor.tablaProveedores.getColumnModel()
-                .getColumn(colAcciones)
-                .setCellEditor(new AccionesRendererEditor());
-
-        // Mejora visual (opcional)
-        paginaAprobarProveedor.tablaProveedores.setRowHeight(35);
+            paginaAprobarProveedor.tablaProveedores.setRowHeight(35);
+        } else {
+            System.out.println("La columna 'Acciones' no está disponible (total columnas: " + totalCols + ")");
+        }
     }
-
 }

@@ -22,6 +22,7 @@ public class PaginaAprobarProveedor extends JFrame {
     public JTable tablaProveedores;
     public DefaultTableModel modeloTabla;
     private JScrollPane scrollTabla;
+    public JLabel noHayProvee;
 
     public PaginaAprobarProveedor() {
         super("Aprobar proveedor");
@@ -49,8 +50,18 @@ public class PaginaAprobarProveedor extends JFrame {
                 40);
         contenedor.add(title);
 
+        noHayProvee = new JLabel();
+        noHayProvee.setVisible(false);
+        noHayProvee.setText("No hay proveedores por aprobar");
+        noHayProvee.setFont(fuente.fuente(3, false));
+        noHayProvee.setBounds(400, title.getHeight() + title.getY() + 150,
+                (int) noHayProvee.getPreferredSize().getWidth() + 50,
+                40);
+        contenedor.add(noHayProvee);
+
         // Contenedor de información
         containInfo = new JPanel();
+        containInfo.setVisible(false);
         containInfo.setLayout(null);
         containInfo.setBackground(Color.white);
         containInfo.setBounds(title.getX(), title.getHeight() + title.getY() + 50, 940 + 170, 370);
@@ -90,12 +101,4 @@ public class PaginaAprobarProveedor extends JFrame {
 
         contenedor.add(containInfo);
     }
-
-    /*
-     * public static void main(String[] args) {
-     * JFrame frame = new PaginaAprobarProveedor();
-     * frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-     * frame.setVisible(true);
-     * }
-     */
 }
