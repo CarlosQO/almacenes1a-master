@@ -5,7 +5,11 @@ import java.awt.Container;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
 
 import org.jdesktop.swingx.JXTextField;
 
@@ -22,6 +26,10 @@ public class PaginaHabilitarProveedor extends JFrame {
     public JXTextField busqueda;
     public RoundedJXButton buscar;
     private RoundedPanel panelBusqueda;
+    public DefaultTableModel modeloTabla;
+    private JScrollPane scrollTabla;
+    public JPanel containInfo;
+    public JTable tablaProveInactivo;
 
     public PaginaHabilitarProveedor() {
         super("Habilitar proveedor");
@@ -55,22 +63,68 @@ public class PaginaHabilitarProveedor extends JFrame {
         panelBusqueda.setShadowSize(1);
 
         busqueda = new JXTextField();
-        limitarCaracteres(busqueda, 10);
-        busqueda.setFont(fuente.fuente(3, false));
-        busqueda.setBackground(null);
-        busqueda.setOpaque(false);
-        busqueda.setBorder(null);
         busqueda.setPrompt("Documento o NIT");
         busqueda.setPromptForeground(new Color(128, 128, 128));
-        limitarCaracteres(busqueda, 20);
-        busqueda.setBounds(1, 0, 250, 40);
+        busqueda.setFont(fuente.fuente(3, false));
+        busqueda.setBackground(null);
+        busqueda.setBorder(null);
+        limitarCaracteres(busqueda, 10);
+        busqueda.setBounds(8, 5, 270, 40);
+        limitarCaracteres(busqueda, 10);
         panelBusqueda.add(busqueda);
 
+        buscar = new RoundedJXButton("Buscar");
+        buscar.setFont(fuente.fuente(3, false));
+        buscar.setBounds(panelBusqueda.getWidth() + panelBusqueda.getX() + 20, panelBusqueda.getY(), 200, 50);
+        contenedor.add(buscar);
         contenedor.add(panelBusqueda);
+
+        // Contenedor de información
+        containInfo = new JPanel();
+        containInfo.setLayout(null);
+        containInfo.setBackground(Color.white);
+        containInfo.setBounds(title.getX(), panelBusqueda.getHeight() + panelBusqueda.getY() + 20, 940 + 170, 370);
+
+        String[] columnas = { "<html><p>Nombres<br>Proveedor</p></html>", "<html><p>Documento<br>NIT</p></html>",
+                "<html><p>Producto/<br>Servicio</p></html>",
+                "Medio de Pago", "Contacto", "Estado Actual", "Acciones" };
+        modeloTabla = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column >= 0 && column < getColumnCount() && column == 6;
+            }
+
+        };
+        tablaProveInactivo = new JTable(modeloTabla);
+        tablaProveInactivo.getColumnModel().getColumn(1).setPreferredWidth(20);
+        tablaProveInactivo.getColumnModel().getColumn(4).setPreferredWidth(10);
+        tablaProveInactivo.getColumnModel().getColumn(6).setPreferredWidth(140);
+        tablaProveInactivo.getTableHeader().setPreferredSize(new java.awt.Dimension(0, 45));
+        tablaProveInactivo.getTableHeader().setFont(fuente.fuente(5, true));
+        tablaProveInactivo.getColumnModel().setColumnMargin(10);
+        tablaProveInactivo.setRowSelectionAllowed(false); // No permite seleccionar filas
+        tablaProveInactivo.setColumnSelectionAllowed(false); // No permite seleccionar columnas
+        tablaProveInactivo.setCellSelectionEnabled(false);
+
+        // Estilo visual
+        tablaProveInactivo.getTableHeader().setReorderingAllowed(false);
+        tablaProveInactivo.getTableHeader().setResizingAllowed(false);
+        tablaProveInactivo.setRowHeight(30);
+        tablaProveInactivo.setBackground(new Color(0xD7EEFF)); // color celeste suave
+        tablaProveInactivo.setGridColor(Color.BLACK);
+
+        // ScrollPane dentro de containInfo
+        scrollTabla = new JScrollPane(tablaProveInactivo);
+        scrollTabla.setBounds(0, 0, containInfo.getWidth(), containInfo.getHeight());
+        containInfo.add(scrollTabla);
+
+        contenedor.add(containInfo);
+
     }
 
     public static void main(String[] args) {
         PaginaHabilitarProveedor ventana = new PaginaHabilitarProveedor();
         ventana.setVisible(true);
+        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
