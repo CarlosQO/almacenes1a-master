@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
+import modelo.crudDocumento.DocumentoDao;
 
-public class MetodoPagoDao {
+public class MetodoPagoDao implements CrudMetodosPago<MetodoPago>{
+    @Override
     public List<MetodoPago> listarMetodosPago() {
         List<MetodoPago> metodos = new ArrayList<>();
         String sql = "SELECT id, nombre FROM metodo_pago";
@@ -31,6 +33,7 @@ public class MetodoPagoDao {
         return metodos;
     }
 
+    @Override
     public int buscarMetodoDePagoPorId(String nombreMetodoDePago) {
         String sql = "SELECT id FROM metodo_pago WHERE nombre = ? LIMIT 1";
 
@@ -42,8 +45,9 @@ public class MetodoPagoDao {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                return rs.getInt("id"); //  Retorna el ID si existe
+                 return rs.getInt("id"); //  Retorna el ID si existe
             } else {
+                 JOptionPane.showMessageDialog(null, "Método de pago no esta disponible por el momento... ");
                 return 0; //No existe el mtodo de pago
             }
         } 
@@ -52,5 +56,10 @@ public class MetodoPagoDao {
             return -1; // Error en la consulta o conexión
         }
     }
+public static void main(String[] args) {
+    MetodoPagoDao dao = new MetodoPagoDao(); // o tu clase real
+    int id = dao.buscarMetodoDePagoPorId("Tarjeta de Crédito");
+    System.out.println("Resultado: " + id);
+}
 
 }

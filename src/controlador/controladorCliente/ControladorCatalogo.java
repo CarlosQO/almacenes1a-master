@@ -61,6 +61,7 @@ public class ControladorCatalogo implements ActionListener {
         daoProducto = new ProductoDao();
         daoCarrito = new DaoCarrito();
         daoPromociones = new PromocionDao();
+        daoMetodoPago = new MetodoPagoDao();
 
         actualizarPromocionesSiExisten();
         cargarProductos();
@@ -741,17 +742,16 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     // metodos de pago
-    public void mostrarDialogoTarjeta(String tipoTrajeta, double valor, List<ProductosCarrito> productos,
-            List<PromocionCarrito> promociones) {
+    public void mostrarDialogoTarjeta(String tipoTrajeta, double valor, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
         tarjeta = new Tarjetas(frame, tipoTrajeta);
         tarjeta.btnFinalizar.addActionListener(e -> {
+
             if (tarjeta.validarCamposTarjeta()) {
                 // Obtener datos
                 String numeroTarjeta = tarjeta.getTxtTarjeta().getText().trim();
                 String cvv = tarjeta.getTxtCVV().getText().trim();
                 String nombreTitular = tarjeta.getTxtNombreTarjeta().getText().trim();
-                String fecha = tarjeta.getCbAnio().getSelectedItem().toString() + "-"
-                        + tarjeta.getCbMes().getSelectedItem().toString();
+                String fecha = tarjeta.getCbAnio().getSelectedItem().toString() + "-" + tarjeta.getCbMes().getSelectedItem().toString();
 
                 // Asignar a factory
                 factory.setNumeroTarjeta(numeroTarjeta);
@@ -763,17 +763,16 @@ public class ControladorCatalogo implements ActionListener {
                 // Procesar pago
                 TipoDePago tipoPagoEnum;
                 int idMetodo = 0;
-                 if (tipoTrajeta.equalsIgnoreCase("de Credito")) {
+                 if (tipoTrajeta.equalsIgnoreCase("credito")) {
                     tipoPagoEnum = TipoDePago.TARJETA_CREDITO;
                     idMetodo = daoMetodoPago.buscarMetodoDePagoPorId("Tarjeta de Credito");
-                } else if (tipoTrajeta.equalsIgnoreCase("Debito")) {
+                } else if (tipoTrajeta.equalsIgnoreCase("debito")) {
                     tipoPagoEnum = TipoDePago.TARJETA_DEBITO;
                     idMetodo = daoMetodoPago.buscarMetodoDePagoPorId("Tarjeta Debito");
                 } else {
                     JOptionPane.showMessageDialog(null, "Tipo de tarjeta no válido.");
                     return;
                 }
-
                 // Procesar pago con el tipo correcto
                 if(idMetodo>0){
                     ProcesoDePago pago = factory.obtenerPago(tipoPagoEnum);
@@ -813,9 +812,10 @@ public class ControladorCatalogo implements ActionListener {
         tarjeta.dialogoTarjeta.setVisible(true);
     }
 
-    public void mostrarDialogoConsignacion(double valor, List<ProductosCarrito> productos,
-            List<PromocionCarrito> promociones) {
+    public void mostrarDialogoConsignacion(double valor, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
+
             tarjetaConsignacion = new Consignacion(frame, valor, cargarTiposDocumento());
+
             tarjetaConsignacion.btnConsignar.addActionListener(eConsignar -> {
             boolean validacionesConsignacion = tarjetaConsignacion.validarCamposConsignacion();
             if (validacionesConsignacion) {
@@ -873,11 +873,12 @@ public class ControladorCatalogo implements ActionListener {
         tarjetaConsignacion.dialogoConsignacion.setVisible(true);
     }
 
-    public void mostrarDiaologoBilleteraElectronica(double valortotal, List<ProductosCarrito> productos,
-            List<PromocionCarrito> promociones) {
-            tarjetaBilletera = new BilleterElectronica(frame, cargarTiposDocumento());
-            tarjetaBilletera.btnConsignarBilletera.addActionListener(eBilletera -> {
+    public void mostrarDiaologoBilleteraElectronica(double valortotal, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
+        tarjetaBilletera = new BilleterElectronica(frame, cargarTiposDocumento());
+
+        tarjetaBilletera.btnConsignarBilletera.addActionListener(eBilletera -> {
             boolean validacionesBilleteraElectronica = tarjetaBilletera.validarCamposBilletera();
+            JOptionPane.showMessageDialog(null, validacionesBilleteraElectronica);
             if (validacionesBilleteraElectronica) {
                 String bancoBilletera = tarjetaBilletera.getCbBancoBilletera().getSelectedItem().toString();
                 String tipoDocBilletera = tarjetaBilletera.getCbTipoDocBilletera().getSelectedItem().toString().trim();

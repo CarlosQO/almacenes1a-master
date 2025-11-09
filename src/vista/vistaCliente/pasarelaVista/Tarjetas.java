@@ -114,8 +114,9 @@ public class Tarjetas{
         this.tipoTarjeta = tipoTarjeta;
     }
     
-    public boolean validarCamposTarjeta(){
-        boolean resultado = true;
+    public boolean validarCamposTarjeta() {
+        String errores = "";
+
         String numeroTarjeta = getTxtTarjeta().getText().trim();
         String cvv = getTxtCVV().getText().trim();
         String nombreTitular = getTxtNombreTarjeta().getText().trim();
@@ -141,43 +142,58 @@ public class Tarjetas{
             anio = getCbAnio().getSelectedItem().toString();
         }
 
-        if (!Validaciones.validarNumeroCuenta(numeroTarjeta)) {
-            JOptionPane.showMessageDialog(null, "Número de tarjeta inválido");
-            resultado = false;
+        // --- Validaciones ---
+
+        if (numeroTarjeta.isEmpty()) {
+            errores += "- El número de tarjeta no puede estar vacío.\n";
+        
+        } else if (!Validaciones.validarNumeroCuenta(numeroTarjeta)) {
+            errores += "- Número de tarjeta inválido.\n";
         }
 
-        if (!Validaciones.validarCVV(cvv)) {
-            JOptionPane.showMessageDialog(null, "CVV inválido (3 o 4 dígitos)");
-            resultado = false;
+        if (cvv.isEmpty()) {
+            errores += "- El CVV no puede estar vacío.\n";
+        } else if (!Validaciones.validarCVV(cvv)) {
+            errores += "- CVV inválido (3 o 4 dígitos).\n";
         }
 
-        if (!Validaciones.validarLetras(nombreTitular)) {
-            JOptionPane.showMessageDialog(null, "El nombre solo debe contener letras");
-            resultado = false;
+        if (nombreTitular.isEmpty()) {
+            errores += "- El nombre del titular no puede estar vacío.\n";
+        } else if (!Validaciones.validarLetras(nombreTitular)) {
+            errores += "- El nombre solo debe contener letras.\n";
         }
 
-        if (departamento.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un departamento");
-            resultado = false;
+        if (departamento.isEmpty() || departamento.equals("Seleccione un departamento")) {
+            errores += "- Debe seleccionar un departamento.\n";
         }
 
-        if (ciudad.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar una ciudad");
-            resultado = false;
+        if (ciudad.isEmpty() || ciudad.equals("Seleccione una ciudad")) {
+            errores += "- Debe seleccionar una ciudad.\n";
         }
 
         if (direccion.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "La dirección no puede estar vacía");
-            resultado = false;
+            errores += "- La dirección no puede estar vacía.\n";
+        } else if (!Validaciones.validarDireccion(direccion)) {
+            errores += "- Dirección inválida. Debe contener letras y números (Ej: Calle 45 #12-34).\n";
         }
 
-        if (mes.isEmpty() || anio.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar mes y año");
-            resultado = false;
+        if (mes.isEmpty() || mes.equals("Mes") || anio.isEmpty() || anio.equals("Año")) {
+            errores += "- Debe seleccionar el mes y año de vencimiento.\n";
+            return false;
         }
-        return resultado;
+
+        //  Mostrar errores 
+        if (!errores.isEmpty()) {
+            JOptionPane.showMessageDialog(dialogoTarjeta,
+                "Se encontraron los siguientes errores:\n\n" + errores,
+                "Errores en los campos de la tarjeta",
+                JOptionPane.WARNING_MESSAGE);
+        }
+
+        return true;
     }
-    
+
+
     public JDialog getDialogotarjeta() { return dialogoTarjeta; }
 
     public JTextField getTxtTarjeta() {

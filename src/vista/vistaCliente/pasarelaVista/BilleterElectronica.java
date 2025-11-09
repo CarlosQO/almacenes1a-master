@@ -104,45 +104,70 @@ public class BilleterElectronica {
     }
     
     public boolean validarCamposBilletera() {
-        
-        if (cbBancoBilletera.getSelectedItem() == null
-            || cbBancoBilletera.getSelectedItem().toString() == null
-            || cbBancoBilletera.getSelectedItem().toString().trim().isEmpty()) {
+    String errores = "";
 
-            JOptionPane.showMessageDialog(dialogoBilleteraElectronica, "Debe seleccionar un banco");
-            return false;
-        }
+    // Documento
+    String tipoDoc = (String) cbTipoDocBilletera.getSelectedItem();
+    String documento = txtDocumentoBilletera.getText().trim();
 
-        if (cbTipoDocBilletera.getSelectedItem() == null
-            || cbTipoDocBilletera.getSelectedItem().toString() == null
-            || cbTipoDocBilletera.getSelectedItem().toString().trim().isEmpty()) {
-
-            JOptionPane.showMessageDialog(dialogoBilleteraElectronica, "Debe seleccionar un tipo de documento");
-            return false;
-        }
-
-        String tipoDoc = cbTipoDocBilletera.getSelectedItem().toString().trim();
-        String documento = txtDocumentoBilletera.getText().trim();
-
-        if (documento == null || documento.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(dialogoBilleteraElectronica, "El número de documento no puede estar vacío");
-            return false;
-        }
-        
-        if (tipoDoc.equals("CC")) {
-            if (!Validaciones.validarCedula(documento)) {
-                JOptionPane.showMessageDialog(dialogoBilleteraElectronica, "Cédula inválida (9 a 11 dígitos)");
-                return false;
-            }
-        } else if (tipoDoc.equals("NIT")) {
-            if (!Validaciones.validarNumeros(documento)) {
-                JOptionPane.showMessageDialog(dialogoBilleteraElectronica, "El NIT solo debe contener números");
-                return false;
+    if (tipoDoc == null || tipoDoc.equals("Seleccione tipo de documento")) {
+        errores += "- Debe seleccionar un tipo de documento.\n";
+    } else {
+        if (documento.isEmpty()) {
+            errores += "- El número de documento no puede estar vacío.\n";
+        } else {
+            if (tipoDoc.equals("CC") || tipoDoc.equals("TI")) {
+                if (!Validaciones.validarCedula(documento)) {
+                    errores += "- Cédula o tarjeta de identidad inválida (debe tener entre 9 y 11 dígitos).\n";
+                }
+            } else if (tipoDoc.equals("NIT")) {
+                if (!Validaciones.validarNIT(documento)) {
+                    errores += "- NIT inválido (Ej: 900123456 o 900123456-7).\n";
+                }
             }
         }
-        return true;
     }
 
+
+    // Banco
+    String banco = (String) cbBancoBilletera.getSelectedItem();
+    if (banco == null || banco.equals("Seleccione un banco")) {
+        errores += "- Debe seleccionar un banco.\n";
+    }
+
+    // Departamento
+    String departamento = (String) cbDepartamento.getSelectedItem();
+    if (departamento == null || departamento.equals("Seleccione un departamento")) {
+        errores += "- Debe seleccionar un departamento.\n";
+    }
+
+    // Ciudad
+    String ciudad = (String) cbCiudad.getSelectedItem();
+    if (ciudad == null || ciudad.equals("Seleccione una ciudad")) {
+        errores += "- Debe seleccionar una ciudad.\n";
+    }
+
+    // Dirección
+    String direccion = txtDireccion.getText().trim();
+    if (direccion.isEmpty()) {
+        errores += "- La dirección no puede estar vacía.\n";
+    } else if (!Validaciones.validarDireccion(direccion)) {
+        errores += "- Dirección inválida. Debe contener letras y números (Ej: Calle 45 #12-34).\n";
+    }
+
+
+    // Mostrar todos los errores juntos si existen
+    if (!errores.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Se encontraron los siguientes errores:\n\n" + errores,
+                "Errores en el formulario", JOptionPane.WARNING_MESSAGE);
+        return false;
+    }
+
+    return true;
+}
+
+
+    
     public JDialog getDialogoBilleteraElectronica() {
         return dialogoBilleteraElectronica;
     }

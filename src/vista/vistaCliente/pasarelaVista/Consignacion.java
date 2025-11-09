@@ -114,13 +114,13 @@ public class Consignacion {
         dialogoConsignacion.add(btnConsignar);
     }
 
-
     public boolean validarCamposConsignacion() {
-        boolean resultado = true;
+        String errores = "";
 
         String nombre = txtNombreConsignacion.getText().trim();
         String documento = txtDocumentoConsignacion.getText().trim();
         String numeroCuenta = txtNumCuenta.getText().trim();
+        String direccion = txtDireccion.getText().trim();
 
         String tipoDoc = "";
         if (cbTipoDocConsignacion.getSelectedItem() != null) {
@@ -136,7 +136,7 @@ public class Consignacion {
         if (cbTipoCuenta.getSelectedItem() != null) {
             tipoCuenta = cbTipoCuenta.getSelectedItem().toString();
         }
-        
+
         String departamento = "";
         if (cbDepartamento.getSelectedItem() != null) {
             departamento = cbDepartamento.getSelectedItem().toString();
@@ -147,54 +147,76 @@ public class Consignacion {
             ciudad = cbCiudad.getSelectedItem().toString();
         }
 
-        // VALIDACIONES
-        if (!Validaciones.validarLetras(nombre)) {
-            JOptionPane.showMessageDialog(dialogoConsignacion, "El nombre solo debe contener letras");
-            resultado = false;
+        // ===== VALIDACIONES =====
+
+        // Nombre
+        if (nombre.isEmpty()) {
+            errores += "- El nombre no puede estar vacío.\n";
+        } else if (!Validaciones.validarLetras(nombre)) {
+            errores += "- El nombre solo debe contener letras.\n";
         }
 
+        // Tipo y número de documento
         if (tipoDoc.isEmpty()) {
-            JOptionPane.showMessageDialog(dialogoConsignacion, "Debe seleccionar un tipo de documento");
-            resultado = false;
+            errores += "- Debe seleccionar un tipo de documento.\n";
         } else {
-            if (tipoDoc.equals("CC")) {
+            if (tipoDoc.equals("CC") || tipoDoc.equals("TI")) {
                 if (!Validaciones.validarCedula(documento)) {
-                    JOptionPane.showMessageDialog(dialogoConsignacion, "Cédula inválida (9 a 11 dígitos)");
-                    resultado = false;
+                    errores += "- Cédula / TI inválida (9 a 11 dígitos).\n";
                 }
             } else if (tipoDoc.equals("NIT")) {
-                if (!Validaciones.validarNIT(documento)) { // asegurate de haber agregado validarNIT en Validaciones
-                    JOptionPane.showMessageDialog(dialogoConsignacion, "NIT inválido (ej: 900123456 o 900123456-7)");
-                    resultado = false;
+                if (!Validaciones.validarNIT(documento)) {
+                    errores += "- NIT inválido (ej: 900123456 o 900123456-7).\n";
+                }
+            } else {
+                // Si tipoDoc tiene otro formato y documento vacío
+                if (documento.isEmpty()) {
+                    errores += "- Debe ingresar el número de documento.\n";
                 }
             }
         }
 
+        // Banco
         if (banco.isEmpty()) {
-            JOptionPane.showMessageDialog(dialogoConsignacion, "Debe seleccionar un banco");
-            resultado = false;
+            errores += "- Debe seleccionar un banco.\n";
         }
 
+        // Tipo de cuenta
         if (tipoCuenta.isEmpty()) {
-            JOptionPane.showMessageDialog(dialogoConsignacion, "Debe seleccionar un tipo de cuenta");
-            resultado = false;
+            errores += "- Debe seleccionar un tipo de cuenta.\n";
         }
 
-        if (!Validaciones.validarNumeroCuenta(numeroCuenta)) {
-            JOptionPane.showMessageDialog(dialogoConsignacion, "Número de cuenta inválido (debe iniciar en 4 o 5 y tener 13 a 16 dígitos)");
-            resultado = false;
-        }
-        
-         if (departamento.isEmpty()) {
-            JOptionPane.showMessageDialog(dialogoConsignacion, "Debe seleccionar un departamento.");
-            resultado = false;
+        // Número de cuenta
+        if (numeroCuenta.isEmpty()) {
+            errores += "- El número de cuenta no puede estar vacío.\n";
+        } else if (!Validaciones.validarNumeroCuenta(numeroCuenta)) {
+            errores += "- Número de cuenta inválido (debe iniciar en 4 o 5 y tener 13 a 16 dígitos).\n";
         }
 
+        // Departamento y ciudad
+        if (departamento.isEmpty()) {
+            errores += "- Debe seleccionar un departamento.\n";
+        }
         if (ciudad.isEmpty()) {
-            JOptionPane.showMessageDialog(dialogoConsignacion, "Debe seleccionar una ciudad.");
-            resultado = false;
+            errores += "- Debe seleccionar una ciudad.\n";
         }
-        return resultado;
+
+        // Dirección (usando tu método)
+        if (direccion.isEmpty()) {
+            errores += "- La dirección no puede estar vacía.\n";
+        } else if (!Validaciones.validarDireccion(direccion)) {
+            errores += "- Dirección inválida. Debe contener letras y números (Ej: Calle 45 #12-34).\n";
+        }
+
+        // Mostrar todos los errores juntos, si hay
+        if (!errores.isEmpty()) {
+            JOptionPane.showMessageDialog(dialogoConsignacion, errores,
+                "Errores en el formulario",
+                JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return true;
     }
 
     public JTextField getTxtNombreConsignacion() {
