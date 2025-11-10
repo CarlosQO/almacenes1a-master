@@ -69,8 +69,6 @@ public class Validaciones {
         return true;
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
      public static boolean validarNumeros(String texto) {
         return Pattern.matches("^\\d+$", texto);
     }
@@ -110,7 +108,7 @@ public class Validaciones {
         return Pattern.matches(regex, texto.trim());
     }
 
-=======
+
     public static boolean validarDescripcion(String texto) {
         if (texto == null)
             return false;
@@ -177,8 +175,7 @@ public class Validaciones {
         int cantidad = Integer.parseInt(texto);
         return cantidad > 0;
     }
->>>>>>> master
-=======
+
     public static boolean validarNIT(String nit) {
         return Pattern.matches("^\\d{5,12}(-\\d)?$", nit);
     }
@@ -191,12 +188,7 @@ public class Validaciones {
         return Pattern.matches("^[45]\\d{12,15}$", texto);
     }
 
-    public static boolean validarNumeros(String texto) {
-        return Pattern.matches("^\\d+$", texto);
-    }
-
     public static boolean validarCVV(String texto) {
         return Pattern.matches("^\\d{3,4}", texto);
     }
->>>>>>> cliente
 }

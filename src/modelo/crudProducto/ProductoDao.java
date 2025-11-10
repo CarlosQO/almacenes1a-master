@@ -402,7 +402,6 @@ public class ProductoDao implements CrudProducto<Producto> {
         }
     }
 
-<<<<<<< HEAD
     @Override
     public boolean registrarProducto(int id, String nombre, int cantidad, double precio, String descripcion,
             String talla, String imagen, int idCategoria, int idEstado) {
@@ -560,28 +559,27 @@ public class ProductoDao implements CrudProducto<Producto> {
                     JOptionPane.ERROR_MESSAGE);
             return false;
         }
-=======
-    //cantidad
+    }
+
+    // cantidad
     @Override
     public int obtenerCantidadCategoriasConProductos() {
         String sql = "SELECT COUNT(DISTINCT id_categoria) AS total FROM producto";
         int total = 0;
 
         try (
-            Connection con = Conexion.getInstance().getConnection();
-            PreparedStatement ps = con.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-        ) {
+                Connection con = Conexion.getInstance().getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();) {
             if (rs.next()) {
                 total = rs.getInt("total");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.toString(), 
-                "Error al obtener cantidad de categorías con productos", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e.toString(),
+                    "Error al obtener cantidad de categorías con productos", JOptionPane.ERROR_MESSAGE);
         }
 
         return total;
->>>>>>> cliente
     }
 
 }
