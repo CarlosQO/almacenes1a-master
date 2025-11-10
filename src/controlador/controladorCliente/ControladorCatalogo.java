@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -182,12 +183,26 @@ public class ControladorCatalogo implements ActionListener {
         return daoPromociones.numeroPromociones();
     }
 
+    //buscar categorias
+    public String buscarCategoria(int idCategoria) {
+        /* 
+        DaoCategoriasProductos dao = new DaoCategoriasProductos();
+        String nombreCategoria = dao.buscarNombreCategoria(idCategoria);
+        
+        if (nombreCategoria == null || nombreCategoria.isEmpty()) {
+            return "Sin categoría";
+        }
+        return nombreCategoria;
+        */
+        return "categoria";
+    }
+
     // listar
     public void getListarProductos(JPanel panelTarjetasProductos) throws IOException {
         // Mostrar mensaje temporal mientras carga
         panelTarjetasProductos.removeAll();
         // Crear SwingWorker con publish/process
-        SwingWorker<Void, TarjetaProducto> worker = new SwingWorker<Void, TarjetaProducto>() {
+        SwingWorker<Void, JComponent> worker = new SwingWorker<Void, JComponent>() {
 
             @Override
             protected Void doInBackground() throws Exception {
@@ -202,11 +217,36 @@ public class ControladorCatalogo implements ActionListener {
                 int separacionX = 50, separacionY = 50;
                 int columnas = 3; // queremos máximo 3 tarjetas por fila
                 int contador = 0;
+
+                int contadorGlobal = 0;
+                int categoriaActual = -1;
+                int yCategoria = yInicial;
                 for (Producto p : listaProductos) {
+                    if (p.getIdCategoria() != categoriaActual) {
+                        categoriaActual = p.getIdCategoria();
+                        String nombreCategoria = buscarCategoria(categoriaActual);
+
+                        // Calcular posición del nombre de la categoría
+                        int posYCategoria = yInicial + ((contadorGlobal / columnas) * (altoTarjeta + separacionY));
+
+                        JLabel lblCategoria = new JLabel(nombreCategoria);
+                        lblCategoria.setFont(new Font("Arial", Font.BOLD, 18));
+                        lblCategoria.setForeground(Color.BLACK);
+                        lblCategoria.setBounds(xInicial, posYCategoria, 300, 30);
+
+                        publish(lblCategoria);
+
+                        // Avanza una "línea" más abajo para comenzar las tarjetas
+                        yCategoria = posYCategoria + 40;
+                        contadorGlobal = (contadorGlobal / columnas) * columnas; // mantiene alineación
+                    
+                    }
+
                     // Crear la tarjeta
                     TarjetaProducto tarjeta = new TarjetaProducto(
                             p.getId(), p.getImagen(), p.getNombre(), p.getTalla(), p.getDescripcion(), p.getPrecio());
 
+                    
                     // Listener para agregar al carrito
                     tarjeta.agregarAlCarrito.addActionListener(e -> {
                         agregarACarritoProductosDeCompras(
@@ -248,21 +288,24 @@ public class ControladorCatalogo implements ActionListener {
                     });
 
                     // Calcular posición de la tarjeta
-                    int posX = xInicial + (contador % columnas) * (anchoTarjeta + separacionX);
-                    int posY = yInicial + (contador / columnas) * (altoTarjeta + separacionY);
-                    tarjeta.setBounds(posX, posY, anchoTarjeta, altoTarjeta);
+                    int fila = contadorGlobal / columnas;
+                    int col = contadorGlobal % columnas;
 
-                    // Publicar la tarjeta para que se agregue al panel inmediatamente
-                    publish(tarjeta);
-                    contador++;
-                }
-                return null;
+                    int posX = xInicial + (col * (anchoTarjeta + separacionX));
+                    int posY = yCategoria + (fila * (altoTarjeta + separacionY));
+
+                    tarjeta.setBounds(posX, posY, anchoTarjeta, altoTarjeta);
+                        // Publicar la tarjeta para que se agregue al panel inmediatamente
+                        publish(tarjeta);
+                        contadorGlobal++;
+                    }
+                    return null;
             }
 
             @Override
-            protected void process(List<TarjetaProducto> chunks) {
+            protected void process(List<JComponent> chunks) {
                 // Se ejecuta en el hilo de la interfaz
-                for (TarjetaProducto tarjeta : chunks) {
+                for (JComponent  tarjeta : chunks) {
                     panelTarjetasProductos.add(tarjeta);
                     panelTarjetasProductos.revalidate();
                     panelTarjetasProductos.repaint();
@@ -977,7 +1020,6 @@ public class ControladorCatalogo implements ActionListener {
 
         return listaBancos;
     }
-
 
     // procesos para la venta
     public void procesarFactura(int idUsuario, int idMetodoPago, double total, List<ProductosCarrito> productos,
