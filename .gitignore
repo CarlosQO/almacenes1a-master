@@ -1,12 +1,10 @@
 # === Carpetas de compilación ===
 /build/
-/dist/
 /out/
 /target/
 
 # === Carpetas del IDE ===
 /.nbproject/private/
-/.vscode/
 /.idea/
 /.classpath
 /.project
@@ -24,14 +22,7 @@ Thumbs.db
 ehthumbs.db
 desktop.ini
 
-# === Archivos Java compilados ===
-*.class
-*.jar
-*.war
-*.ear
-
 # === Dependencias (si las descargas localmente) ===
-/lib/
 /dependencies/
 /node_modules/
 
@@ -43,3 +34,4 @@ desktop.ini
 # === Archivos específicos que no quieres subir ===
 build.xml
 manifest.mf
+dist/almacenes1a.jar

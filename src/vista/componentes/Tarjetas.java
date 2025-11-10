@@ -27,7 +27,7 @@ public class Tarjetas extends RoundedPanel {
     public RoundedPanel containDetalle;
     public JLabel nombreCamisa, cantidad, precio;
     public JLabel talla, cantidadNum, precioNum;
-    public JXPanel imgPanel; // Cambiado a JXPanel
+    public JXPanel imgPanel;
     public RoundedPanel promocionar;
     private Fuente fuente = new Fuente();
 

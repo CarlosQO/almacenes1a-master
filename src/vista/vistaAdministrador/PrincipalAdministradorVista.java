@@ -27,12 +27,12 @@ public class PrincipalAdministradorVista extends JFrame {
         private Container container;
         private JPanel principal, histoContain, proveeContain;
         private RoundedPanel principalContainer, header, cuerpo;
-        private RoundedPanel historiVentaPeri, historiTendeCompra, carritoContain;
+        private RoundedPanel carritoContain;
         private JLabel icono, user, titulo, permisos, promociones, reportes, historicos, proveedores, cerrarSesion;
         private RoundedPanel listaProvee, aprobarProvee, contratoProvee, modificarInfo, deshabiliProvee,
                         habilitarProvee;
         public RoundedPanel confiRol, promoContain, producMasVendi, producMenVendi,
-                        informeGlobal, histoVentas;
+                        informeGlobal, histoVentas, historiVentaPeri, historiTendeCompra;
         public JLabel actualizarPerfil;
         private static boolean carritoBooleano = false;
 
@@ -330,6 +330,7 @@ public class PrincipalAdministradorVista extends JFrame {
 
                 // historiVentaPeri
                 historiVentaPeri = new RoundedPanel(20, 0x9E9C9C);
+                historiVentaPeri.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 historiVentaPeri.setShadowSize(1);
                 historiVentaPeri.setLayout(null);
                 historiVentaPeri.setBackground(Color.WHITE);
@@ -345,6 +346,7 @@ public class PrincipalAdministradorVista extends JFrame {
 
                 // historiTendeCompra
                 historiTendeCompra = new RoundedPanel(20, 0x9E9C9C);
+                historiTendeCompra.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 historiTendeCompra.setShadowSize(1);
                 historiTendeCompra.setLayout(null);
                 historiTendeCompra.setBackground(Color.WHITE);
@@ -363,13 +365,12 @@ public class PrincipalAdministradorVista extends JFrame {
                 ScrollPersonalizado scrollHist = new ScrollPersonalizado(histoContain, "horizontal",
                                 (int) (cuerpo.getWidth() * 0.35),
                                 100);
+                scrollHist.habilitarArrastreEnHijos(histoContain);
                 scrollHist.setBounds(20, historicos.getY() + historicos.getHeight() + 10,
                                 (int) (cuerpo.getWidth() * 0.35),
                                 100);
 
                 cuerpo.add(scrollHist);
-                cuerpo.revalidate();
-                cuerpo.repaint();
 
                 // añadir el titulo del modulo de proveedores
                 proveedores = new JLabel("Proveedores                                                   >");
@@ -480,6 +481,7 @@ public class PrincipalAdministradorVista extends JFrame {
 
                 // Crear scroll personalizado para Proveedores
                 ScrollPersonalizado scrollProvee = new ScrollPersonalizado(proveeContain, "horizontal", 655, 100);
+                scrollProvee.habilitarArrastreEnHijos(proveeContain);
                 scrollProvee.setBounds((int) (scrollHist.getX() + scrollHist.getWidth() + 20),
                                 historicos.getY() + historicos.getHeight() + 10, 655, 100);
                 cuerpo.add(scrollProvee);

@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -21,6 +22,7 @@ import javax.swing.text.JTextComponent;
 
 import vista.fuenteLetra.Fuente;
 import vista.vistaAdministrador.RoundedPanel;
+
 
 public class Promociones extends JFrame {
 
@@ -59,7 +61,7 @@ public class Promociones extends JFrame {
         // agregar el JLabel de nombre de la promocion
         nombreProm = new JTextField();
         nombreProm.setBackground(Color.white);
-        limitarCaracteres(nombreProm, 30);
+        limitarCaracteres(nombreProm, 15);
         nombreProm.setFont(fuente.fuente(5, false));
         nombreProm.setBounds(10, (int) titlePromocion.getHeight() + 15, 270, 40);
         nombreProm.setBorder(crearTituloSinLinea("Nombre de la promoción", new Color(0x787878)));
@@ -89,7 +91,7 @@ public class Promociones extends JFrame {
         descripcionProm.setBounds(nombreProm.getWidth() + 20, nombreProm.getY(), 200, 90);
         descripcionProm.setFont(fuente.fuente(5, false));
         descripcionProm.setBorder(crearTituloSinLinea("Descripción", new Color(0x787878)));
-        limitarCaracteres(descripcionProm, 80);
+        limitarCaracteres(descripcionProm, 55);
         container.add(descripcionProm);
 
         // Agregar la url de la imagen
@@ -131,6 +133,7 @@ public class Promociones extends JFrame {
                 btnPublicar.setBackground(new Color(0x75A6F3));
             }
         });
+        container.add(btnPublicar);
 
         // Agregar el campo de cantidad
         cantidad = new JTextField();
@@ -139,6 +142,7 @@ public class Promociones extends JFrame {
         cantidad.setBorder(crearTituloSinLinea("Cantidad a Promocionar", new Color(0x787878)));
         cantidad.setBounds(nombreProm.getX(), btnPublicar.getY(), 170, 40);
         cantidad.setHorizontalAlignment(JTextField.CENTER);
+        limitarCaracteres(cantidad, 7);
         container.add(cantidad);
 
         // Agregar el campo de precioTotal
@@ -151,7 +155,6 @@ public class Promociones extends JFrame {
         PrecioTotal.setBorder(crearTituloSinLinea("Precio Total", new Color(0x787878)));
         container.add(PrecioTotal);
 
-        container.add(btnPublicar);
     }
 
     public static Border crearTituloSinLinea(String titulo, Color colorTexto) {
@@ -184,5 +187,24 @@ public class Promociones extends JFrame {
         urlImagenSeleccionada = "";
         cantidad.setText("");
         idSegundoProductoSeleccionado = 0;
+    }
+
+    public boolean validarCampos() {
+        if (!Validaciones.validarNombrePromocion(nombreProm.getText())) {
+            JOptionPane.showMessageDialog(null,
+                    "El nombre de la promocion no es valido, debe tener entre 10 y 15 letras, ademas debe tener mas del 50% de letras");
+            return false;
+        }
+        if (!Validaciones.validarDescripcion(descripcionProm.getText())) {
+            JOptionPane.showMessageDialog(null,
+                    "La descripcion de la promocion no es valida, debe tener entre 20 y 55 letras, ademas debe tener mas del 50% de letras");
+            return false;
+        }
+        if (!Validaciones.validarCantidadPromocionar(cantidad.getText())) {
+            JOptionPane.showMessageDialog(null,
+                    "La cantidad de productos a promocionar debe ser mayor a 0 o no debe contener letras");
+            return false;
+        }
+        return true;
     }
 }

@@ -71,7 +71,6 @@ public class HistoricoVentaDao implements CrudHistoricoVenta {
                 fila[13] = rs.getString("estado_pedido");
                 datos.add(fila);
             }
-
         } catch (Exception e) {
             System.out.println("Error al listar el histórico de ventas: " + e.getMessage());
         }

@@ -9,8 +9,13 @@ public class pr {
          * Registro r = new Registro();
          * PaginaRegistro p = new PaginaRegistro(r);
          */
+        System.out.println("Hola desde el repositorio de administrador");
         Login l = new Login();
         PaginaLogin p = new PaginaLogin(l);
+<<<<<<< HEAD
         System.out.println("Prueba");
+=======
+
+>>>>>>> master
     }
 }
