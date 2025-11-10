@@ -567,10 +567,18 @@ public class ControladorCatalogo implements ActionListener {
         }
 
         // Ajustar tamaño del contenido según número de tarjetas
+        int numeroCategorias = daoProducto.obtenerCantidadCategoriasConProductos();
+        numeroCategorias*=2;
+
         int numeroTarjetas = obtenerCantidadProductos();
+
         CalcularTamañoPanel calc = new CalcularTamañoPanel();
         int altoCalculado = calc.calcularAltoPanel(numeroTarjetas, 3, 330, 50, 20);
-        altoCalculado += 50;
+        altoCalculado+=30;
+        // Espacio adicional para las etiquetas de categoría
+        int espacioPorCategoria = 50;
+        altoCalculado += numeroCategorias * espacioPorCategoria;
+
 
         if (obtenerCantidadPromociones() > 0) {
             altoCalculado += 480; // 460 del scroll + 20 de margen

@@ -114,7 +114,7 @@ public class ProductoDao implements CrudProducto<Producto> {
     @Override
     public List<Producto> mostrarProductos() {
         List<Producto> info = new ArrayList<>();
-        String sql = "SELECT * FROM producto WHERE cantidad>0 AND id_estado=1";
+        String sql = "SELECT * FROM producto WHERE cantidad>0 AND id_estado=1 ORDER BY id_categoria ASC";
         try (
                 Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql);
@@ -401,4 +401,27 @@ public class ProductoDao implements CrudProducto<Producto> {
             return false;
         }
     }
+
+    //cantidad
+    @Override
+    public int obtenerCantidadCategoriasConProductos() {
+        String sql = "SELECT COUNT(DISTINCT id_categoria) AS total FROM producto";
+        int total = 0;
+
+        try (
+            Connection con = Conexion.getInstance().getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+        ) {
+            if (rs.next()) {
+                total = rs.getInt("total");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), 
+                "Error al obtener cantidad de categorías con productos", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return total;
+    }
+
 }

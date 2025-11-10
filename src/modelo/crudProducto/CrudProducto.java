@@ -34,4 +34,6 @@ public interface CrudProducto<P> {
     public List<P> listarProductosSinProveedor();
 
     public boolean asignarProveedor(int idProducto, int idProveedor);
+
+    public int obtenerCantidadCategoriasConProductos();
 }
