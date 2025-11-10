@@ -128,6 +128,7 @@ public class ProductoDao implements CrudProducto<Producto> {
                 p.setTalla(rs.getString("talla"));
                 p.setImagen(rs.getString("imagen"));
                 p.setPrecio(rs.getDouble("precio"));
+                p.setIdCategoria(rs.getInt("id_categoria"));
                 info.add(p);
             }
             return info;
