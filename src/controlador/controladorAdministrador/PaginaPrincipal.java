@@ -60,6 +60,10 @@ public class PaginaPrincipal implements ActionListener {
     public PaginaHistoricoTendenciaCompra pTendenciaCompra;
     public PaginaTendenciaCompra controTendenciaCompra;
 
+    // Aprobar proveedor
+    public PaginaAprobarProveedor controAproPro;
+    public vista.vistaAdministrador.PaginaAprobarProveedor paginaAprobarProveedor;
+
     private String idAdministrador;
 
     public PaginaPrincipal(PrincipalAdministradorVista p, String id) throws IOException {
@@ -134,6 +138,14 @@ public class PaginaPrincipal implements ActionListener {
                 pTendenciaCompra = new PaginaHistoricoTendenciaCompra();
                 controTendenciaCompra = new PaginaTendenciaCompra(pTendenciaCompra);
                 configurarCierreVentana(pTendenciaCompra);
+            }
+        });
+        p.aprobarProvee.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                paginaAprobarProveedor = new vista.vistaAdministrador.PaginaAprobarProveedor();
+                controAproPro = new PaginaAprobarProveedor(paginaAprobarProveedor);
+                configurarCierreVentana(paginaAprobarProveedor);
             }
         });
     }

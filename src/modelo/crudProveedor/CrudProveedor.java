@@ -16,4 +16,6 @@ public interface CrudProveedor<T> {
     public List<T> listarProveedorActivos();
 
     public List<T> listarProveedorInactivo();
+
+    public int CambiarEstado(int id, int estado);
 }

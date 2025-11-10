@@ -90,17 +90,102 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
 
     @Override
     public List<Proveedor> listarProveedorPendiente() {
-        return null;
+        List<Proveedor> proveedores = new ArrayList<>();
+        String sql = "SELECT proveedor.*, producto.nombre FROM proveedor INNER JOIN producto ON proveedor.id = producto.id_proveedor WHERE proveedor.estado = 3";
+        try {
+            Connection con = Conexion.getInstance().getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Proveedor proveedor = new Proveedor();
+                proveedor.setId(rs.getInt(1));
+                proveedor.setTipo(rs.getString(2));
+                proveedor.setNombre(rs.getString(3));
+                proveedor.setDocumento(rs.getString(4));
+                proveedor.setMetodoDePago(rs.getInt(5));
+                proveedor.setDireccion(rs.getString(6));
+                proveedor.setTelefono(rs.getString(7));
+                proveedor.setCorreo(rs.getString(8));
+                proveedor.setEstado(rs.getInt(9));
+                proveedores.add(proveedor);
+            }
+            return proveedores;
+        } catch (Exception e) {
+            System.out.println("Error al listar proveedores pendientes: " + e.getMessage());
+        }
+        return proveedores;
     }
 
     @Override
     public List<Proveedor> listarProveedorActivos() {
-        return null;
+        List<Proveedor> proveedores = new ArrayList<>();
+        String sql = "SELECT proveedor.*, producto.nombre FROM proveedor INNER JOIN producto ON proveedor.id = producto.id_proveedor WHERE proveedor.estado = 1";
+        try {
+            Connection con = Conexion.getInstance().getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Proveedor proveedor = new Proveedor();
+                proveedor.setId(rs.getInt(1));
+                proveedor.setTipo(rs.getString(2));
+                proveedor.setNombre(rs.getString(3));
+                proveedor.setDocumento(rs.getString(4));
+                proveedor.setMetodoDePago(rs.getInt(5));
+                proveedor.setDireccion(rs.getString(6));
+                proveedor.setTelefono(rs.getString(7));
+                proveedor.setCorreo(rs.getString(8));
+                proveedor.setEstado(rs.getInt(9));
+                proveedores.add(proveedor);
+            }
+            return proveedores;
+        } catch (Exception e) {
+            System.out.println("Error al listar proveedores activos: " + e.getMessage());
+        }
+        return proveedores;
     }
 
     @Override
     public List<Proveedor> listarProveedorInactivo() {
-        return null;
+        List<Proveedor> proveedores = new ArrayList<>();
+        String sql = "SELECT proveedor.*, producto.nombre FROM proveedor INNER JOIN producto ON proveedor.id = producto.id_proveedor WHERE proveedor.estado = 2";
+        try {
+            Connection con = Conexion.getInstance().getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Proveedor proveedor = new Proveedor();
+                proveedor.setId(rs.getInt(1));
+                proveedor.setTipo(rs.getString(2));
+                proveedor.setNombre(rs.getString(3));
+                proveedor.setDocumento(rs.getString(4));
+                proveedor.setMetodoDePago(rs.getInt(5));
+                proveedor.setDireccion(rs.getString(6));
+                proveedor.setTelefono(rs.getString(7));
+                proveedor.setCorreo(rs.getString(8));
+                proveedor.setEstado(rs.getInt(9));
+                proveedor.setProducto(rs.getString(10));
+                proveedores.add(proveedor);
+            }
+            return proveedores;
+        } catch (Exception e) {
+            System.out.println("Error al listar proveedores inactivos: " + e.getMessage());
+        }
+        return proveedores;
+    }
+
+    @Override
+    public int CambiarEstado(int id, int estado) {
+        String sql = "UPDATE proveedor SET estado = ? WHERE documento = ?";
+        try {
+            Connection con = Conexion.getInstance().getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, estado);
+            ps.setInt(2, id);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error al cambiar el estado del proveedor: " + e.getMessage());
+        }
+        return 0;
     }
 
 }

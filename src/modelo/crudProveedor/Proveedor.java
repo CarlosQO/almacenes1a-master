@@ -10,6 +10,7 @@ public class Proveedor {
     private String telefono;
     private String correo;
     private int estado;
+    private String producto;
 
     public Proveedor(int id, String tipo, String nombre, String documento, int metodoDePago, String direccion,
             String telefono, String correo, int estado) {
@@ -100,4 +101,11 @@ public class Proveedor {
         return tipo;
     }
 
+    public String getProducto() {
+        return producto;
+    }
+
+    public void setProducto(String producto) {
+        this.producto = producto;
+    }
 }
