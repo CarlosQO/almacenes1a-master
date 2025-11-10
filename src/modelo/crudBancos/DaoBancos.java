@@ -8,15 +8,15 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
 
-public class DaoBancos implements CrudBanco{
+public class DaoBancos implements CrudBanco {
     @Override
     public List<Banco> listarBancos() {
         List<Banco> lista = new ArrayList<>();
         String sql = "SELECT idBanco, nombreBanco FROM bancos";
 
         try (Connection con = Conexion.getInstance().getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 Banco banco = new Banco();

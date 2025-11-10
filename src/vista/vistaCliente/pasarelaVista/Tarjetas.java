@@ -16,38 +16,37 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import vista.componentes.Validaciones;
 
-public class Tarjetas{
+public class Tarjetas {
     public JDialog dialogoTarjeta;
     public JTextField txtTarjeta, txtCVV, txtNombreTarjeta, txtDireccion;
     public JComboBox<String> cbMes, cbAnio, cbDepartamento, cbCiudad;
     public JButton btnFinalizar;
-    public String tipoTarjeta;//debito o credito
+    public String tipoTarjeta;// debito o credito
     public CiudadesDepartamentosColombia ciudadesDepartamentosColombia;
     ColorAzulClaro colorAzulClaro = new ColorAzulClaro();
-    Color colorFondoAzulClaro= colorAzulClaro.colorFondoAzulClaro;
+    Color colorFondoAzulClaro = colorAzulClaro.colorFondoAzulClaro;
     CamposDeLasTarjetas campos = new CamposDeLasTarjetas();
-
 
     public Tarjetas(JFrame frame, String tipoTarjeta) {
         this.tipoTarjeta = tipoTarjeta;
-        
-        dialogoTarjeta = new JDialog(frame, "Tarjeta"+tipoTarjeta, true);
+
+        dialogoTarjeta = new JDialog(frame, "Tarjeta" + tipoTarjeta, true);
         dialogoTarjeta.setLayout(null);
         dialogoTarjeta.setBounds(250, 250, 470, 400);
         dialogoTarjeta.getContentPane().setBackground(Color.WHITE);
-        
+
         // Panel principal donde va todo
         JPanel panelTarjeta = new JPanel();
         panelTarjeta.setLayout(null);
         panelTarjeta.setBounds(0, 40, 470, 250);
         panelTarjeta.setBackground(colorFondoAzulClaro);
         dialogoTarjeta.add(panelTarjeta);
-        //titulo
-        JLabel lblTitulo = new JLabel("Tarjeta "+tipoTarjeta);
+        // titulo
+        JLabel lblTitulo = new JLabel("Tarjeta " + tipoTarjeta);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
         lblTitulo.setBounds(20, 10, 300, 25);
         dialogoTarjeta.add(lblTitulo);
-       
+
         txtTarjeta = campos.agregarCampoNumeroTarjeta(panelTarjeta, 20, 10);
 
         // Fecha de vencimiento
@@ -60,7 +59,8 @@ public class Tarjetas{
             @Override
             public void keyTyped(java.awt.event.KeyEvent e) {
                 char c = e.getKeyChar();
-                if (!Character.isDigit(c) || txtCVV.getText().length() >= 4) e.consume();
+                if (!Character.isDigit(c) || txtCVV.getText().length() >= 4)
+                    e.consume();
             }
         });
 
@@ -97,8 +97,8 @@ public class Tarjetas{
 
         // Dirección
         txtDireccion = campos.agregarCampoDireccion(panelTarjeta, 20, 210);
-        
-        //finalizar boton
+
+        // finalizar boton
         btnFinalizar = new JButton("Finalizar Compra");
         btnFinalizar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         btnFinalizar.setBackground(colorFondoAzulClaro);
@@ -108,12 +108,14 @@ public class Tarjetas{
         dialogoTarjeta.add(btnFinalizar);
     }
 
-    public String getTipoTarjeta() {return tipoTarjeta;}
+    public String getTipoTarjeta() {
+        return tipoTarjeta;
+    }
 
     public void setTipoTarjeta(String tipoTarjeta) {
         this.tipoTarjeta = tipoTarjeta;
     }
-    
+
     public boolean validarCamposTarjeta() {
         String errores = "";
 
@@ -146,7 +148,7 @@ public class Tarjetas{
 
         if (numeroTarjeta.isEmpty()) {
             errores += "- El número de tarjeta no puede estar vacío.\n";
-        
+
         } else if (!Validaciones.validarNumeroCuenta(numeroTarjeta)) {
             errores += "- Número de tarjeta inválido.\n";
         }
@@ -182,19 +184,20 @@ public class Tarjetas{
             return false;
         }
 
-        //  Mostrar errores 
+        // Mostrar errores
         if (!errores.isEmpty()) {
             JOptionPane.showMessageDialog(dialogoTarjeta,
-                "Se encontraron los siguientes errores:\n\n" + errores,
-                "Errores en los campos de la tarjeta",
-                JOptionPane.WARNING_MESSAGE);
+                    "Se encontraron los siguientes errores:\n\n" + errores,
+                    "Errores en los campos de la tarjeta",
+                    JOptionPane.WARNING_MESSAGE);
         }
 
         return true;
     }
 
-
-    public JDialog getDialogotarjeta() { return dialogoTarjeta; }
+    public JDialog getDialogotarjeta() {
+        return dialogoTarjeta;
+    }
 
     public JTextField getTxtTarjeta() {
         return txtTarjeta;
@@ -259,7 +262,7 @@ public class Tarjetas{
     public void setCbCiudad(JComboBox<String> cbCiudad) {
         this.cbCiudad = cbCiudad;
     }
-    
+
     public static void main(String[] args) {
         JFrame frame = new JFrame("Prueba Pasarela de Pagos");
         frame.setSize(600, 400);
@@ -273,13 +276,13 @@ public class Tarjetas{
 
         // Acción del botón
         btnAbrirTarjeta.addActionListener(e -> {
-            Tarjetas tarjeta = new Tarjetas(frame,"Crédito");
+            Tarjetas tarjeta = new Tarjetas(frame, "Crédito");
             tarjeta.dialogoTarjeta.setVisible(true);
         });
 
         // Mostrar el frame
         frame.setLocationRelativeTo(null); // Centrar en pantalla
         frame.setVisible(true);
-    
+
     }
 }

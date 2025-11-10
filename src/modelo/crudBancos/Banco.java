@@ -4,7 +4,8 @@ public class Banco {
     private int idBanco;
     private String nombreBanco;
 
-    public Banco() {}
+    public Banco() {
+    }
 
     public Banco(int idBanco, String nombreBanco) {
         this.idBanco = idBanco;

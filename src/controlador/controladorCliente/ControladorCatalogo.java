@@ -23,19 +23,29 @@ import javax.swing.SwingWorker;
 
 import modelo.crudBancos.Banco;
 import modelo.crudBancos.DaoBancos;
-import modelo.crudCarrito.*;
+import modelo.crudCarrito.DaoCarrito;
+import modelo.crudCarrito.ProductosCarrito;
+import modelo.crudCarrito.PromocionCarrito;
 import modelo.crudDocumento.Documento;
 import modelo.crudDocumento.DocumentoDao;
 import modelo.crudMetodoDePago.MetodoPagoDao;
-import modelo.crudProducto.*;
-import modelo.crudPromociones.*;
-import modelo.crudMetodoPago.*;
-import modelo.pasarelaDePagosModelo.*;
+import modelo.crudProducto.Producto;
+import modelo.crudProducto.ProductoDao;
+import modelo.crudPromociones.Promocion;
+import modelo.crudPromociones.PromocionDao;
+import modelo.pasarelaDePagosModelo.Factory;
+import modelo.pasarelaDePagosModelo.ProcesoDePago;
+import modelo.pasarelaDePagosModelo.TipoDePago;
 import vista.componentes.CalcularTamañoPanel;
 import vista.componentes.ScrollPersonalizado;
 import vista.vistaCliente.PanelPrincipal;
-import vista.vistaCliente.pasarelaVista.*;
-import vista.vistaCliente.tarjetas.*;
+import vista.vistaCliente.pasarelaVista.BilleterElectronica;
+import vista.vistaCliente.pasarelaVista.Consignacion;
+import vista.vistaCliente.pasarelaVista.PasarelaPagosVista;
+import vista.vistaCliente.pasarelaVista.Tarjetas;
+import vista.vistaCliente.tarjetas.TarjetaProducto;
+import vista.vistaCliente.tarjetas.TarjetaPromocion;
+import vista.vistaCliente.tarjetas.TarjetasProductoCarrito;
 
 public class ControladorCatalogo implements ActionListener {
     private JFrame frame;
@@ -183,141 +193,141 @@ public class ControladorCatalogo implements ActionListener {
         return daoPromociones.numeroPromociones();
     }
 
-    //buscar categorias
+    // buscar categorias
     public String buscarCategoria(int idCategoria) {
-        /* 
-        DaoCategoriasProductos dao = new DaoCategoriasProductos();
-        String nombreCategoria = dao.buscarNombreCategoria(idCategoria);
-        
-        if (nombreCategoria == null || nombreCategoria.isEmpty()) {
-            return "Sin categoría";
-        }
-        return nombreCategoria;
-        */
+        /*
+         * DaoCategoriasProductos dao = new DaoCategoriasProductos();
+         * String nombreCategoria = dao.buscarNombreCategoria(idCategoria);
+         * 
+         * if (nombreCategoria == null || nombreCategoria.isEmpty()) {
+         * return "Sin categoría";
+         * }
+         * return nombreCategoria;
+         */
         return "categoria";
     }
 
     // listar
     public void getListarProductos(JPanel panelTarjetasProductos) throws IOException {
-    panelTarjetasProductos.removeAll();
+        panelTarjetasProductos.removeAll();
 
-    SwingWorker<Void, JComponent> worker = new SwingWorker<Void, JComponent>() {
+        SwingWorker<Void, JComponent> worker = new SwingWorker<Void, JComponent>() {
 
-        @Override
-        protected Void doInBackground() throws Exception {
-            List<Producto> listaProductos = daoProducto.mostrarProductos();
-            int xInicial = 125;
-            int yInicial = 10;
-            if (obtenerCantidadPromociones() > 0) {
-                yInicial = 100;
-            }
-
-            int anchoTarjeta = 220, altoTarjeta = 330;
-            int separacionX = 50, separacionY = 50;
-            int columnas = 3;
-
-            int contador = 0;
-            int categoriaActual = -1;
-            int yInicioCategoria = yInicial;
-
-            for (Producto p : listaProductos) {
-                // Cambio de categoría
-                if (p.getIdCategoria() != categoriaActual) {
-                    categoriaActual = p.getIdCategoria();
-                    String nombreCategoria = buscarCategoria(categoriaActual);
-
-                    // Antes de agregar nueva categoría, ajustar Y si hay tarjetas incompletas arriba
-                    if (contador % columnas != 0) {
-                        yInicioCategoria += ((contador / columnas) + 1) * (altoTarjeta + separacionY);
-                    } else if (contador > 0) {
-                        yInicioCategoria += (contador / columnas) * (altoTarjeta + separacionY);
-                    }
-
-                    JLabel lblCategoria = new JLabel(nombreCategoria);
-                    lblCategoria.setFont(new Font("Times New Roman", Font.BOLD, 24));
-                    lblCategoria.setForeground(Color.BLACK);
-                    lblCategoria.setBounds(xInicial, yInicioCategoria, 300, 30);
-                    publish(lblCategoria);
-
-                    // Reiniciar contador y bajar para las tarjetas
-                    contador = 0;
-                    yInicioCategoria += 40;
+            @Override
+            protected Void doInBackground() throws Exception {
+                List<Producto> listaProductos = daoProducto.mostrarProductos();
+                int xInicial = 125;
+                int yInicial = 10;
+                if (obtenerCantidadPromociones() > 0) {
+                    yInicial = 100;
                 }
 
-                // Crear la tarjeta (sin tocar tu lógica)
-                TarjetaProducto tarjeta = new TarjetaProducto(
-                        p.getId(), p.getImagen(), p.getNombre(), p.getTalla(),
-                        p.getDescripcion(), p.getPrecio());
+                int anchoTarjeta = 220, altoTarjeta = 330;
+                int separacionX = 50, separacionY = 50;
+                int columnas = 3;
 
-                tarjeta.agregarAlCarrito.addActionListener(e -> {
-                    agregarACarritoProductosDeCompras(
-                            tarjeta.getIdentificadorTarjeta(), idUsuario, tarjeta.getImagen(), 1,
-                            tarjeta.getPrecio());
-                    cargarProductosACarrito();
-                });
+                int contador = 0;
+                int categoriaActual = -1;
+                int yInicioCategoria = yInicial;
 
-                tarjeta.compraInstanatnea.addActionListener(eCompraInstantanea -> {
-                    frame = new JFrame();
-                    pasarela = new PasarelaPagosVista(frame);
-                    factory = new Factory();
-                    ProductosCarrito productoConvertidoACarrito = new ProductosCarrito(p.getNombre(), p.getImagen(),
-                            0, idUsuario, p.getId(), 1, p.getPrecio(), p.getPrecio());
-                    List<ProductosCarrito> productosCompraInstantanea = new ArrayList<>();
-                    productosCompraInstantanea.add(productoConvertidoACarrito);
+                for (Producto p : listaProductos) {
+                    // Cambio de categoría
+                    if (p.getIdCategoria() != categoriaActual) {
+                        categoriaActual = p.getIdCategoria();
+                        String nombreCategoria = buscarCategoria(categoriaActual);
 
-                    pasarela.btnTarjetaCredito.addActionListener(ev -> {
-                        mostrarDialogoTarjeta("credito", p.getPrecio(), productosCompraInstantanea,
-                                new ArrayList<PromocionCarrito>());
+                        // Antes de agregar nueva categoría, ajustar Y si hay tarjetas incompletas
+                        // arriba
+                        if (contador % columnas != 0) {
+                            yInicioCategoria += ((contador / columnas) + 1) * (altoTarjeta + separacionY);
+                        } else if (contador > 0) {
+                            yInicioCategoria += (contador / columnas) * (altoTarjeta + separacionY);
+                        }
+
+                        JLabel lblCategoria = new JLabel(nombreCategoria);
+                        lblCategoria.setFont(new Font("Times New Roman", Font.BOLD, 24));
+                        lblCategoria.setForeground(Color.BLACK);
+                        lblCategoria.setBounds(xInicial, yInicioCategoria, 300, 30);
+                        publish(lblCategoria);
+
+                        // Reiniciar contador y bajar para las tarjetas
+                        contador = 0;
+                        yInicioCategoria += 40;
+                    }
+
+                    // Crear la tarjeta (sin tocar tu lógica)
+                    TarjetaProducto tarjeta = new TarjetaProducto(
+                            p.getId(), p.getImagen(), p.getNombre(), p.getTalla(),
+                            p.getDescripcion(), p.getPrecio());
+
+                    tarjeta.agregarAlCarrito.addActionListener(e -> {
+                        agregarACarritoProductosDeCompras(
+                                tarjeta.getIdentificadorTarjeta(), idUsuario, tarjeta.getImagen(), 1,
+                                tarjeta.getPrecio());
+                        cargarProductosACarrito();
                     });
 
-                    pasarela.btnTarjetaDebito.addActionListener(ev -> {
-                        mostrarDialogoTarjeta("debito", p.getPrecio(), productosCompraInstantanea,
-                                new ArrayList<PromocionCarrito>());
+                    tarjeta.compraInstanatnea.addActionListener(eCompraInstantanea -> {
+                        frame = new JFrame();
+                        pasarela = new PasarelaPagosVista(frame);
+                        factory = new Factory();
+                        ProductosCarrito productoConvertidoACarrito = new ProductosCarrito(p.getNombre(), p.getImagen(),
+                                0, idUsuario, p.getId(), 1, p.getPrecio(), p.getPrecio());
+                        List<ProductosCarrito> productosCompraInstantanea = new ArrayList<>();
+                        productosCompraInstantanea.add(productoConvertidoACarrito);
+
+                        pasarela.btnTarjetaCredito.addActionListener(ev -> {
+                            mostrarDialogoTarjeta("credito", p.getPrecio(), productosCompraInstantanea,
+                                    new ArrayList<PromocionCarrito>());
+                        });
+
+                        pasarela.btnTarjetaDebito.addActionListener(ev -> {
+                            mostrarDialogoTarjeta("debito", p.getPrecio(), productosCompraInstantanea,
+                                    new ArrayList<PromocionCarrito>());
+                        });
+
+                        pasarela.btnConsignacion.addActionListener(evConsignacion -> {
+                            mostrarDialogoConsignacion(p.getPrecio(), productosCompraInstantanea,
+                                    new ArrayList<PromocionCarrito>());
+                        });
+
+                        pasarela.btnBilletera.addActionListener(evBilletera -> {
+                            mostrarDiaologoBilleteraElectronica(p.getPrecio(), productosCompraInstantanea,
+                                    new ArrayList<PromocionCarrito>());
+                        });
+
+                        pasarela.getDialogo().setVisible(true);
                     });
 
-                    pasarela.btnConsignacion.addActionListener(evConsignacion -> {
-                        mostrarDialogoConsignacion(p.getPrecio(), productosCompraInstantanea,
-                                new ArrayList<PromocionCarrito>());
-                    });
+                    // Calcular posición
+                    int posX = xInicial + (contador % columnas) * (anchoTarjeta + separacionX);
+                    int posY = yInicioCategoria + (contador / columnas) * (altoTarjeta + separacionY);
+                    tarjeta.setBounds(posX, posY, anchoTarjeta, altoTarjeta);
 
-                    pasarela.btnBilletera.addActionListener(evBilletera -> {
-                        mostrarDiaologoBilleteraElectronica(p.getPrecio(), productosCompraInstantanea,
-                                new ArrayList<PromocionCarrito>());
-                    });
-
-                    pasarela.getDialogo().setVisible(true);
-                });
-
-                // Calcular posición
-                int posX = xInicial + (contador % columnas) * (anchoTarjeta + separacionX);
-                int posY = yInicioCategoria + (contador / columnas) * (altoTarjeta + separacionY);
-                tarjeta.setBounds(posX, posY, anchoTarjeta, altoTarjeta);
-
-                publish(tarjeta);
-                contador++;
+                    publish(tarjeta);
+                    contador++;
+                }
+                return null;
             }
-            return null;
-        }
 
-        @Override
-        protected void process(List<JComponent> chunks) {
-            for (JComponent comp : chunks) {
-                panelTarjetasProductos.add(comp);
+            @Override
+            protected void process(List<JComponent> chunks) {
+                for (JComponent comp : chunks) {
+                    panelTarjetasProductos.add(comp);
+                }
+                panelTarjetasProductos.revalidate();
+                panelTarjetasProductos.repaint();
             }
-            panelTarjetasProductos.revalidate();
-            panelTarjetasProductos.repaint();
-        }
 
-        @Override
-        protected void done() {
-            panelTarjetasProductos.revalidate();
-            panelTarjetasProductos.repaint();
-        }
-    };
-    worker.execute();
-}
+            @Override
+            protected void done() {
+                panelTarjetasProductos.revalidate();
+                panelTarjetasProductos.repaint();
+            }
+        };
+        worker.execute();
+    }
 
-    
     public void getListarPromociones(JPanel panelPromociones) {
         List<Promocion> listaPromociones = daoPromociones.mostrarPromociones();
         panelPromociones.removeAll();
@@ -568,17 +578,16 @@ public class ControladorCatalogo implements ActionListener {
 
         // Ajustar tamaño del contenido según número de tarjetas
         int numeroCategorias = daoProducto.obtenerCantidadCategoriasConProductos();
-        numeroCategorias*=2;
+        numeroCategorias *= 2;
 
         int numeroTarjetas = obtenerCantidadProductos();
 
         CalcularTamañoPanel calc = new CalcularTamañoPanel();
         int altoCalculado = calc.calcularAltoPanel(numeroTarjetas, 3, 330, 50, 20);
-        altoCalculado+=30;
+        altoCalculado += 30;
         // Espacio adicional para las etiquetas de categoría
         int espacioPorCategoria = 50;
         altoCalculado += numeroCategorias * espacioPorCategoria;
-
 
         if (obtenerCantidadPromociones() > 0) {
             altoCalculado += 480; // 460 del scroll + 20 de margen
@@ -791,7 +800,8 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     // metodos de pago
-    public void mostrarDialogoTarjeta(String tipoTrajeta, double valor, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
+    public void mostrarDialogoTarjeta(String tipoTrajeta, double valor, List<ProductosCarrito> productos,
+            List<PromocionCarrito> promociones) {
         tarjeta = new Tarjetas(frame, tipoTrajeta);
         tarjeta.btnFinalizar.addActionListener(e -> {
 
@@ -800,7 +810,8 @@ public class ControladorCatalogo implements ActionListener {
                 String numeroTarjeta = tarjeta.getTxtTarjeta().getText().trim();
                 String cvv = tarjeta.getTxtCVV().getText().trim();
                 String nombreTitular = tarjeta.getTxtNombreTarjeta().getText().trim();
-                String fecha = tarjeta.getCbAnio().getSelectedItem().toString() + "-" + tarjeta.getCbMes().getSelectedItem().toString();
+                String fecha = tarjeta.getCbAnio().getSelectedItem().toString() + "-"
+                        + tarjeta.getCbMes().getSelectedItem().toString();
 
                 // Asignar a factory
                 factory.setNumeroTarjeta(numeroTarjeta);
@@ -812,7 +823,7 @@ public class ControladorCatalogo implements ActionListener {
                 // Procesar pago
                 TipoDePago tipoPagoEnum;
                 int idMetodo = 0;
-                 if (tipoTrajeta.equalsIgnoreCase("credito")) {
+                if (tipoTrajeta.equalsIgnoreCase("credito")) {
                     tipoPagoEnum = TipoDePago.TARJETA_CREDITO;
                     idMetodo = daoMetodoPago.buscarMetodoDePagoPorId("Tarjeta de Credito");
                 } else if (tipoTrajeta.equalsIgnoreCase("debito")) {
@@ -823,7 +834,7 @@ public class ControladorCatalogo implements ActionListener {
                     return;
                 }
                 // Procesar pago con el tipo correcto
-                if(idMetodo>0){
+                if (idMetodo > 0) {
                     ProcesoDePago pago = factory.obtenerPago(tipoPagoEnum);
 
                     if (pago.pagar(valor) == 1) {
@@ -851,23 +862,24 @@ public class ControladorCatalogo implements ActionListener {
                         limpiarCarrito(idUsuario);
                         tarjeta.dialogoTarjeta.dispose();
                         pasarela.getDialogo().setVisible(false);
-                        
+
                     }
-                }else{
-                    JOptionPane.showMessageDialog(null, 
-                        "Se produjo un error al conectar con la pasarela de pago.","Error de conexión", JOptionPane.ERROR_MESSAGE
-                    );
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "Se produjo un error al conectar con la pasarela de pago.", "Error de conexión",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
         tarjeta.dialogoTarjeta.setVisible(true);
     }
 
-    public void mostrarDialogoConsignacion(double valor, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
+    public void mostrarDialogoConsignacion(double valor, List<ProductosCarrito> productos,
+            List<PromocionCarrito> promociones) {
 
-            tarjetaConsignacion = new Consignacion(frame, valor, cargarTiposDocumento(), listarBancos());
+        tarjetaConsignacion = new Consignacion(frame, valor, cargarTiposDocumento(), listarBancos());
 
-            tarjetaConsignacion.btnConsignar.addActionListener(eConsignar -> {
+        tarjetaConsignacion.btnConsignar.addActionListener(eConsignar -> {
             boolean validacionesConsignacion = tarjetaConsignacion.validarCamposConsignacion();
             if (validacionesConsignacion) {
                 String nombreConsignacion = tarjetaConsignacion.getTxtNombreConsignacion().getText().trim();
@@ -889,7 +901,7 @@ public class ControladorCatalogo implements ActionListener {
                 ProcesoDePago pagoConsignacion = factory.obtenerPago(TipoDePago.CONSIGNACION);
                 if (pagoConsignacion.pagar(valor) == 1) {
                     int idMetodo = daoMetodoPago.buscarMetodoDePagoPorId("Consignacion");
-                    if(idMetodo>0){
+                    if (idMetodo > 0) {
                         procesarFactura(idUsuario, idMetodo, valor, productos, promociones);
                         // guardarventa
                         for (ProductosCarrito p : productos) {
@@ -914,10 +926,10 @@ public class ControladorCatalogo implements ActionListener {
                         limpiarCarrito(idUsuario);
                         tarjetaConsignacion.dialogoConsignacion.dispose();
                         pasarela.getDialogo().setVisible(false);
-                    }else{
-                        JOptionPane.showMessageDialog(null, 
-                        "Se produjo un error al conectar con la pasarela de pago.","Error de conexión", JOptionPane.ERROR_MESSAGE
-                        );
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "Se produjo un error al conectar con la pasarela de pago.", "Error de conexión",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -925,7 +937,8 @@ public class ControladorCatalogo implements ActionListener {
         tarjetaConsignacion.dialogoConsignacion.setVisible(true);
     }
 
-    public void mostrarDiaologoBilleteraElectronica(double valortotal, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
+    public void mostrarDiaologoBilleteraElectronica(double valortotal, List<ProductosCarrito> productos,
+            List<PromocionCarrito> promociones) {
         tarjetaBilletera = new BilleterElectronica(frame, cargarTiposDocumento(), listarBancos());
 
         tarjetaBilletera.btnConsignarBilletera.addActionListener(eBilletera -> {
@@ -949,7 +962,7 @@ public class ControladorCatalogo implements ActionListener {
                     daoCarrito.validarStockItemsCarrito(idUsuario);
 
                     int idMetodo = daoMetodoPago.buscarMetodoDePagoPorId("Billetera Electronica");
-                    if(idMetodo>0){
+                    if (idMetodo > 0) {
                         // Procesar factura
                         procesarFactura(idUsuario, idMetodo, valortotal, productos, promociones);
 
@@ -977,10 +990,10 @@ public class ControladorCatalogo implements ActionListener {
                         limpiarCarrito(idUsuario);// Limpiar carrito
                         tarjetaBilletera.dialogoBilleteraElectronica.dispose();
                         pasarela.getDialogo().setVisible(false);
-                    }else{
-                        JOptionPane.showMessageDialog(null, 
-                            "Se produjo un error al conectar con la pasarela de pago.","Error de conexión", JOptionPane.ERROR_MESSAGE
-                        );
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "Se produjo un error al conectar con la pasarela de pago.", "Error de conexión",
+                                JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -1000,7 +1013,7 @@ public class ControladorCatalogo implements ActionListener {
                 mapa.put(doc.getId(), doc.getNombre());
                 tiposDoc.add(mapa);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al obtener la lista de tipos de documento: " + e.getMessage());
         }
         return tiposDoc;
@@ -1013,7 +1026,7 @@ public class ControladorCatalogo implements ActionListener {
         List<Map<Integer, String>> listaBancos = new ArrayList<>();
 
         try {
-            for(Banco banco: bancos){
+            for (Banco banco : bancos) {
                 Map<Integer, String> mapa = new HashMap<>();
                 mapa.put(banco.getIdBanco(), banco.getNombreBanco());
                 listaBancos.add(mapa);

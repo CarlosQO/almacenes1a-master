@@ -108,7 +108,7 @@ public class CamposDeLasTarjetas {
     /** Agrega el combo de año */
     public JComboBox<String> agregarComboAnio(JPanel panel, int x, int y, int anioActual) {
         JComboBox<String> cbAnio = new JComboBox<>();
-        for (int i = 0; i < 10; i++){
+        for (int i = 0; i < 10; i++) {
             cbAnio.addItem(String.valueOf(anioActual + i));
         }
         cbAnio.setName("cbAnio");
@@ -140,7 +140,6 @@ public class CamposDeLasTarjetas {
         return cbTipoDoc;
     }
 
-
     // Agrega un combo genérico (por ejemplo banco o tipo de cuenta) */
     public JComboBox<String> agregarComboGenerico(JPanel panel, int x, int y, String etiqueta, String[] opciones,
             String nombre) {
@@ -150,28 +149,29 @@ public class CamposDeLasTarjetas {
         panel.add(lbl);
 
         JComboBox<String> combo = new JComboBox<>();
-        for (String opcion : opciones){
-           combo.addItem(opcion); 
-        }  
+        for (String opcion : opciones) {
+            combo.addItem(opcion);
+        }
         combo.setName(nombre);
         combo.setBounds(x + 200, y, 150, 25);
         panel.add(combo);
         return combo;
     }
 
-    //bancos
-     public JComboBox<String> agregarComboBanco(JPanel panel, int x, int y, String etiqueta, List<Map<Integer, String>> opciones, String nombre) {
+    // bancos
+    public JComboBox<String> agregarComboBanco(JPanel panel, int x, int y, String etiqueta,
+            List<Map<Integer, String>> opciones, String nombre) {
         JLabel lbl = new JLabel(etiqueta);
         lbl.setFont(fuenteLabel);
         lbl.setBounds(x, y, 160, 20);
         panel.add(lbl);
 
         JComboBox<String> combo = new JComboBox<>();
-        for (Map<Integer, String> opcion : opciones){
-            for(String valor : opcion.values()){
-                combo.addItem(valor); 
+        for (Map<Integer, String> opcion : opciones) {
+            for (String valor : opcion.values()) {
+                combo.addItem(valor);
             }
-        }  
+        }
         combo.setName(nombre);
         combo.setBounds(x + 200, y, 150, 25);
         panel.add(combo);

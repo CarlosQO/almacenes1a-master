@@ -1,16 +1,14 @@
 package controladorAdministrador;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import controladorAdministrador.PDF_Administrador.TendenciaCompraPDF;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
 import modelo.crudTendenciaCompra.TendenciaCompraDao;
 import vista.vistaAdministrador.PaginaHistoricoTendenciaCompra;
 

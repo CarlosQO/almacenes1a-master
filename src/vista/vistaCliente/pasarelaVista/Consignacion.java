@@ -17,9 +17,10 @@ public class Consignacion {
     public JButton btnConsignar;
     public JDialog dialogoConsignacion;
     public double total;
-    public CiudadesDepartamentosColombia ciudadesDepartamentosColombia; 
+    public CiudadesDepartamentosColombia ciudadesDepartamentosColombia;
 
-    public Consignacion(JFrame frame, double total, List<Map<Integer, String>> tiposDoc, List<Map<Integer, String>>bancos) {
+    public Consignacion(JFrame frame, double total, List<Map<Integer, String>> tiposDoc,
+            List<Map<Integer, String>> bancos) {
         this.total = total;
 
         // Crear diálogo
@@ -49,20 +50,20 @@ public class Consignacion {
 
         cbTipoDocConsignacion = campos.agregarComboTipoDocumento(panel, 20, 50, tiposDoc);
 
-
         txtDocumentoConsignacion = new JTextField();
         txtDocumentoConsignacion = campos.agregarCampoDocumento(panel, 20, 90);
         panel.add(txtDocumentoConsignacion);
 
-        cbBancoConsignacion = campos.agregarComboBanco(panel, 20, 130, "Elige un banco*", bancos, "cbBancoConsignacion");
+        cbBancoConsignacion = campos.agregarComboBanco(panel, 20, 130, "Elige un banco*", bancos,
+                "cbBancoConsignacion");
 
-        String[] tiposCuenta = {"Ahorros", "Corriente"};
+        String[] tiposCuenta = { "Ahorros", "Corriente" };
         cbTipoCuenta = campos.agregarComboGenerico(panel, 20, 170, "Tipo de cuenta*", tiposCuenta, "cbTipoCuenta");
 
         txtNumCuenta = new JTextField();
         txtNumCuenta = campos.agregarCampoNumeroTarjeta(panel, 20, 210);
         panel.add(txtNumCuenta);
-        
+
         // Departamentos y ciudades
         ciudadesDepartamentosColombia = new CiudadesDepartamentosColombia();
         JLabel lblDep = new JLabel("Departamento - Ciudad*");
@@ -91,10 +92,10 @@ public class Consignacion {
             }
         });
 
-        //  direccion
+        // direccion
         txtDireccion = campos.agregarCampoDireccion(panel, 20, 290);
-        
-        // Monto 
+
+        // Monto
         JLabel lblMonto = new JLabel("Monto a pagar*");
         lblMonto.setFont(new Font("Arial", Font.BOLD, 13));
         lblMonto.setBounds(20, 330, 160, 20);
@@ -103,7 +104,7 @@ public class Consignacion {
         agregarMonto = new JLabel(" " + total);
         agregarMonto.setBounds(220, 330, 220, 25);
         panel.add(agregarMonto);
-        
+
         // Botón consignar
         btnConsignar = new JButton("Consignar");
         btnConsignar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -210,8 +211,8 @@ public class Consignacion {
         // Mostrar todos los errores juntos, si hay
         if (!errores.isEmpty()) {
             JOptionPane.showMessageDialog(dialogoConsignacion, errores,
-                "Errores en el formulario",
-                JOptionPane.WARNING_MESSAGE);
+                    "Errores en el formulario",
+                    JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
@@ -277,7 +278,7 @@ public class Consignacion {
     public void setTotal(double total) {
         this.total = total;
     }
-    
+
     public static void main(String[] args) {
         // Crear un JFrame base (padre del diálogo)
         JFrame frame = new JFrame("Prueba Consignación");

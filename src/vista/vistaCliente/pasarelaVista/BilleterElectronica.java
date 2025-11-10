@@ -101,7 +101,7 @@ public class BilleterElectronica {
         btnConsignarBilletera.setBounds(150, 270, 150, 30);
         dialogoBilleteraElectronica.add(btnConsignarBilletera);
     }
-    
+
     public boolean validarCamposBilletera() {
         String errores = "";
 
@@ -126,7 +126,6 @@ public class BilleterElectronica {
                 }
             }
         }
-
 
         // Banco
         String banco = (String) cbBancoBilletera.getSelectedItem();
@@ -154,7 +153,6 @@ public class BilleterElectronica {
             errores += "- Dirección inválida. Debe contener letras y números (Ej: Calle 45 #12-34).\n";
         }
 
-
         // Mostrar todos los errores juntos si existen
         if (!errores.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Se encontraron los siguientes errores:\n\n" + errores,
@@ -165,8 +163,6 @@ public class BilleterElectronica {
         return true;
     }
 
-
-    
     public JDialog getDialogoBilleteraElectronica() {
         return dialogoBilleteraElectronica;
     }
@@ -202,7 +198,7 @@ public class BilleterElectronica {
     public void setTiposDoc(List<Map<Integer, String>> tiposDoc) {
         this.tiposDoc = tiposDoc;
     }
-    
+
     public static void main(String[] args) {
         JFrame frame = new JFrame("Prueba Pasarela de Pagos");
         frame.setSize(600, 400);
@@ -213,21 +209,21 @@ public class BilleterElectronica {
         JButton btnAbrirTarjeta = new JButton("Pagar con Tarjeta");
         btnAbrirTarjeta.setBounds(200, 150, 200, 50);
         frame.add(btnAbrirTarjeta);
-        
+
         List<Map<Integer, String>> tiposDoc = new ArrayList<>();
 
-Map<Integer, String> tipo1 = new HashMap<>();
-tipo1.put(1, "Cédula de ciudadanía");
+        Map<Integer, String> tipo1 = new HashMap<>();
+        tipo1.put(1, "Cédula de ciudadanía");
 
-Map<Integer, String> tipo2 = new HashMap<>();
-tipo2.put(2, "Tarjeta de identidad");
+        Map<Integer, String> tipo2 = new HashMap<>();
+        tipo2.put(2, "Tarjeta de identidad");
 
-Map<Integer, String> tipo3 = new HashMap<>();
-tipo3.put(3, "Pasaporte");
+        Map<Integer, String> tipo3 = new HashMap<>();
+        tipo3.put(3, "Pasaporte");
 
-tiposDoc.add(tipo1);
-tiposDoc.add(tipo2);
-tiposDoc.add(tipo3);
+        tiposDoc.add(tipo1);
+        tiposDoc.add(tipo2);
+        tiposDoc.add(tipo3);
 
         // Acción del botón
         btnAbrirTarjeta.addActionListener(e -> {
