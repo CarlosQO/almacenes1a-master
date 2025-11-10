@@ -199,129 +199,125 @@ public class ControladorCatalogo implements ActionListener {
 
     // listar
     public void getListarProductos(JPanel panelTarjetasProductos) throws IOException {
-        // Mostrar mensaje temporal mientras carga
-        panelTarjetasProductos.removeAll();
-        // Crear SwingWorker con publish/process
-        SwingWorker<Void, JComponent> worker = new SwingWorker<Void, JComponent>() {
+    panelTarjetasProductos.removeAll();
 
-            @Override
-            protected Void doInBackground() throws Exception {
-                List<Producto> listaProductos = daoProducto.mostrarProductos();
-                int xInicial = 125;
-                int yInicial = 10;
-                if (obtenerCantidadPromociones() > 0) {
-                    yInicial = 100;
-                }
+    SwingWorker<Void, JComponent> worker = new SwingWorker<Void, JComponent>() {
 
-                int anchoTarjeta = 220, altoTarjeta = 330;
-                int separacionX = 50, separacionY = 50;
-                int columnas = 3; // queremos máximo 3 tarjetas por fila
-                int contador = 0;
+        @Override
+        protected Void doInBackground() throws Exception {
+            List<Producto> listaProductos = daoProducto.mostrarProductos();
+            int xInicial = 125;
+            int yInicial = 10;
+            if (obtenerCantidadPromociones() > 0) {
+                yInicial = 100;
+            }
 
-                int contadorGlobal = 0;
-                int categoriaActual = -1;
-                int yCategoria = yInicial;
-                for (Producto p : listaProductos) {
-                    if (p.getIdCategoria() != categoriaActual) {
-                        categoriaActual = p.getIdCategoria();
-                        String nombreCategoria = buscarCategoria(categoriaActual);
+            int anchoTarjeta = 220, altoTarjeta = 330;
+            int separacionX = 50, separacionY = 50;
+            int columnas = 3;
 
-                        // Calcular posición del nombre de la categoría
-                        int posYCategoria = yInicial + ((contadorGlobal / columnas) * (altoTarjeta + separacionY));
+            int contador = 0;
+            int categoriaActual = -1;
+            int yInicioCategoria = yInicial;
 
-                        JLabel lblCategoria = new JLabel(nombreCategoria);
-                        lblCategoria.setFont(new Font("Arial", Font.BOLD, 18));
-                        lblCategoria.setForeground(Color.BLACK);
-                        lblCategoria.setBounds(xInicial, posYCategoria, 300, 30);
+            for (Producto p : listaProductos) {
+                // Cambio de categoría
+                if (p.getIdCategoria() != categoriaActual) {
+                    categoriaActual = p.getIdCategoria();
+                    String nombreCategoria = buscarCategoria(categoriaActual);
 
-                        publish(lblCategoria);
-
-                        // Avanza una "línea" más abajo para comenzar las tarjetas
-                        yCategoria = posYCategoria + 40;
-                        contadorGlobal = (contadorGlobal / columnas) * columnas; // mantiene alineación
-                    
+                    // Antes de agregar nueva categoría, ajustar Y si hay tarjetas incompletas arriba
+                    if (contador % columnas != 0) {
+                        yInicioCategoria += ((contador / columnas) + 1) * (altoTarjeta + separacionY);
+                    } else if (contador > 0) {
+                        yInicioCategoria += (contador / columnas) * (altoTarjeta + separacionY);
                     }
 
-                    // Crear la tarjeta
-                    TarjetaProducto tarjeta = new TarjetaProducto(
-                            p.getId(), p.getImagen(), p.getNombre(), p.getTalla(), p.getDescripcion(), p.getPrecio());
+                    JLabel lblCategoria = new JLabel(nombreCategoria);
+                    lblCategoria.setFont(new Font("Arial", Font.BOLD, 18));
+                    lblCategoria.setForeground(Color.BLACK);
+                    lblCategoria.setBounds(xInicial, yInicioCategoria, 300, 30);
+                    publish(lblCategoria);
 
-                    
-                    // Listener para agregar al carrito
-                    tarjeta.agregarAlCarrito.addActionListener(e -> {
-                        agregarACarritoProductosDeCompras(
-                                tarjeta.getIdentificadorTarjeta(), idUsuario, tarjeta.getImagen(), 1,
-                                tarjeta.getPrecio());
-                        cargarProductosACarrito();
-                    });
-
-                    tarjeta.compraInstanatnea.addActionListener(eCompraInstantanea -> {
-                        frame = new JFrame();
-                        pasarela = new PasarelaPagosVista(frame);
-                        factory = new Factory();
-                        ProductosCarrito productoConvertidoACarrito = new ProductosCarrito(p.getNombre(), p.getImagen(),
-                                0, idUsuario, p.getId(), 1, p.getPrecio(), p.getPrecio());
-                        List<ProductosCarrito> productosCompraInstantanea = new ArrayList<>();
-                        productosCompraInstantanea.add(productoConvertidoACarrito);
-
-                        pasarela.btnTarjetaCredito.addActionListener(ev -> {
-                            mostrarDialogoTarjeta("credito", p.getPrecio(), productosCompraInstantanea,
-                                    new ArrayList<PromocionCarrito>());
-                        });
-
-                        pasarela.btnTarjetaDebito.addActionListener(ev -> {
-                            mostrarDialogoTarjeta("debito", p.getPrecio(), productosCompraInstantanea,
-                                    new ArrayList<PromocionCarrito>());
-                        });
-
-                        pasarela.btnConsignacion.addActionListener(evConsignacion -> {
-                            mostrarDialogoConsignacion(p.getPrecio(), productosCompraInstantanea,
-                                    new ArrayList<PromocionCarrito>());
-                        });
-
-                        pasarela.btnBilletera.addActionListener(evBilletera -> {
-                            mostrarDiaologoBilleteraElectronica(p.getPrecio(), productosCompraInstantanea,
-                                    new ArrayList<PromocionCarrito>());
-                        });
-
-                        pasarela.getDialogo().setVisible(true);
-                    });
-
-                    // Calcular posición de la tarjeta
-                    int fila = contadorGlobal / columnas;
-                    int col = contadorGlobal % columnas;
-
-                    int posX = xInicial + (col * (anchoTarjeta + separacionX));
-                    int posY = yCategoria + (fila * (altoTarjeta + separacionY));
-
-                    tarjeta.setBounds(posX, posY, anchoTarjeta, altoTarjeta);
-                        // Publicar la tarjeta para que se agregue al panel inmediatamente
-                        publish(tarjeta);
-                        contadorGlobal++;
-                    }
-                    return null;
-            }
-
-            @Override
-            protected void process(List<JComponent> chunks) {
-                // Se ejecuta en el hilo de la interfaz
-                for (JComponent  tarjeta : chunks) {
-                    panelTarjetasProductos.add(tarjeta);
-                    panelTarjetasProductos.revalidate();
-                    panelTarjetasProductos.repaint();
+                    // Reiniciar contador y bajar para las tarjetas
+                    contador = 0;
+                    yInicioCategoria += 40;
                 }
-            }
 
-            @Override
-            protected void done() {
-                panelTarjetasProductos.revalidate();
-                panelTarjetasProductos.repaint();
-            }
-        };
-        // Iniciar SwingWorker
-        worker.execute();
-    }
+                // Crear la tarjeta (sin tocar tu lógica)
+                TarjetaProducto tarjeta = new TarjetaProducto(
+                        p.getId(), p.getImagen(), p.getNombre(), p.getTalla(),
+                        p.getDescripcion(), p.getPrecio());
 
+                tarjeta.agregarAlCarrito.addActionListener(e -> {
+                    agregarACarritoProductosDeCompras(
+                            tarjeta.getIdentificadorTarjeta(), idUsuario, tarjeta.getImagen(), 1,
+                            tarjeta.getPrecio());
+                    cargarProductosACarrito();
+                });
+
+                tarjeta.compraInstanatnea.addActionListener(eCompraInstantanea -> {
+                    frame = new JFrame();
+                    pasarela = new PasarelaPagosVista(frame);
+                    factory = new Factory();
+                    ProductosCarrito productoConvertidoACarrito = new ProductosCarrito(p.getNombre(), p.getImagen(),
+                            0, idUsuario, p.getId(), 1, p.getPrecio(), p.getPrecio());
+                    List<ProductosCarrito> productosCompraInstantanea = new ArrayList<>();
+                    productosCompraInstantanea.add(productoConvertidoACarrito);
+
+                    pasarela.btnTarjetaCredito.addActionListener(ev -> {
+                        mostrarDialogoTarjeta("credito", p.getPrecio(), productosCompraInstantanea,
+                                new ArrayList<PromocionCarrito>());
+                    });
+
+                    pasarela.btnTarjetaDebito.addActionListener(ev -> {
+                        mostrarDialogoTarjeta("debito", p.getPrecio(), productosCompraInstantanea,
+                                new ArrayList<PromocionCarrito>());
+                    });
+
+                    pasarela.btnConsignacion.addActionListener(evConsignacion -> {
+                        mostrarDialogoConsignacion(p.getPrecio(), productosCompraInstantanea,
+                                new ArrayList<PromocionCarrito>());
+                    });
+
+                    pasarela.btnBilletera.addActionListener(evBilletera -> {
+                        mostrarDiaologoBilleteraElectronica(p.getPrecio(), productosCompraInstantanea,
+                                new ArrayList<PromocionCarrito>());
+                    });
+
+                    pasarela.getDialogo().setVisible(true);
+                });
+
+                // Calcular posición
+                int posX = xInicial + (contador % columnas) * (anchoTarjeta + separacionX);
+                int posY = yInicioCategoria + (contador / columnas) * (altoTarjeta + separacionY);
+                tarjeta.setBounds(posX, posY, anchoTarjeta, altoTarjeta);
+
+                publish(tarjeta);
+                contador++;
+            }
+            return null;
+        }
+
+        @Override
+        protected void process(List<JComponent> chunks) {
+            for (JComponent comp : chunks) {
+                panelTarjetasProductos.add(comp);
+            }
+            panelTarjetasProductos.revalidate();
+            panelTarjetasProductos.repaint();
+        }
+
+        @Override
+        protected void done() {
+            panelTarjetasProductos.revalidate();
+            panelTarjetasProductos.repaint();
+        }
+    };
+    worker.execute();
+}
+
+    
     public void getListarPromociones(JPanel panelPromociones) {
         List<Promocion> listaPromociones = daoPromociones.mostrarPromociones();
         panelPromociones.removeAll();
