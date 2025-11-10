@@ -77,7 +77,7 @@ public class PagoConsignacion implements ProcesoDePago {
     @Override
     public int pagar(double monto) {
         if (this.saldo >= monto) {
-            JOptionPane.showMessageDialog(null, "Pago con Bit Coin exitoso");
+            JOptionPane.showMessageDialog(null, "Pago con Consignación exitoso");
             return 1;
         } else {
             JOptionPane.showMessageDialog(null, "Saldo insuficiente");

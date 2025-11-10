@@ -195,7 +195,7 @@ public class TarjetaProducto extends JPanel {
         for (int i = 0; i < 2; i++) {
             TarjetaProducto tarjeta = new TarjetaProducto(
                     i,
-                    "", // ruta imagen válida
+                    "src/productos/CamisasFormalesHombre/camisa MangaLarga Blanca.jpg", // ruta imagen válida
                     "Producto " + (i + 1),
                     "M",
                     "Descripción corta llllljjkihboooooooooooooooooooooooooooooooooooooogvtfcf vb goooooooooooooooooooooooooooooooooooooooooooofcrdrcfgvbhhgfrdfghjiuygfcy jn"

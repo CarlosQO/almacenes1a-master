@@ -35,10 +35,14 @@ public interface CrudProducto<P> {
 
     public boolean asignarProveedor(int idProducto, int idProveedor);
 
+<<<<<<< HEAD
     //vendedor
     public boolean productoExiste(int id);
     
     public boolean registrarProducto(int id, String nombre, int cantidad, double precio, String descripcion, String talla, String imagen, int idCategoria, int idEstado);
     public boolean actualizarDatosProducto(int id, String nombre, double precio, String descripcion, String talla, String imagen, int idCategoria, int idEstado);
     public List<Producto> informacionDeUnProducto(int id);
+=======
+    public int obtenerCantidadCategoriasConProductos();
+>>>>>>> cliente
 }

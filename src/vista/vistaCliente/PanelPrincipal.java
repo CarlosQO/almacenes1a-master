@@ -1,11 +1,6 @@
 package vista.vistaCliente;
 
-/*import controladorCliente.ControladorCatalogo;
-import controladorCliente.ControladorActividad;
-import controladorCliente.ControladorHistorial;
-import controladorCliente.ControladorPQRS;
-import controladorCliente.ControladorSeguimiento;
-import controladorCliente.CrontoladorManejarMenu;*/
+import controladorCliente.*;
 import static vista.componentes.RoundedPanel.*;
 
 import java.awt.Color;
@@ -32,7 +27,7 @@ import vista.componentes.RoundedButton;
 public class PanelPrincipal extends JFrame {
     public JPanel panel, barra;
     public JButton catalogo, actividad, pedidos;
-    public JButton carrito;
+    public JButton carrito, cerrarCarrito;
     public JButton seguimientoOpcion, historialDeComprasOpcion;
     public DefaultTableModel modeloProductos;
     public JPanel panelCentroContenido, panelActividadCentrado, panelHistorialCentrado, panelSeguimientoCentrado;
@@ -197,14 +192,19 @@ public class PanelPrincipal extends JFrame {
         carritoContenedor.setBounds(900, 65, 370, 500);
         carritoContenedor.setPreferredSize(new Dimension(400, 500));
         // cerrar
-        JButton cerrarCarrito = new JButton("X");
+        cerrarCarrito = new JButton("X");
         cerrarCarrito.setBorderPainted(false);
         cerrarCarrito.setContentAreaFilled(false);
         cerrarCarrito.setLayout(null);
         cerrarCarrito.setBounds(0, 0, 70, 70);
         carritoContenedor.add(cerrarCarrito);
         // evento para cerrar
-        cerrarCarrito.addActionListener(e -> carritoContenedor.setVisible(false));
+
+        cerrarCarrito.addActionListener(e -> {
+            carritoContenedor.setVisible(false);
+            panelCentroContenido.revalidate();
+            panelCentroContenido.repaint();
+        });
 
         // Título "Mi Carrito"
         JLabel lblTitulo = new JLabel("Mi Carrito");
@@ -252,17 +252,16 @@ public class PanelPrincipal extends JFrame {
         boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
-    /*
-     * public static void main(String[] args) throws IOException {
-     * PanelPrincipal menu = new PanelPrincipal();
-     * menu.setVisible(true);
-     * menu.setSize(1300, 700);
-     * ControladorCatalogo c = new ControladorCatalogo(menu);
-     * ControladorActividad ca = new ControladorActividad(menu);
-     * ControladorHistorial ch = new ControladorHistorial(menu);
-     * ControladorSeguimiento cs = new ControladorSeguimiento(menu);
-     * ControladorPQRS cpqrs = new ControladorPQRS(menu);
-     * CrontoladorManejarMenu ccerrar = new CrontoladorManejarMenu(menu);
-     * }
-     */
+    public static void main(String[] args) throws IOException {
+        PanelPrincipal menu = new PanelPrincipal();
+        menu.setVisible(true);
+        menu.setSize(1300, 700);
+        ControladorCatalogo c = new ControladorCatalogo(menu);
+        ControladorActividad ca = new ControladorActividad(menu);
+        ControladorHistorial ch = new ControladorHistorial(menu);
+        ControladorSeguimiento cs = new ControladorSeguimiento(menu);
+        ControladorPQRS cpqrs = new ControladorPQRS(menu);
+        CrontoladorManejarMenu ccerrar = new CrontoladorManejarMenu(menu);
+    }
+
 }

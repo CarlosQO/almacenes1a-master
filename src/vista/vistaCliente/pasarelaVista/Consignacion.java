@@ -2,122 +2,124 @@ package vista.vistaCliente.pasarelaVista;
 
 import java.awt.Color;
 import java.awt.Font;
+import javax.swing.*;
+import vista.componentes.Validaciones;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import vista.vistaCliente.Validaciones;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Consignacion {
-    public JTextField txtNombreConsignacion, txtDocumentoConsignacion, txtNumCuenta;
-    public JComboBox<String> cbTipoDocConsignacion, cbBancoConsignacion, cbTipoCuenta;
+    public JTextField txtNombreConsignacion, txtDocumentoConsignacion, txtNumCuenta, txtDireccion;
+    public JComboBox<String> cbTipoDocConsignacion, cbBancoConsignacion, cbTipoCuenta, cbDepartamento, cbCiudad;
     public JLabel montoConsignacion, agregarMonto;
     public JButton btnConsignar;
     public JDialog dialogoConsignacion;
     public double total;
+    public CiudadesDepartamentosColombia ciudadesDepartamentosColombia; 
 
-    public Consignacion(JFrame frame, double total) {
-        dialogoConsignacion = new JDialog(frame, "Consignacion", true);
-        dialogoConsignacion.getContentPane().setBackground(Color.WHITE);
-        dialogoConsignacion.setTitle("Consignación Bancaria");
-        dialogoConsignacion.setModal(true);
+    public Consignacion(JFrame frame, double total, List<Map<Integer, String>> tiposDoc, List<Map<Integer, String>>bancos) {
+        this.total = total;
+
+        // Crear diálogo
+        dialogoConsignacion = new JDialog(frame, "Consignación Bancaria", true);
+        dialogoConsignacion.setSize(490, 520);
         dialogoConsignacion.setLayout(null);
-        dialogoConsignacion.setBounds(250, 250, 450, 445);
-        // Panel principal
-        JPanel panelConsignacion = new JPanel();
-        panelConsignacion.setLayout(null);
-        panelConsignacion.setBounds(0, 40, 450, 300);
-        panelConsignacion.setBackground(new Color(0xE4EFF9));
-        dialogoConsignacion.add(panelConsignacion);
+        dialogoConsignacion.setLocationRelativeTo(frame);
+        dialogoConsignacion.getContentPane().setBackground(Color.WHITE);
+
         // Título
         JLabel lblTitulo = new JLabel("Datos de Consignación");
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
         lblTitulo.setBounds(20, 10, 300, 25);
         dialogoConsignacion.add(lblTitulo);
-        // Nombre de quien recibe
-        JLabel lblNombre = new JLabel("Nombre de quien recibe*");
-        lblNombre.setBounds(20, 10, 160, 20);
-        panelConsignacion.add(lblNombre);
-        txtNombreConsignacion = new JTextField();
-        txtNombreConsignacion.setBounds(180, 10, 220, 25);
-        txtNombreConsignacion.setBorder(null);
-        panelConsignacion.add(txtNombreConsignacion);
-        // Tipo de documento
-        JLabel lblTipoDoc = new JLabel("Tipo de documento*");
-        lblTipoDoc.setBounds(20, 50, 160, 20);
-        panelConsignacion.add(lblTipoDoc);
-        cbTipoDocConsignacion = new JComboBox<>();
-        cbTipoDocConsignacion.addItem("CC");
-        cbTipoDocConsignacion.addItem("NIT");
-        cbTipoDocConsignacion.setBounds(180, 50, 100, 25);
-        panelConsignacion.add(cbTipoDocConsignacion);
-        // Documento
-        JLabel lblDocumento = new JLabel("Documento CC/NIT*");
-        lblDocumento.setBounds(20, 90, 160, 20);
-        panelConsignacion.add(lblDocumento);
+
+        // Panel principal
+        JPanel panel = new JPanel(null);
+        panel.setBounds(0, 40, 470, 370);
+        panel.setBackground(new Color(0xE4EFF9));
+        dialogoConsignacion.add(panel);
+
+        // Instancia de CamposDeLasTarjetas
+        CamposDeLasTarjetas campos = new CamposDeLasTarjetas();
+
+        // Campos
+        txtNombreConsignacion = campos.agregarCampoNombreTitular(panel, 20, 10);
+
+        cbTipoDocConsignacion = campos.agregarComboTipoDocumento(panel, 20, 50, tiposDoc);
+
+
         txtDocumentoConsignacion = new JTextField();
-        txtDocumentoConsignacion.setBounds(180, 90, 220, 25);
-        txtDocumentoConsignacion.setBorder(null);
-        panelConsignacion.add(txtDocumentoConsignacion);
-        // Banco
-        JLabel lblBanco = new JLabel("Elige un Banco*");
-        lblBanco.setBounds(20, 130, 160, 20);
-        panelConsignacion.add(lblBanco);
-        cbBancoConsignacion = new JComboBox<>();
-        cbBancoConsignacion.addItem("Bancolombia");
-        cbBancoConsignacion.addItem("Davivienda");
-        cbBancoConsignacion.addItem("BBVA");
-        cbBancoConsignacion.addItem("Banco de Bogotá");
-        cbBancoConsignacion.addItem("Nequi");
-        cbBancoConsignacion.setBounds(180, 130, 150, 25);
-        panelConsignacion.add(cbBancoConsignacion);
-        // Tipo de cuenta
-        JLabel lblTipoCuenta = new JLabel("Tipo de Cuenta*");
-        lblTipoCuenta.setBounds(20, 170, 160, 20);
-        panelConsignacion.add(lblTipoCuenta);
-        cbTipoCuenta = new JComboBox<>();
-        cbTipoCuenta.addItem("Ahorros");
-        cbTipoCuenta.addItem("Corriente");
-        cbTipoCuenta.setBounds(180, 170, 150, 25);
-        panelConsignacion.add(cbTipoCuenta);
-        // Número de cuenta
-        JLabel lblNumCuenta = new JLabel("Número de cuenta*");
-        lblNumCuenta.setBounds(20, 210, 160, 20);
-        panelConsignacion.add(lblNumCuenta);
+        txtDocumentoConsignacion = campos.agregarCampoDocumento(panel, 20, 90);
+        panel.add(txtDocumentoConsignacion);
+
+        cbBancoConsignacion = campos.agregarComboBanco(panel, 20, 130, "Elige un banco*", bancos, "cbBancoConsignacion");
+
+        String[] tiposCuenta = {"Ahorros", "Corriente"};
+        cbTipoCuenta = campos.agregarComboGenerico(panel, 20, 170, "Tipo de cuenta*", tiposCuenta, "cbTipoCuenta");
+
         txtNumCuenta = new JTextField();
-        txtNumCuenta.setBounds(180, 210, 220, 25);
-        txtNumCuenta.setBorder(null);
-        panelConsignacion.add(txtNumCuenta);
-        // Monto a pagar
-        JLabel lblMonto = new JLabel("Monto a Pagar*");
-        lblMonto.setBounds(20, 250, 160, 20);
-        panelConsignacion.add(lblMonto);
+        txtNumCuenta = campos.agregarCampoNumeroTarjeta(panel, 20, 210);
+        panel.add(txtNumCuenta);
+        
+        // Departamentos y ciudades
+        ciudadesDepartamentosColombia = new CiudadesDepartamentosColombia();
+        JLabel lblDep = new JLabel("Departamento - Ciudad*");
+        lblDep.setFont(new Font("Arial", Font.BOLD, 13));
+        lblDep.setBounds(20, 250, 180, 20);
+        panel.add(lblDep);
+
+        cbDepartamento = new JComboBox<>();
+        ciudadesDepartamentosColombia.cargarDepartamentosEnCombo(cbDepartamento);
+        cbDepartamento.setBounds(220, 250, 100, 25);
+        panel.add(cbDepartamento);
+
+        cbCiudad = new JComboBox<>();
+        cbCiudad.setBounds(325, 250, 100, 25);
+        panel.add(cbCiudad);
+
+        cbDepartamento.addActionListener(e -> {
+            cbCiudad.removeAllItems();
+            String depSeleccionado = (String) cbDepartamento.getSelectedItem();
+            if (depSeleccionado != null && !depSeleccionado.isEmpty()) {
+                for (String ciudad : ciudadesDepartamentosColombia.obtenerCiudadesPorDepartamento(depSeleccionado)) {
+                    cbCiudad.addItem(ciudad);
+                }
+            } else {
+                cbCiudad.addItem("Seleccione un departamento");
+            }
+        });
+
+        //  direccion
+        txtDireccion = campos.agregarCampoDireccion(panel, 20, 290);
+        
+        // Monto 
+        JLabel lblMonto = new JLabel("Monto a pagar*");
+        lblMonto.setFont(new Font("Arial", Font.BOLD, 13));
+        lblMonto.setBounds(20, 330, 160, 20);
+        panel.add(lblMonto);
+
         agregarMonto = new JLabel(" " + total);
-        agregarMonto.setBounds(180, 250, 220, 25);
-        panelConsignacion.add(agregarMonto);
+        agregarMonto.setBounds(220, 330, 220, 25);
+        panel.add(agregarMonto);
+        
         // Botón consignar
         btnConsignar = new JButton("Consignar");
         btnConsignar.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         btnConsignar.setBackground(new Color(0xE4EFF9));
-        btnConsignar.setForeground(Color.BLACK);
         btnConsignar.setFont(new Font("Arial", Font.PLAIN, 15));
-        btnConsignar.setBounds(140, 350, 150, 40);
+        btnConsignar.setBounds(160, 425, 150, 40);
         dialogoConsignacion.add(btnConsignar);
     }
 
     public boolean validarCamposConsignacion() {
-        boolean resultado = true;
+        String errores = "";
 
         String nombre = txtNombreConsignacion.getText().trim();
         String documento = txtDocumentoConsignacion.getText().trim();
         String numeroCuenta = txtNumCuenta.getText().trim();
+        String direccion = txtDireccion.getText().trim();
 
         String tipoDoc = "";
         if (cbTipoDocConsignacion.getSelectedItem() != null) {
@@ -134,45 +136,86 @@ public class Consignacion {
             tipoCuenta = cbTipoCuenta.getSelectedItem().toString();
         }
 
-        // VALIDACIONES
-        if (!Validaciones.validarLetras(nombre)) {
-            JOptionPane.showMessageDialog(dialogoConsignacion, "El nombre solo debe contener letras");
-            resultado = false;
+        String departamento = "";
+        if (cbDepartamento.getSelectedItem() != null) {
+            departamento = cbDepartamento.getSelectedItem().toString();
         }
 
+        String ciudad = "";
+        if (cbCiudad.getSelectedItem() != null) {
+            ciudad = cbCiudad.getSelectedItem().toString();
+        }
+
+        // ===== VALIDACIONES =====
+
+        // Nombre
+        if (nombre.isEmpty()) {
+            errores += "- El nombre no puede estar vacío.\n";
+        } else if (!Validaciones.validarLetras(nombre)) {
+            errores += "- El nombre solo debe contener letras.\n";
+        }
+
+        // Tipo y número de documento
         if (tipoDoc.isEmpty()) {
-            JOptionPane.showMessageDialog(dialogoConsignacion, "Debe seleccionar un tipo de documento");
-            resultado = false;
+            errores += "- Debe seleccionar un tipo de documento.\n";
         } else {
-            if (tipoDoc.equals("CC")) {
+            if (tipoDoc.equals("CC") || tipoDoc.equals("TI")) {
                 if (!Validaciones.validarCedula(documento)) {
-                    JOptionPane.showMessageDialog(dialogoConsignacion, "Cédula inválida (9 a 11 dígitos)");
-                    resultado = false;
+                    errores += "- Cédula / TI inválida (9 a 11 dígitos).\n";
                 }
             } else if (tipoDoc.equals("NIT")) {
-                if (!Validaciones.validarNIT(documento)) { // asegurate de haber agregado validarNIT en Validaciones
-                    JOptionPane.showMessageDialog(dialogoConsignacion, "NIT inválido (ej: 900123456 o 900123456-7)");
-                    resultado = false;
+                if (!Validaciones.validarNIT(documento)) {
+                    errores += "- NIT inválido (ej: 900123456 o 900123456-7).\n";
+                }
+            } else {
+                // Si tipoDoc tiene otro formato y documento vacío
+                if (documento.isEmpty()) {
+                    errores += "- Debe ingresar el número de documento.\n";
                 }
             }
         }
 
+        // Banco
         if (banco.isEmpty()) {
-            JOptionPane.showMessageDialog(dialogoConsignacion, "Debe seleccionar un banco");
-            resultado = false;
+            errores += "- Debe seleccionar un banco.\n";
         }
 
+        // Tipo de cuenta
         if (tipoCuenta.isEmpty()) {
-            JOptionPane.showMessageDialog(dialogoConsignacion, "Debe seleccionar un tipo de cuenta");
-            resultado = false;
+            errores += "- Debe seleccionar un tipo de cuenta.\n";
         }
 
-        if (!Validaciones.validarNumeroCuenta(numeroCuenta)) {
-            JOptionPane.showMessageDialog(dialogoConsignacion,
-                    "Número de cuenta inválido (debe iniciar en 4 o 5 y tener 13 a 16 dígitos)");
-            resultado = false;
+        // Número de cuenta
+        if (numeroCuenta.isEmpty()) {
+            errores += "- El número de cuenta no puede estar vacío.\n";
+        } else if (!Validaciones.validarNumeroCuenta(numeroCuenta)) {
+            errores += "- Número de cuenta inválido (debe iniciar en 4 o 5 y tener 13 a 16 dígitos).\n";
         }
-        return resultado;
+
+        // Departamento y ciudad
+        if (departamento.isEmpty()) {
+            errores += "- Debe seleccionar un departamento.\n";
+        }
+        if (ciudad.isEmpty()) {
+            errores += "- Debe seleccionar una ciudad.\n";
+        }
+
+        // Dirección (usando tu método)
+        if (direccion.isEmpty()) {
+            errores += "- La dirección no puede estar vacía.\n";
+        } else if (!Validaciones.validarDireccion(direccion)) {
+            errores += "- Dirección inválida. Debe contener letras y números (Ej: Calle 45 #12-34).\n";
+        }
+
+        // Mostrar todos los errores juntos, si hay
+        if (!errores.isEmpty()) {
+            JOptionPane.showMessageDialog(dialogoConsignacion, errores,
+                "Errores en el formulario",
+                JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return true;
     }
 
     public JTextField getTxtNombreConsignacion() {
@@ -234,5 +277,43 @@ public class Consignacion {
     public void setTotal(double total) {
         this.total = total;
     }
+    
+    public static void main(String[] args) {
+        // Crear un JFrame base (padre del diálogo)
+        JFrame frame = new JFrame("Prueba Consignación");
+        frame.setSize(500, 500);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
 
+        // Crear instancia de la ventana de consignación
+        double total = 150000; // ejemplo de monto total
+        List<Map<Integer, String>> tiposDoc = new ArrayList<>();
+
+        Map<Integer, String> tipo1 = new HashMap<>();
+        tipo1.put(1, "Cédula de ciudadanía");
+
+        Map<Integer, String> tipo2 = new HashMap<>();
+        tipo2.put(2, "Tarjeta de identidad");
+
+        Map<Integer, String> tipo3 = new HashMap<>();
+        tipo3.put(3, "Pasaporte");
+
+        tiposDoc.add(tipo1);
+        tiposDoc.add(tipo2);
+        tiposDoc.add(tipo3);
+        Consignacion consignacion = new Consignacion(frame, total, tiposDoc, tiposDoc);
+
+        // Mostrar el diálogo
+        consignacion.dialogoConsignacion.setVisible(true);
+
+        // Ejemplo: Validar los campos al cerrar o presionar botón
+        consignacion.btnConsignar.addActionListener(e -> {
+            if (consignacion.validarCamposConsignacion()) {
+                System.out.println("✅ Validaciones correctas. Se puede procesar la consignación.");
+                consignacion.dialogoConsignacion.dispose();
+            } else {
+                System.out.println("❌ Hay errores en los campos de consignación.");
+            }
+        });
+    }
 }
