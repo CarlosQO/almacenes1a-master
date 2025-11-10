@@ -234,7 +234,7 @@ public class ControladorCatalogo implements ActionListener {
                     }
 
                     JLabel lblCategoria = new JLabel(nombreCategoria);
-                    lblCategoria.setFont(new Font("Arial", Font.BOLD, 18));
+                    lblCategoria.setFont(new Font("Times New Roman", Font.BOLD, 24));
                     lblCategoria.setForeground(Color.BLACK);
                     lblCategoria.setBounds(xInicial, yInicioCategoria, 300, 30);
                     publish(lblCategoria);
