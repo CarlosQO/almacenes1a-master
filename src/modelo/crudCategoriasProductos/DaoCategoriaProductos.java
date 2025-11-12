@@ -32,4 +32,27 @@ public class DaoCategoriaProductos implements CrudCategoriasProductos<Categoria>
         }
     } 
 
+    @Override
+    public String buscarNombreCategoria(int idCategoria) {
+        String sql = "SELECT nombre FROM categoria WHERE id = ?";
+        
+        try (
+            Connection con = Conexion.getInstance().getConnection();
+            PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+            ps.setInt(1, idCategoria);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                return rs.getString("nombre");
+            } else {
+                return null; // No se encontró la categoría
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "Error al buscar categoría", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+    
 }

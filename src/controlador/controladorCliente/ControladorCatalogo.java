@@ -21,31 +21,21 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
-import modelo.crudBancos.Banco;
-import modelo.crudBancos.DaoBancos;
-import modelo.crudCarrito.DaoCarrito;
-import modelo.crudCarrito.ProductosCarrito;
-import modelo.crudCarrito.PromocionCarrito;
-import modelo.crudDocumento.Documento;
-import modelo.crudDocumento.DocumentoDao;
-import modelo.crudMetodoDePago.MetodoPagoDao;
-import modelo.crudProducto.Producto;
-import modelo.crudProducto.ProductoDao;
-import modelo.crudPromociones.Promocion;
-import modelo.crudPromociones.PromocionDao;
-import modelo.pasarelaDePagosModelo.Factory;
-import modelo.pasarelaDePagosModelo.ProcesoDePago;
-import modelo.pasarelaDePagosModelo.TipoDePago;
-import vista.componentes.CalcularTamañoPanel;
-import vista.componentes.ScrollPersonalizado;
+import modelo.crudBancos.*;
+import modelo.crudCarrito.*;
+import modelo.crudDocumento.*;
+import modelo.crudMetodoDePago.*;
+import modelo.crudProducto.*;
+import modelo.crudPromociones.*;
+import modelo.pasarelaDePagosModelo.*;
+import modelo.crudCategoriasProductos.*;
+import vista.componentes.*;
 import vista.vistaCliente.PanelPrincipal;
 import vista.vistaCliente.pasarelaVista.BilleterElectronica;
 import vista.vistaCliente.pasarelaVista.Consignacion;
 import vista.vistaCliente.pasarelaVista.PasarelaPagosVista;
 import vista.vistaCliente.pasarelaVista.Tarjetas;
-import vista.vistaCliente.tarjetas.TarjetaProducto;
-import vista.vistaCliente.tarjetas.TarjetaPromocion;
-import vista.vistaCliente.tarjetas.TarjetasProductoCarrito;
+import vista.vistaCliente.tarjetas.*;
 
 public class ControladorCatalogo implements ActionListener {
     private JFrame frame;
@@ -195,16 +185,13 @@ public class ControladorCatalogo implements ActionListener {
 
     // buscar categorias
     public String buscarCategoria(int idCategoria) {
-        /*
-         * DaoCategoriasProductos dao = new DaoCategoriasProductos();
-         * String nombreCategoria = dao.buscarNombreCategoria(idCategoria);
-         * 
-         * if (nombreCategoria == null || nombreCategoria.isEmpty()) {
-         * return "Sin categoría";
-         * }
-         * return nombreCategoria;
-         */
-        return "categoria";
+        DaoCategoriaProductos dao = new DaoCategoriaProductos();
+        String nombreCategoria = dao.buscarNombreCategoria(idCategoria);
+         
+        if (nombreCategoria == null || nombreCategoria.isEmpty()) {
+             return "Sin categoría";
+        }
+        return nombreCategoria;
     }
 
     // listar
