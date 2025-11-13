@@ -1,5 +1,4 @@
 package controladorCliente;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -12,12 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
@@ -166,7 +165,6 @@ public class ControladorCatalogo implements ActionListener {
             if (listaProductos != null) {
                 totalItems += listaProductos.size();
             }
-
             if (listaPromociones != null) {
                 totalItems += listaPromociones.size();
             }
@@ -179,9 +177,7 @@ public class ControladorCatalogo implements ActionListener {
         }
     }
 
-    public int obtenerCantidadPromociones() {
-        return daoPromociones.numeroPromociones();
-    }
+    public int obtenerCantidadPromociones() { return daoPromociones.numeroPromociones(); }
 
     // buscar categorias
     public String buscarCategoria(int idCategoria) {
@@ -189,7 +185,7 @@ public class ControladorCatalogo implements ActionListener {
         String nombreCategoria = dao.buscarNombreCategoria(idCategoria);
          
         if (nombreCategoria == null || nombreCategoria.isEmpty()) {
-             return "Sin categoría";
+            return "Sin categoría";
         }
         return nombreCategoria;
     }
@@ -205,14 +201,9 @@ public class ControladorCatalogo implements ActionListener {
                 List<Producto> listaProductos = daoProducto.mostrarProductos();
                 int xInicial = 125;
                 int yInicial = 10;
-                if (obtenerCantidadPromociones() > 0) {
-                    yInicial = 100;
-                }
-
                 int anchoTarjeta = 220, altoTarjeta = 330;
                 int separacionX = 50, separacionY = 50;
                 int columnas = 3;
-
                 int contador = 0;
                 int categoriaActual = -1;
                 int yInicioCategoria = yInicial;
@@ -544,52 +535,75 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     public void cargarProductos() {
-        // panelPrincipal.panelCentroContenido.removeAll();
         panelPrincipal.panelTarjetasProductos = new JPanel();
         panelPrincipal.panelTarjetasProductos.removeAll();
         panelPrincipal.panelTarjetasProductos.setBackground(new Color(0x93E6FF));
         panelPrincipal.panelTarjetasProductos.setLayout(null);
+        int posicionY = 0;
 
-        if (obtenerCantidadPromociones() > 0) {
-            JPanel promos = new JPanel();
-            promos.add(cargarPromociones());
-            promos.setBounds(10, 10, 980, 460);
-            // panelPrincipal.panelTarjetasProductos.add(promos);
-            panelPrincipal.panelTarjetasProductos.add(cargarPromociones());
-        }
         try {
-            getListarProductos(panelPrincipal.panelTarjetasProductos);
+            if (obtenerCantidadPromociones() > 0) {
+                JPanel panelPromociones = new JPanel();
+                panelPromociones.setLayout(null);
+                panelPromociones.setBackground(new Color(0x93E6FF));
+                getListarPromociones(panelPromociones);
+
+                // Calculamos el ancho total (cada tarjeta mide 650 + 30 de margen)
+                int cantidadPromos = obtenerCantidadPromociones();
+                int anchoTotal = cantidadPromos * 680;
+                if (anchoTotal < 1000) {anchoTotal = 1000;}
+
+                panelPromociones.setPreferredSize(new Dimension(anchoTotal, 400));
+
+                // Scroll horizontal SOLO para promociones
+                JScrollPane scrollPromociones = new JScrollPane(panelPromociones,
+                        JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+                        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                scrollPromociones.setBounds(0, posicionY, 990, 470);
+                scrollPromociones.setBorder(null);
+                scrollPromociones.getHorizontalScrollBar().setUnitIncrement(20); // velocidad del scroll
+
+                panelPrincipal.panelTarjetasProductos.add(scrollPromociones);//agregar al panel principal del catalogo
+
+                posicionY += 480; // Dejamos espacio debajo para productos
+            }
+
+            JPanel panelProductos = new JPanel();
+            panelProductos.setLayout(null);
+            panelProductos.setBackground(new Color(0x93E6FF));
+
+            getListarProductos(panelProductos);
+
+            int numeroCategorias = daoProducto.obtenerCantidadCategoriasConProductos();
+            numeroCategorias *= 2;
+
+            // Calcular el alto necesario para el panel de productos
+            int numeroTarjetas = obtenerCantidadProductos();
+            CalcularTamañoPanel calc = new CalcularTamañoPanel();
+            int altoCalculadoProductos = calc.calcularAltoPanel(numeroTarjetas, 3, 330, 50, 20);
+            altoCalculadoProductos += 100;
+
+            altoCalculadoProductos += numeroCategorias * 70; // espacio extra por categorías
+
+            panelProductos.setBounds(0, posicionY, 1000, altoCalculadoProductos);
+            panelPrincipal.panelTarjetasProductos.add(panelProductos);
+
+            int altoTotal = posicionY + altoCalculadoProductos;
+            panelPrincipal.panelTarjetasProductos.setPreferredSize(new Dimension(1000, altoTotal));
+
+            scrollPersonalizado = new ScrollPersonalizado(panelPrincipal.panelTarjetasProductos, "vertical", 1000, 500);
+            scrollPersonalizado.setBounds(0, 0, 1000, 600);
+
+            panelPrincipal.panelCentroContenido.removeAll();
+            panelPrincipal.panelCentroContenido.add(scrollPersonalizado);
+            panelPrincipal.panelCentroContenido.revalidate();
+            panelPrincipal.panelCentroContenido.repaint();
+
         } catch (IOException ex) {
             Logger.getLogger(ControladorCatalogo.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        // Ajustar tamaño del contenido según número de tarjetas
-        int numeroCategorias = daoProducto.obtenerCantidadCategoriasConProductos();
-        numeroCategorias *= 2;
-
-        int numeroTarjetas = obtenerCantidadProductos();
-
-        CalcularTamañoPanel calc = new CalcularTamañoPanel();
-        int altoCalculado = calc.calcularAltoPanel(numeroTarjetas, 3, 330, 50, 20);
-        altoCalculado += 30;
-        // Espacio adicional para las etiquetas de categoría
-        int espacioPorCategoria = 50;
-        altoCalculado += numeroCategorias * espacioPorCategoria;
-
-        if (obtenerCantidadPromociones() > 0) {
-            altoCalculado += 480; // 460 del scroll + 20 de margen
-        }
-        panelPrincipal.panelTarjetasProductos.setPreferredSize(new Dimension(1000, altoCalculado));
-
-        // Crear scroll personalizado que envuelve el panel de tarjetas
-        scrollPersonalizado = new ScrollPersonalizado(panelPrincipal.panelTarjetasProductos, "vertical", 1000, 500);
-        scrollPersonalizado.setBounds(0, 0, 1000, 600);
-        panelPrincipal.panelCentroContenido.add(scrollPersonalizado);
-
-        panelPrincipal.panelCentroContenido.revalidate();
-        panelPrincipal.panelCentroContenido.repaint();
-
     }
+
 
     public void cargarProductosACarrito() {
         // daoCarrito.validarStockItemsCarrito(idUsuario);
@@ -642,16 +656,14 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     // carrito acciones
-    public void agregarACarritoProductosDeCompras(int idProducto, int idUsuario, String imagen, int cantidad,
-            double precioUnitario) {
+    public void agregarACarritoProductosDeCompras(int idProducto, int idUsuario, String imagen, int cantidad, double precioUnitario) {
         daoCarrito.agregarProductosAlCarrito(idProducto, idUsuario, imagen, cantidad, precioUnitario);
         if (panelPrincipal.carritoContenedor.isVisible()) {
             cargarProductosACarrito();
         }
     }
 
-    public void agregarACarritoPromociones(int idPromocion, int idUsuario, String imagen, int cantidad,
-            double precioUnitario) {
+    public void agregarACarritoPromociones(int idPromocion, int idUsuario, String imagen, int cantidad, double precioUnitario) {
         daoCarrito.agregarPromocionAlCarrito(idPromocion, idUsuario, imagen, cantidad, precioUnitario);
         if (panelPrincipal.carritoContenedor.isVisible()) {
             cargarProductosACarrito();
@@ -749,38 +761,22 @@ public class ControladorCatalogo implements ActionListener {
         return stockSuficiente;
     }
 
-    public void disminuirStockProductosReal(int idProducto, int cantidad) {
-        daoProducto.setDismuirStock(idProducto, cantidad);
-    }
+    public void disminuirStockProductosReal(int idProducto, int cantidad) { daoProducto.setDismuirStock(idProducto, cantidad);    }
 
-    public void disminuirStockPromocionReal(int idProducto, int cantidad) {
-        daoPromociones.disminuirStockPromocion(idProducto, cantidad);
-    }
+    public void disminuirStockPromocionReal(int idProducto, int cantidad) { daoPromociones.disminuirStockPromocion(idProducto, cantidad);}
 
-    public boolean getValidadStockProductos(int idProducto, int cantidad) {
-        return daoProducto.getValidarStockProducto(idProducto, cantidad);
-    }
+    public boolean getValidadStockProductos(int idProducto, int cantidad) { return daoProducto.getValidarStockProducto(idProducto, cantidad);}
 
-    public boolean getValidarStockPromocion(int idPromocion, int cantidadPromocion) {
-        return daoPromociones.validarStockPromocion(idPromocion, cantidadPromocion);
-    }
+    public boolean getValidarStockPromocion(int idPromocion, int cantidadPromocion) { return daoPromociones.validarStockPromocion(idPromocion, cantidadPromocion);}
 
-    public int getCantidadDisponible(int idProducto) {
-        return daoProducto.stockProducto(idProducto);
-    }
+    public int getCantidadDisponible(int idProducto) { return daoProducto.stockProducto(idProducto); }
 
-    public int getCantidadDisponiblePromocion(int idPromocion) {
-        return daoPromociones.cantidadEnStockPromociones(idPromocion);
-    }
+    public int getCantidadDisponiblePromocion(int idPromocion) { return daoPromociones.cantidadEnStockPromociones(idPromocion); }
 
     // disminuir cantridad en las tablas
-    public List<Integer> getIdsProductosPromociones(int idPromocion) {
-        return daoPromociones.obtenerIdsProductosPromocion(idPromocion);
-    }
+    public List<Integer> getIdsProductosPromociones(int idPromocion) { return daoPromociones.obtenerIdsProductosPromocion(idPromocion); }
 
-    public void actualizarProductoConBajoStock(int idUsuario, int idProducto, int cantidad) {
-        daoCarrito.actualizarCantidadProducto(idUsuario, idProducto, cantidad);
-    }
+    public void actualizarProductoConBajoStock(int idUsuario, int idProducto, int cantidad) { daoCarrito.actualizarCantidadProducto(idUsuario, idProducto, cantidad); }
 
     public void actualizarPromocionConBajoStock(int idUsuario, int idPromocion, int cantidadDisponible) {
         daoCarrito.actualizarCantidadPromocion(idUsuario, idPromocion, cantidadDisponible);
@@ -991,7 +987,6 @@ public class ControladorCatalogo implements ActionListener {
     public List<Map<Integer, String>> cargarTiposDocumento() {
         DocumentoDao daoDocumento = new DocumentoDao();
         List<Documento> documentos = daoDocumento.listar();
-
         List<Map<Integer, String>> tiposDoc = new ArrayList<>();
 
         try {
@@ -1009,7 +1004,6 @@ public class ControladorCatalogo implements ActionListener {
     public List<Map<Integer, String>> listarBancos() {
         DaoBancos daoBancos = new DaoBancos();
         List<Banco> bancos = daoBancos.listarBancos();
-
         List<Map<Integer, String>> listaBancos = new ArrayList<>();
 
         try {
