@@ -462,6 +462,9 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     public void cargarProductos() {
+        panelPrincipal.panelCentroContenido.revalidate();
+        panelPrincipal.panelCentroContenido.repaint();
+
         panelPrincipal.panelTarjetasProductos = new JPanel();
         panelPrincipal.panelTarjetasProductos.removeAll();
         panelPrincipal.panelTarjetasProductos.setBackground(new Color(0x93E6FF));
@@ -531,6 +534,8 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     public void cargarProductosACarrito() {
+        panelPrincipal.panelCentroContenido.revalidate();
+        panelPrincipal.panelCentroContenido.repaint();
         panelPrincipal.carritoContenedor.setVisible(true);
         panelPrincipal.contenedorTarjetasCorritas.removeAll();
 
