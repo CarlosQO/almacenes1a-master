@@ -69,7 +69,6 @@ public class Validaciones {
         return true;
     }
 
-<<<<<<< HEAD
      public static boolean validarNumeros(String texto) {
         return Pattern.matches("^\\d+$", texto);
     }
@@ -109,7 +108,7 @@ public class Validaciones {
         return Pattern.matches(regex, texto.trim());
     }
 
-=======
+
     public static boolean validarDescripcion(String texto) {
         if (texto == null)
             return false;
@@ -176,5 +175,5 @@ public class Validaciones {
         int cantidad = Integer.parseInt(texto);
         return cantidad > 0;
     }
->>>>>>> master
+
 }

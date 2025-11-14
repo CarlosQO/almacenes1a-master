@@ -12,10 +12,7 @@ public class pr {
         System.out.println("Hola desde el repositorio de administrador");
         Login l = new Login();
         PaginaLogin p = new PaginaLogin(l);
-<<<<<<< HEAD
         System.out.println("Prueba");
-=======
 
->>>>>>> master
     }
 }
