@@ -126,4 +126,14 @@ public class ProveedorEmpresaDao implements CrudProveedor<ProveedorEmpresa> {
     public int CambiarEstado(int id, int estado) {
         return 0;
     }
+
+    @Override
+    public List<ProveedorEmpresa> listarProveedorPorID(String documento) {
+        return null;
+    }
+
+    @Override
+    public List<ProveedorEmpresa> listarProveedorActivosInactivos() {
+        return null;
+    }
 }

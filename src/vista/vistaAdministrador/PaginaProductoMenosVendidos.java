@@ -30,7 +30,7 @@ public class PaginaProductoMenosVendidos extends JFrame {
         contenedor.add(header);
 
         // COMPONENTE DE FECHAS
-        containFechas = new FechasComponente(5, 0x000000, "Generar Reporte", "Productos Menos Vendidos");
+        containFechas = new FechasComponente(5, 0xffffff, "Generar Reporte", "Productos Menos Vendidos");
         containFechas.setBounds(10, 120, 200, 210);
         contenedor.add(containFechas);
 

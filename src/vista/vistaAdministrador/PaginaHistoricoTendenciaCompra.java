@@ -39,7 +39,6 @@ public class PaginaHistoricoTendenciaCompra extends JFrame {
         header = new Header();
         contenedor.add(header);
 
-        // COMPONENTE DE FECHAS (reemplazado por PanelHistorico)
         containFechas = new FechasContainMesAño();
         containFechas.setBackground(new Color(0xF8F9FB));
         containFechas.setBounds(10, 120, 200, 180);

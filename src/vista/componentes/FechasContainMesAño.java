@@ -21,10 +21,10 @@ public class FechasContainMesAño extends RoundedPanel {
 
     public FechasContainMesAño() {
         super(20, 0xFFFFFF); // Bordes redondeados, color blanco
+        setShadowSize(1);
         setLayout(null);
-        setBackground(new Color(0xFFFFFF));
+        setBackground(new Color(0xCFCFCF));
         setBounds(10, 120, 200, 180);
-        setShadowSize(2);
 
         Font fontLabel = fuente.fuente(6, true);
         Font fontTitulo = fuente.fuente(5, true);
