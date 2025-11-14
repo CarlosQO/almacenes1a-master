@@ -21,10 +21,10 @@ public class controladorSolicitudesDeReposicion implements ActionListener {
     private ScrollPersonalizado scrollSolicitudes;
     private JFrame frame;
 
-    public controladorSolicitudesDeReposicion(int idVendedor) {
+    public controladorSolicitudesDeReposicion(JFrame frame, int idVendedor) {
         this.idVendedor = idVendedor;
         this.daoSolicitudesReposicion = new DaoSolicitudesReposicion();
-        this.frame = new JFrame("Módulo Solicitudes de Reposición");
+        this.frame = frame;
         cargarModuloReposicion();
 
     }
@@ -35,7 +35,7 @@ public class controladorSolicitudesDeReposicion implements ActionListener {
 
     public void cargarModuloReposicion() {
         frame.setSize(1300, 700);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
         vistaModuloSolicitudes = new ModuloReposicionArticulos(frame);
@@ -114,6 +114,7 @@ public class controladorSolicitudesDeReposicion implements ActionListener {
     }
 
     public static void main(String[] args) {
-        controladorSolicitudesDeReposicion controlador = new controladorSolicitudesDeReposicion(1002);
+        JFrame frame = new JFrame("Módulo Solicitudes de Reposición");
+        controladorSolicitudesDeReposicion controlador = new controladorSolicitudesDeReposicion(frame, 1002);
     }
 }

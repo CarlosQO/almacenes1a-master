@@ -11,7 +11,7 @@ public class ModuloRegistrarModulos extends javax.swing.JPanel {
 
     private JFrame ventana;
     private Header header;
-    public String titulo; 
+    public String titulo;
     public Formulario formularioRegistro;
 
     public ModuloRegistrarModulos(JFrame frame, Map<Integer, String> categorias) {
@@ -21,6 +21,7 @@ public class ModuloRegistrarModulos extends javax.swing.JPanel {
         setLayout(null);
         setBackground(Color.WHITE);
         setSize(1300, 700);
+        setVisible(true);
 
         // Header
         header = new Header();
@@ -32,11 +33,11 @@ public class ModuloRegistrarModulos extends javax.swing.JPanel {
         // Solo agregamos el panelFormulario
         add(formularioRegistro.getPanelFormulario());
     }
-    
-    public boolean validarCampos(){
+
+    public boolean validarCampos() {
         return formularioRegistro.validarCampos();
     }
-    
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             // Crear frame principal
