@@ -173,7 +173,7 @@ public class PaginaPrincipal implements ActionListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 paginaDeshabilitarProveedor = new vista.vistaAdministrador.PaginaDeshabilitarProveedor();
-                controDesPro = new PaginaDeshabilitarProveedor(paginaDeshabilitarProveedor);
+                controDesPro = new PaginaDeshabilitarProveedor();
                 configurarCierreVentana(paginaDeshabilitarProveedor);
             }
         });
