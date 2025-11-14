@@ -95,6 +95,8 @@ public class PaginaRegistro implements ActionListener {
                 } else {
                     JOptionPane.showMessageDialog(null, "Las contrasenas no coinciden");
                 }
+            } else {
+                return;
             }
         }
     }

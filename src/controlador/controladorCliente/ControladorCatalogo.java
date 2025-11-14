@@ -464,6 +464,7 @@ public class ControladorCatalogo implements ActionListener {
     public void cargarProductos() {
         panelPrincipal.panelCentroContenido.revalidate();
         panelPrincipal.panelCentroContenido.repaint();
+        
 
         panelPrincipal.panelTarjetasProductos = new JPanel();
         panelPrincipal.panelTarjetasProductos.removeAll();
@@ -979,7 +980,7 @@ public class ControladorCatalogo implements ActionListener {
 
     // Salgo
     public double getSaldo() {
-        return 1000000000.00;
+        return 10000000.00;
     }
 
     public static void main(String[] args) throws IOException {

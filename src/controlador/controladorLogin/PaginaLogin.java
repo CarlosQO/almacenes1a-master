@@ -102,6 +102,10 @@ public class PaginaLogin implements ActionListener {
                 PanelPrincipal paginaCliente = new PanelPrincipal();
                 ControladorPrincipalCliente con = new ControladorPrincipalCliente(paginaCliente,
                         login.inputNumero.getText());
+                paginaCliente.setResizable(false);
+                paginaCliente.setVisible(true);
+                paginaCliente.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                login.setVisible(false);
                 configurarCierreVentana(paginaCliente);
 
                 break;
@@ -111,6 +115,10 @@ public class PaginaLogin implements ActionListener {
             case 4:
                 VistaSupervisor vs = new VistaSupervisor();
                 ContraladorVistaSuper cs = new ContraladorVistaSuper(vs);
+                vs.setResizable(false);
+                vs.setVisible(true);
+                vs.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                login.setVisible(false);
                 configurarCierreVentana(vs);
                 break;
             default:
