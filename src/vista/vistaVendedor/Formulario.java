@@ -2,6 +2,14 @@ package vista.vistaVendedor;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import javax.swing.*;
 import vista.componentes.*;
@@ -19,14 +27,15 @@ public class Formulario extends JPanel {
     public RoundedButton btnGuardar;
     public JLabel lblImagenSeleccionada;
     public JLabel lblidProducto;
-    public String titulo; 
+    public String titulo, urlImagen;
     public int idProducto;
 
     // constructor que recibe tambien las categorias
-    public Formulario(String titulo, int idProducto, Map<Integer, String> categorias,Map<Integer, String> estados, int x, int y) {
+    public Formulario(String titulo, int idProducto, Map<Integer, String> categorias, Map<Integer, String> estados,
+            int x, int y) {
         this.titulo = titulo;
         this.idProducto = idProducto;
-        
+
         panelFormulario = new RoundedPanel(30, 0xC7D9E8);
         panelFormulario.setShadowSize(1);
         panelFormulario.setBackground(new Color(240, 248, 255));
@@ -48,7 +57,7 @@ public class Formulario extends JPanel {
         if (titulo.equals("Registro")) {
             txtIdProducto = crearCampoTexto(60, 100, 250, 25);
             panelFormulario.add(txtIdProducto);
-            
+
             JLabel lblCantidad = new JLabel("cantidad* :");
             aplicarFuenteLabels(lblCantidad);
             lblCantidad.setBounds(305, 370, 110, 25);
@@ -61,7 +70,7 @@ public class Formulario extends JPanel {
             lblIdProducto.setFont(new Font("Times New Roman", Font.PLAIN, 16));
             lblIdProducto.setBounds(60, 100, 230, 25);
             panelFormulario.add(lblIdProducto);
-            
+
             JLabel lblEstado = new JLabel("Estado* :");
             aplicarFuenteLabels(lblEstado);
             lblEstado.setBounds(305, 70, 100, 25);
@@ -109,6 +118,16 @@ public class Formulario extends JPanel {
 
         btnSeleccionarImagen = new JButton("seleccionar imagen");
         btnSeleccionarImagen.setBounds(200, 210, 250, 25);
+        btnSeleccionarImagen.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (!comboCategoria.getSelectedItem().toString().equals("-- seleccione --")) {
+                    agregarImagen();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Debe seleccionar una categoria");
+                }
+            }
+        });
         panelFormulario.add(btnSeleccionarImagen);
 
         lblImagenSeleccionada = new JLabel("", SwingConstants.CENTER);
@@ -137,6 +156,62 @@ public class Formulario extends JPanel {
         btnGuardar.setFont(new Font("Times New Roman", Font.BOLD, 16));
         btnGuardar.setBounds(180, 450, 160, 40);
         panelFormulario.add(btnGuardar);
+    }
+
+    private void agregarImagen() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Selecciona una imagen");
+
+        // Filtro para mostrar solo imágenes
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
+                "Imágenes (JPG, PNG, GIF)", "jpg", "png", "gif"));
+
+        int result = fileChooser.showOpenDialog(null);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = fileChooser.getSelectedFile();
+
+            // 📁 Carpeta destino dentro del proyecto
+            String carpetaDestino = "src/productos/" + comboCategoria.getSelectedItem().toString(); // puedes cambiar el
+            // nombre
+
+            // quitar espacios en blanco entre las palabras del comboCategoria
+            urlImagen = carpetaDestino.replaceAll("\\s+", "") + "/" + archivoSeleccionado.getName();
+
+            lblImagenSeleccionada.setText(urlImagen);
+
+            // Creamos la carpeta si no existe
+            File carpeta = new File(carpetaDestino);
+            if (!carpeta.exists()) {
+                carpeta.mkdir();
+            }
+
+            // 📄 Archivo destino con mismo nombre que el original
+            File destino = new File(carpeta, archivoSeleccionado.getName());
+
+            try {
+                // Copiar el archivo seleccionado a la carpeta destino
+                copiarArchivo(archivoSeleccionado, destino);
+                // JOptionPane.showMessageDialog(null, "Imagen guardada en: " +
+                // destino.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al guardar la imagen");
+            }
+        }
+    }
+
+    // 🔧 Método para copiar archivos
+    private static void copiarArchivo(File origen, File destino) throws IOException {
+        try (InputStream in = new FileInputStream(origen);
+                OutputStream out = new FileOutputStream(destino)) {
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = in.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+        }
     }
 
     private void aplicarFuenteLabels(JLabel label) {
@@ -168,14 +243,14 @@ public class Formulario extends JPanel {
             } else if (!Validaciones.validarNumeros(id)) {
                 errores += "- el id debe contener solo numeros.\n";
             }
-            
+
             String cantidad = txtCantidad.getText().trim();
             if (cantidad.isEmpty()) {
                 errores += "- La cantidad no puede estar vacía.\n";
             } else if (!Validaciones.validarCantidad(cantidad)) {
                 errores += "- La cantidad debe ser un número entero positivo.\n";
             }
-        }else{
+        } else {
             String estados = (String) comboEstado.getSelectedItem();
             if (estados.equals("-- seleccione --")) {
                 errores += "- debe seleccionar un estado.\n";
@@ -184,21 +259,21 @@ public class Formulario extends JPanel {
 
         if (nombre.isEmpty()) {
             errores += "- el nombre no puede estar vacio.\n";
-        }else if (!Validaciones.validarNombreProducto(nombre)) {
+        } else if (!Validaciones.validarNombreProducto(nombre)) {
             errores += "- El nombre solo puede contener letras, números y espacios, y debe tener al menos una letra.\n";
         }
 
         if (categoria.equals("-- seleccione --")) {
             errores += "- debe seleccionar una categoria.\n";
         }
-        
+
         if (descripcion.isEmpty()) {
             errores += "- la descripcion no puede estar vacia.\n";
-        }else if (!Validaciones.validarDescripcionEntre25y55Caracteres(descripcion)) {
+        } else if (!Validaciones.validarDescripcionEntre25y55Caracteres(descripcion)) {
             errores += "- La descripción debe tener entre 25 y 55 caracteres.\n";
         }
-        
-       boolean confirmarPrecio = true;
+
+        boolean confirmarPrecio = true;
         if (precio.isEmpty()) {
             errores += "- El precio no puede estar vacío.\n";
             confirmarPrecio = false;
@@ -212,12 +287,11 @@ public class Formulario extends JPanel {
 
             if (precioDouble < 5000.00) {
                 int opcion = JOptionPane.showConfirmDialog(
-                    null,
-                    "¿Seguro que desea que el producto cueste " + precioDouble + "?",
-                    "Confirmar precio bajo",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE
-                );
+                        null,
+                        "¿Seguro que desea que el producto cueste " + precioDouble + "?",
+                        "Confirmar precio bajo",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE);
 
                 // Si el usuario elige "No", se puede manejar el caso según lo necesites
                 if (opcion != JOptionPane.YES_OPTION) {
@@ -227,13 +301,14 @@ public class Formulario extends JPanel {
         }
 
         if (!errores.isEmpty()) {
-            JOptionPane.showMessageDialog(null, errores, "errores de validacion de campos", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, errores, "errores de validacion de campos",
+                    JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
         return true;
     }
-    
+
     public String getTitulo() {
         return titulo;
     }
@@ -297,11 +372,11 @@ public class Formulario extends JPanel {
     public void setComboCategoria(JComboBox<String> comboCategoria) {
         this.comboCategoria = comboCategoria;
     }
-    
+
     public RoundedPanel getPanelFormulario() {
         return panelFormulario;
     }
-    
+
     public JLabel getLblIdProducto() {
         return lblidProducto;
     }
@@ -313,7 +388,15 @@ public class Formulario extends JPanel {
     public void setComboEstado(JComboBox<String> comboEstado) {
         this.comboEstado = comboEstado;
     }
-    
+
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
+    }
+
     public void limpiarFormulario() {
         // Limpiar campos de texto
         if (txtIdProducto != null) {
@@ -341,7 +424,6 @@ public class Formulario extends JPanel {
         lblImagenSeleccionada.setIcon(null);
     }
 
-    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             // Crear ventana principal
@@ -358,7 +440,7 @@ public class Formulario extends JPanel {
             categorias.put(3, "Cactus");
 
             // Crear instancia del formulario, con posición x=380, y=100
-            Formulario formulario = new Formulario("Actualizar", 0, categorias, categorias,380, 100);
+            Formulario formulario = new Formulario("Actualizar", 0, categorias, categorias, 380, 100);
 
             // Agregar el panelFormulario al JFrame
             ventana.add(formulario.getPanelFormulario());
