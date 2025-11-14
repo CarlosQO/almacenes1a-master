@@ -8,14 +8,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import vista.vistaVendedor.ModuloActualizarDatosProductos;
 import vista.vistaVendedor.ModuloRegistrarModulos;
 import vista.vistaVendedor.ModuloReposicionArticulos;
 import vista.vistaVendedor.RecepcionDeOrdenes;
 import vista.vistaVendedor.VistaVendedor;
-import controlador.controladorVendedor.controladorRecepcionOrdenes;
 
 public class ControladorVendedor implements MouseListener {
 
@@ -87,76 +86,31 @@ public class ControladorVendedor implements MouseListener {
     }
 
     private void registroProducto() {
-        /*
-         * vv.setVisible(false);
-         * PreRegistroProveedor vprp = new PreRegistroProveedor();
-         * new ControladorProve(vprp);
-         * vprp.setVisible(true);
-         * 
-         * vprp.addWindowListener(new WindowAdapter() {
-         * 
-         * @Override
-         * public void windowClosed(WindowEvent e) {
-         * vv.setVisible(true);
-         * }
-         * });
-         * vv.setVisible(false);
-         */
-
-        JFrame sas = new JFrame("sas");
-
-        ControladorRegistrarProductos conRegisProd = new ControladorRegistrarProductos(sas, 1);
-        sas.setVisible(true);
-        sas.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+        JFrame rp = new JFrame("Registro de Productos");
+        ControladorRegistrarProductos conRegisProd = new ControladorRegistrarProductos(rp, 1);
+        ModuloRegistrarModulos moduloRegistro = new ModuloRegistrarModulos(rp, conRegisProd.getListarCatgorias());
+        rp.setVisible(true);
+        configurarCierreVentana(rp);
     }
 
     private void bajoStock() {
 
-        /*
-         * vv.setVisible(false);
-         * ModuloReposicionArticulos vprp = new ModuloReposicionArticulos(new JFrame());
-         * vprp.setVisible(true);
-         * 
-         * 
-         * vprp.addWindowListener(new WindowAdapter() {
-         * 
-         * @Override
-         * public void windowClosed(WindowEvent e) {
-         * vv.setVisible(true);
-         * }
-         * });
-         * 
-         * vv.setVisible(false);
-         */
-
-        // Quitar todos los componentes y mostrar ModuloReposicionArticulos
-        // vv.getContentPane().removeAll();
         JFrame ap = new JFrame("Actualizar de Productos");
-        new ControladorActualizarProductos(ap, 1);
+        ControladorActualizarProductos conActualizarProd = new ControladorActualizarProductos(ap, 1);
+        ModuloActualizarDatosProductos moduloActualizarProductos = new ModuloActualizarDatosProductos(ap,
+                conActualizarProd.getListarCatgorias(), conActualizarProd.getListarEstado());
+        ap.setVisible(true);
         configurarCierreVentana(ap);
 
     }
 
     private void solicitudReposicion() {
-        /*
-         * vv.setVisible(false);
-         * PreRegistroProveedor vprp = new PreRegistroProveedor();
-         * new ControladorProve(vprp);
-         * vprp.setVisible(true);
-         * 
-         * vprp.addWindowListener(new WindowAdapter() {
-         * 
-         * @Override
-         * public void windowClosed(WindowEvent e) {
-         * vv.setVisible(true);
-         * }
-         * });
-         * vv.setVisible(false);
-         */
-
         JFrame sr = new JFrame("Solicitudes de Reposición");
-        new controladorSolicitudesDeReposicion(sr, 1);
+        sr.setVisible(true);
+
+        ModuloReposicionArticulos moduloReposicionArticulos = new ModuloReposicionArticulos(sr);
+        controladorSolicitudesDeReposicion controladorSolicitudesDeReposicion = new controladorSolicitudesDeReposicion(
+                sr, 1);
         configurarCierreVentana(sr);
 
     }

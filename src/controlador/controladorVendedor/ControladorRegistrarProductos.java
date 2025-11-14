@@ -41,7 +41,7 @@ public class ControladorRegistrarProductos implements ActionListener {
 
     public void cargarModuloProductos() {
         frame.setSize(1300, 700);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.getContentPane().removeAll(); // limpia el contenido anterior
 
@@ -106,7 +106,7 @@ public class ControladorRegistrarProductos implements ActionListener {
     public static void main(String[] args) {
         // Crear el frame principal
         JFrame frame = new JFrame("Registro de Productos");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1300, 700);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
