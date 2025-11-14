@@ -16,14 +16,13 @@ import vista.vistaVendedor.ModuloReposicionArticulos;
 import vista.vistaVendedor.RecepcionDeOrdenes;
 import vista.vistaVendedor.VistaVendedor;
 
-import controladorVendedor.controladorRecepcionOrdenes;
-
 public class ControladorVendedor implements MouseListener {
 
     private VistaVendedor vv = new VistaVendedor();
 
     public ControladorVendedor(VistaVendedor vv) {
         this.vv = vv;
+        vv.setLocationRelativeTo(null);
         vv.getPanelRecepcionOrdenes().addMouseListener(this);
         vv.getPanelRecepcionOrdenes().setCursor(new Cursor(Cursor.HAND_CURSOR));
         vv.getPanelBajoStock().addMouseListener(this);
