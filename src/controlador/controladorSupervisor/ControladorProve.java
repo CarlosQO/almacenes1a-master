@@ -1,17 +1,25 @@
-package controladorSupervisor;
+package controlador.controladorSupervisor;
 
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
+import modelo.crudMetodoDePago.MetodoPago;
+import modelo.crudMetodoDePago.MetodoPagoDao;
 import modelo.crudProducto.Producto;
 import modelo.crudProducto.ProductoDao;
 import modelo.crudProveedor.Proveedor;
 import modelo.crudProveedor.ProveedorDao;
 import modelo.crudProveedorEmpresa.ProveedorEmpresa;
+import javax.swing.JList;
 import modelo.crudProveedorEmpresa.ProveedorEmpresaDao;
+import vista.componentes.Validaciones;
 import vista.vistaSupervisor.PreRegistroProveedor;
 
 public class ControladorProve implements ActionListener {
@@ -19,21 +27,18 @@ public class ControladorProve implements ActionListener {
     public Proveedor p = new Proveedor();
     public PreRegistroProveedor vista = new PreRegistroProveedor();
     private ProveedorEmpresaDao empresaDao = new ProveedorEmpresaDao();
-    private ProductoDao productoDao;
     private int currentProviderId;
     private Producto productoSeleccionado;
 
     public ControladorProve(PreRegistroProveedor vista) {
         this.vista = vista;
-        this.productoDao = new ProductoDao();
         this.currentProviderId = 0;
         this.productoSeleccionado = null;
 
-        // Configurar action listeners
+        // === Registrar listeners ===
         vista.getTipoEntidad().addActionListener(this);
         vista.getBtnEnviarPersona().addActionListener(this);
         vista.getBtnEnviarEmpresa().addActionListener(this);
-        // Registrar ambos botones "Agregar" (persona y empresa)
         try {
             if (vista.getBtnAgregarProPersona() != null)
                 vista.getBtnAgregarProPersona().addActionListener(this);
@@ -44,11 +49,65 @@ public class ControladorProve implements ActionListener {
             if (vista.getBtnAgregarProEmpresa() != null)
                 vista.getBtnAgregarProEmpresa().addActionListener(this);
         } catch (Exception ex) {
-            // ignore if not present
         }
+
+        inicializarCombos();
     }
 
     public ControladorProve() {
+    }
+
+    private void inicializarCombos() {
+        try {
+            cargarProductosSinProveedor(vista.getCboProductoPersona());
+            configurarRendererProducto(vista.getCboProductoPersona());
+
+            cargarProductosSinProveedor(vista.getCboProductoEmpresa());
+            configurarRendererProducto(vista.getCboProductoEmpresa());
+
+            cargarMetodosPago(vista.getCboPersonaMedioPago());
+            cargarMetodosPago(vista.getCboMedioPago());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(vista, "Error al cargar datos iniciales: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void cargarProductosSinProveedor(JComboBox<Producto> comboBox) {
+        ProductoDao productoDao = new ProductoDao();
+        comboBox.removeAllItems();
+        List<Producto> productos = productoDao.listarProductosSinProveedor();
+        for (Producto producto : productos) {
+            comboBox.addItem(producto);
+        }
+        if (comboBox.getItemCount() > 0)
+            comboBox.setSelectedIndex(0);
+    }
+
+    private void cargarMetodosPago(JComboBox<MetodoPago> comboBox) {
+        MetodoPagoDao metodoDao = new MetodoPagoDao();
+        comboBox.removeAllItems();
+        List<MetodoPago> metodos = metodoDao.listarMetodosPago();
+        for (MetodoPago metodo : metodos) {
+            comboBox.addItem(metodo);
+        }
+        if (comboBox.getItemCount() > 0)
+            comboBox.setSelectedIndex(0);
+    }
+
+    private void configurarRendererProducto(JComboBox<Producto> comboBox) {
+        comboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                    boolean isSelected, boolean cellHasFocus) {
+                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (value instanceof Producto) {
+                    Producto producto = (Producto) value;
+                    setText(producto.getNombre());
+                }
+                return this;
+            }
+        });
     }
 
     @Override
@@ -65,7 +124,6 @@ public class ControladorProve implements ActionListener {
                 vista.getPanelCards().setBounds(vista.getWidth() - 550, 170, 450, 450);
             }
 
-            // Forzar refresco de la vista
             vista.revalidate();
             vista.repaint();
         } else if (e.getSource() == vista.getBtnEnviarPersona()) {
@@ -103,21 +161,43 @@ public class ControladorProve implements ActionListener {
         }
     }
 
-    private void asignarProductoGuardado(int idProveedor) {
+    private void validarYRegistrarProveedor(Proveedor nuevo) {
         if (productoSeleccionado != null) {
-            if (productoDao.asignarProveedor(productoSeleccionado.getId(), idProveedor)) {
-                System.out.println("Producto asignado exitosamente al proveedor: " + idProveedor);
-                productoSeleccionado = null; // Limpiar después de asignar
-                vista.actualizarListaProductos(); // Actualizar la lista de productos
-            } else {
-                System.out.println("Error al asignar el producto al proveedor");
-            }
+            nuevo.setIdProducto(productoSeleccionado.getId());
         }
-    }
 
-    public void setCurrentProviderId(int id) {
-        System.out.println("Estableciendo ID del proveedor actual: " + id);
-        this.currentProviderId = id;
+        if (nuevo.getDocumento().isEmpty() || nuevo.getNombre().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe completar el número de documento y el nombre.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (nuevo.getMetodoDePago() == 0) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un método de pago.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (pdao.existeProveedorPorNit(nuevo.getDocumento())) {
+            JOptionPane.showMessageDialog(null, "Ya existe un proveedor registrado con este número de documento.",
+                    "Error de Duplicidad", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int idInsert = pdao.setAgregar(nuevo);
+
+        if (idInsert > 0) {
+            this.currentProviderId = idInsert;
+            JOptionPane.showMessageDialog(null, "Proveedor agregado correctamente.", "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+            if (productoSeleccionado != null) {
+                cargarProductosSinProveedor(vista.getCboProductoEmpresa());
+                cargarProductosSinProveedor(vista.getCboProductoPersona());
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo agregar el proveedor. Revise la conexión o los datos.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void insertarProveedorEmpresa() {
@@ -126,7 +206,6 @@ public class ControladorProve implements ActionListener {
             return;
         }
 
-        // leer campos de la vista
         String nit = vista.getEmpresaNit();
         String nombreEntidad = vista.getEmpresaNombreEntidad();
         int medioPago = vista.getEmpresaMedioDePago();
@@ -139,19 +218,48 @@ public class ControladorProve implements ActionListener {
         String repTelefono = vista.getRepresentanteTelefono();
         String repCorreo = vista.getRepresentanteCorreo();
 
-        if (nit.isEmpty() || nombreEntidad.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Debe completar NIT y nombre de la entidad.", "Validación",
+        if (!Validaciones.validarCedula(nit)) {
+            JOptionPane.showMessageDialog(null, "El NIT no es válido. Debe contener entre 10 y 11 dígitos numéricos.",
+                    "Validación", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarTelefono(telefonoEntidad)) {
+            JOptionPane.showMessageDialog(null, "El teléfono de la entidad no es válido.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarCorreo(correoEntidad)) {
+            JOptionPane.showMessageDialog(null, "El correo de la entidad no es válido.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarSoloLetras(repNombre)) {
+            JOptionPane.showMessageDialog(null, "El nombre del representante debe contener solo letras y espacios.",
+                    "Validación", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarCedula(repDocumento)) {
+            JOptionPane.showMessageDialog(null,
+                    "El documento del representante no es válido. Debe ser numérico (10-11 dígitos).",
+                    "Validación", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarTelefono(repTelefono)) {
+            JOptionPane.showMessageDialog(null, "El teléfono del representante no es válido.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarCorreo(repCorreo)) {
+            JOptionPane.showMessageDialog(null, "El correo del representante no es válido.", "Validación",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (repDocumento.isEmpty() || repNombre.isEmpty() || repTelefono.isEmpty() || repCorreo.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe completar todos los datos del representante.", "Validación",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        if (medioPago == 0) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un método de pago.", "Validación",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        // 1) Insertar en tabla proveedor
         Proveedor nuevo = new Proveedor();
         nuevo.setTipo("EMPRESA");
         nuevo.setDocumento(nit);
@@ -160,33 +268,25 @@ public class ControladorProve implements ActionListener {
         nuevo.setDireccion(direccion);
         nuevo.setTelefono(telefonoEntidad);
         nuevo.setCorreo(correoEntidad);
-        nuevo.setEstado(1);
+        nuevo.setIdProducto(vista.getProductoSeleccionado() != null ? vista.getProductoSeleccionado().getId() : 0);
+        nuevo.setEstado(3);
 
-        int idInsert = pdao.setAgregar(nuevo);
-        setCurrentProviderId(idInsert);
-        if (idInsert <= 0) {
-            JOptionPane.showMessageDialog(null, "No se pudo agregar la empresa en tabla proveedor.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        validarYRegistrarProveedor(nuevo);
 
-        // 2) Insertar datos específicos en proveedor_empresa
-        ProveedorEmpresa pe = new ProveedorEmpresa();
-        pe.setIdProveedor(idInsert);
-        pe.setRepresentanteNombre(repNombre);
-        pe.setRepresentanteDocumento(repDocumento);
-        pe.setRepresentanteTelefono(repTelefono);
-        pe.setRepresentanteCorreo(repCorreo);
+        if (this.currentProviderId > 0) {
+            ProveedorEmpresa pe = new ProveedorEmpresa();
+            pe.setIdProveedor(this.currentProviderId);
+            pe.setRepresentanteNombre(repNombre);
+            pe.setRepresentanteDocumento(repDocumento);
+            pe.setRepresentanteTelefono(repTelefono);
+            pe.setRepresentanteCorreo(repCorreo);
 
-        int res = empresaDao.setAgregar(pe);
-        if (res > 0) {
-            asignarProductoGuardado(idInsert);
-            JOptionPane.showMessageDialog(null, "Empresa agregada correctamente.", "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, "La empresa se insertó en proveedor pero falló proveedor_empresa.",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
+            int res = empresaDao.setAgregar(pe);
+            if (res <= 0) {
+                JOptionPane.showMessageDialog(null,
+                        "El proveedor se registró, pero falló al guardar los datos del representante.",
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
 
@@ -198,23 +298,29 @@ public class ControladorProve implements ActionListener {
 
         String documento = vista.getPersonaNumeroDoc();
         String nombre = vista.getPersonaNombre();
-
-        System.out.println("Documento: [" + documento + "]");
-        System.out.println("Nombre: [" + nombre + "]");
         int medioPago = vista.getPersonaMedioDePago();
         String direccion = vista.getPersonaDireccion();
         String telefono = vista.getPersonaTelefono();
         String correo = vista.getPersonaCorreo();
 
-        // Validaciones simples
-        if (documento.isEmpty() || nombre.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Debe completar el número de documento y el nombre.", "Validación",
+        if (!Validaciones.validarCedula(documento)) {
+            JOptionPane.showMessageDialog(null,
+                    "El número de documento no es válido. Debe contener entre 10 y 11 dígitos numéricos.",
+                    "Validación", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarSoloLetras(nombre)) {
+            JOptionPane.showMessageDialog(null, "El nombre debe contener solo letras y espacios.",
+                    "Validación", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!Validaciones.validarTelefono(telefono)) {
+            JOptionPane.showMessageDialog(null, "El número de teléfono no es válido.", "Validación",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        if (medioPago == 0) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un método de pago.", "Validación",
+        if (!Validaciones.validarCorreo(correo)) {
+            JOptionPane.showMessageDialog(null, "El formato del correo electrónico no es válido.", "Validación",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -227,18 +333,9 @@ public class ControladorProve implements ActionListener {
         nuevo.setDireccion(direccion);
         nuevo.setTelefono(telefono);
         nuevo.setCorreo(correo);
-        nuevo.setEstado(1); // activo por defecto
+        nuevo.setIdProducto(vista.getProductoSeleccionado() != null ? vista.getProductoSeleccionado().getId() : 0);
+        nuevo.setEstado(3);
 
-        int idInsert = pdao.setAgregar(nuevo);
-        if (idInsert > 0) {
-            asignarProductoGuardado(idInsert);
-            JOptionPane.showMessageDialog(null, "Proveedor agregado correctamente.", "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-            setCurrentProviderId(idInsert);
-            // opcional: limpiar campos
-        } else {
-            JOptionPane.showMessageDialog(null, "No se pudo agregar el proveedor. Revise la conexión o los datos.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        validarYRegistrarProveedor(nuevo);
     }
 }

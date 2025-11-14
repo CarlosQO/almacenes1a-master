@@ -1,4 +1,4 @@
-package controladorSupervisor;
+package controlador.controladorSupervisor;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

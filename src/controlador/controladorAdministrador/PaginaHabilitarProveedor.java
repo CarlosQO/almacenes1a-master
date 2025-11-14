@@ -32,26 +32,29 @@ public class PaginaHabilitarProveedor implements ActionListener {
                 JOptionPane.showMessageDialog(null, "No se encontró ningún proveedor con ese NIT", "Error",
                         JOptionPane.ERROR_MESSAGE);
                 proveedorInactivoID.clear();
+                cargarProveedoresInactivos();
                 return;
             }
             // validar que el proveedor tenga el estado activo
             if (proveedorInactivoID.get(0).getEstado() == 1) {
                 JOptionPane.showMessageDialog(null,
-                        "El proveedor com el Documento " + proveedorInactivoID.get(0).getDocumento()
-                                + " se encuentra habilitado",
+                        "El proveedor con el Documento " + proveedorInactivoID.get(0).getDocumento()
+                                + " ya se encuentra habilitado",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
                 proveedorInactivoID.clear();
+                cargarProveedoresInactivos();
                 return;
             }
             // validar que el proveedor tenga el estado pendiente
             if (proveedorInactivoID.get(0).getEstado() == 3) {
                 JOptionPane.showMessageDialog(null,
                         "El proveedor con el Documento " + proveedorInactivoID.get(0).getDocumento()
-                                + " no se encuentra pendiente",
+                                + " se encuentra pendiente",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
                 proveedorInactivoID.clear();
+                cargarProveedoresInactivos();
                 return;
             }
 

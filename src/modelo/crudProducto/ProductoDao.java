@@ -365,7 +365,7 @@ public class ProductoDao implements CrudProducto<Producto> {
     @Override
     public List<Producto> listarProductosSinProveedor() {
         List<Producto> productos = new ArrayList<>();
-        String sql = "SELECT id, nombre FROM producto WHERE id_proveedor IS NULL";
+        String sql = "SELECT p.id, p.nombre FROM producto p LEFT JOIN proveedor pr ON p.id = pr.idProducto WHERE pr.idProducto IS NULL;";
 
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql);

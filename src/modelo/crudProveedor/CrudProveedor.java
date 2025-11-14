@@ -22,4 +22,5 @@ public interface CrudProveedor<T> {
     public List<T> listarProveedorActivosInactivos();
 
     public int CambiarEstado(int id, int estado);
+    public boolean existeProveedorPorNit(String nit);
 }

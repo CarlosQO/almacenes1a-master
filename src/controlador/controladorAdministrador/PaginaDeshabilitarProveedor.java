@@ -38,7 +38,7 @@ public class PaginaDeshabilitarProveedor implements ActionListener {
             if (proveedorInactivoID.get(0).getEstado() == 2) {
                 JOptionPane.showMessageDialog(null,
                         "El proveedor con el Documento " + proveedorInactivoID.get(0).getDocumento()
-                                + " se encuentra deshabilitado",
+                                + " ya se encuentra deshabilitado",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
                 proveedorInactivoID.clear();
@@ -48,7 +48,7 @@ public class PaginaDeshabilitarProveedor implements ActionListener {
             if (proveedorInactivoID.get(0).getEstado() == 3) {
                 JOptionPane.showMessageDialog(null,
                         "El proveedor con el Documento " + proveedorInactivoID.get(0).getDocumento()
-                                + " no se encuentra pendiente",
+                                + " se encuentra pendiente",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
                 proveedorInactivoID.clear();
@@ -97,7 +97,7 @@ public class PaginaDeshabilitarProveedor implements ActionListener {
                     proveedor.getProducto(),
                     proveedor.getMetodoPagoVarchar(),
                     proveedor.getTelefono(),
-                    proveedor.getDocumento() 
+                    proveedor.getDocumento()
             };
             modelo.addRow(datos);
         }
