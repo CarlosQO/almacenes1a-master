@@ -30,6 +30,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
                 pv.setTelefono(rs.getString(7));
                 pv.setCorreo(rs.getString(8));
                 pv.setEstado(rs.getInt(9));
+                pv.setIdProducto(rs.getInt(10));
                 datos.add(pv);
             }
         } catch (
@@ -43,7 +44,10 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
 
     @Override
     public int setAgregar(Proveedor p) {
-        String sql = "INSERT INTO proveedor (tipo, nombre, documento, metodo_pago, direccion, telefono, correo, estado) VALUES (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO proveedor (tipo, nombre, documento, metodo_pago, direccion, telefono, correo, idProducto,estado) VALUES (?,?,?,?,?,?,?,?,?)";
+
+        // **Variable para almacenar el ID generado**
+        int generatedId = 0;
 
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -54,20 +58,23 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
             ps.setString(5, p.getDireccion());
             ps.setString(6, p.getTelefono());
             ps.setString(7, p.getCorreo());
-            ps.setInt(8, p.getEstado());
+            ps.setInt(8, p.getIdProducto());
+            ps.setInt(9, p.getEstado());
 
             int affected = ps.executeUpdate();
-            if (affected == 0) {
-                return 0;
-            }
 
-            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
+            // **Parte CLAVE: Recuperar el ID generado**
+            if (affected > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        // Asume que el ID es la primera columna generada (posición 1)
+                        generatedId = rs.getInt(1);
+                    }
                 }
             }
 
-            return affected;
+            // Retorna el ID generado, o 0 si no se insertó
+            return generatedId;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "Error de Inserción", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -253,4 +260,23 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
         }
         return proveedores;
     }
+
+    public boolean existeProveedorPorNit(String nit) {
+        String sql = "SELECT COUNT(*) FROM proveedor WHERE documento = ?";
+        try (Connection con = Conexion.getInstance().getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nit);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; // Si el conteo es > 0, ya existe
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error verificando NIT existente: " + e.getMessage());
+        }
+        return false;
+    }
+
 }
