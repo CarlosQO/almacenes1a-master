@@ -13,7 +13,7 @@ import modelo.Conexion;
 public class DaoPQRS implements CrudPQRS<Pqrs> {
     @Override
     public boolean enviarPQRS(int idUsuario, String asunto, String cuerpo) {
-        String sql = "INSERT INTO pqrs (correo, asunto, cuerpo, id_usuario_remitente) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO pqrs (correo, asunto, contenido, id_usuario_remitente) VALUES (?, ?, ?, ?)";
         try (
                 Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql);) {

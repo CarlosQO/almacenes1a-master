@@ -50,8 +50,11 @@ public class ControladorPQRS implements ActionListener {
         boolean respuesta = daoPQRS.enviarPQRS(idUsuario, asunto, cuerpo);
         if (!respuesta) {
             return "Error PQRS enviada";
+        }else{
+            tarjetaPqrsDialog.dialogo.dispose();
+            return "PQRS enviada";
         }
-        return "PQRS enviada";
+       
     }
 
     public static void main(String[] args) throws IOException {
