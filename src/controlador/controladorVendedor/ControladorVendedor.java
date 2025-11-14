@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import vista.vistaVendedor.ModuloRegistrarModulos;
 import vista.vistaVendedor.ModuloReposicionArticulos;
 import vista.vistaVendedor.RecepcionDeOrdenes;
 import vista.vistaVendedor.VistaVendedor;
@@ -102,7 +103,12 @@ public class ControladorVendedor implements MouseListener {
          * vv.setVisible(false);
          */
 
-        JOptionPane.showMessageDialog(vv, "clic en registro de productos");
+        JFrame sas = new JFrame("sas");
+
+        ControladorRegistrarProductos conRegisProd = new ControladorRegistrarProductos(sas, 1);
+        sas.setVisible(true);
+        sas.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
     }
 
     private void bajoStock() {
@@ -125,13 +131,11 @@ public class ControladorVendedor implements MouseListener {
          */
 
         // Quitar todos los componentes y mostrar ModuloReposicionArticulos
-        vv.getContentPane().removeAll();
-        ModuloReposicionArticulos modulo = new ModuloReposicionArticulos(new JFrame("asa"));
-        new controladorSolicitudesDeReposicion(0);
-        vv.getContentPane().add(modulo);
-        vv.revalidate();
-        vv.repaint();
-        JOptionPane.showMessageDialog(vv, "clic en bajo stock");
+        // vv.getContentPane().removeAll();
+        JFrame ap = new JFrame("Actualizar de Productos");
+        new ControladorActualizarProductos(ap, 1);
+        configurarCierreVentana(ap);
+
     }
 
     private void solicitudReposicion() {
@@ -151,7 +155,10 @@ public class ControladorVendedor implements MouseListener {
          * vv.setVisible(false);
          */
 
-        JOptionPane.showMessageDialog(vv, "clic en solicitud de reposicion");
+        JFrame sr = new JFrame("Solicitudes de Reposición");
+        new controladorSolicitudesDeReposicion(sr, 1);
+        configurarCierreVentana(sr);
+
     }
 
     private void colorSa(JPanel vs) {
@@ -160,5 +167,18 @@ public class ControladorVendedor implements MouseListener {
 
     private void colorEn(JPanel vs) {
         vs.setBackground(new Color(240, 240, 240));
+    }
+
+    private void configurarCierreVentana(JFrame ventanaSecundaria) {
+        vv.setVisible(false);
+
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            ventanaSecundaria.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                    vv.setVisible(true);
+                }
+            });
+        });
     }
 }

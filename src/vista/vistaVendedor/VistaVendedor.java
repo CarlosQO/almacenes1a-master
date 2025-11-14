@@ -17,7 +17,7 @@ import vista.vistaVendedor.componentes.RoundedPanel;
 
 public class VistaVendedor extends JFrame {
 
-    private JPanel panelP, header, panelBtn, panelRecepcionOrdenes, panelBajoStock, panelSolicitudReposicion,
+    private JPanel panelP, header, panelBtn, panelRecepcionOrdenes, panelActuProducto, panelSolicitudReposicion,
             panelRegistroProducto;
     private JLabel lTitulo, lRecepcionOrdenes, lIRO, lBajoStock, lIBS, lSolicitudReposicion, lISR, lRegistroProducto,
             lIRP;
@@ -70,20 +70,20 @@ public class VistaVendedor extends JFrame {
         lRecepcionOrdenes.setFont(customFont.deriveFont(Font.PLAIN, 28));
         panelRecepcionOrdenes.add(lRecepcionOrdenes);
 
-        panelBajoStock = new RoundedPanel(20, Color.cyan);
-        panelBajoStock.setLayout(new GridLayout(1, 2, 0, 0));
-        panelBajoStock.setBackground(Color.white);
-        removerSombras(panelBajoStock);
-        panelBajoStock.add(agregarImagenALabel(lIBS, "/Iconos/barraCodigo.png", 130, 80));
-        lBajoStock = new JLabel("<html>Bajo Stock</html>");
+        panelActuProducto = new RoundedPanel(20, Color.cyan);
+        panelActuProducto.setLayout(new GridLayout(1, 2, 0, 0));
+        panelActuProducto.setBackground(Color.white);
+        removerSombras(panelActuProducto);
+        panelActuProducto.add(agregarImagenALabel(lISR, "/Iconos/reposicionIcono.png", 120, 120));
+        lBajoStock = new JLabel("<html>Actualización de Productos</html>");
         lBajoStock.setFont(customFont.deriveFont(Font.PLAIN, 28));
-        panelBajoStock.add(lBajoStock);
+        panelActuProducto.add(lBajoStock);
 
         panelSolicitudReposicion = new RoundedPanel(20, Color.cyan);
         panelSolicitudReposicion.setLayout(new GridLayout(1, 2, 0, 0));
         panelSolicitudReposicion.setBackground(Color.white);
         removerSombras(panelSolicitudReposicion);
-        panelSolicitudReposicion.add(agregarImagenALabel(lISR, "/Iconos/reposicionIcono.png", 120, 120));
+        panelSolicitudReposicion.add(agregarImagenALabel(lIBS, "/Iconos/barraCodigo.png", 130, 80));
         lSolicitudReposicion = new JLabel("<html>Solicitud de reposición de artículos</html>");
         lSolicitudReposicion.setFont(customFont.deriveFont(Font.PLAIN, 28));
         panelSolicitudReposicion.add(lSolicitudReposicion);
@@ -98,7 +98,7 @@ public class VistaVendedor extends JFrame {
         panelRegistroProducto.add(lRegistroProducto);
 
         panelBtn.add(panelRecepcionOrdenes);
-        panelBtn.add(panelBajoStock);
+        panelBtn.add(panelActuProducto);
         panelBtn.add(panelSolicitudReposicion);
         panelBtn.add(panelRegistroProducto);
         panelP.add(panelBtn);
@@ -114,7 +114,7 @@ public class VistaVendedor extends JFrame {
     }
 
     public JPanel getPanelBajoStock() {
-        return panelBajoStock;
+        return panelActuProducto;
     }
 
     public JPanel getPanelRecepcionOrdenes() {

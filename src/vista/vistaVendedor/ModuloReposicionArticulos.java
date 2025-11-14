@@ -5,6 +5,8 @@ import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import controlador.controladorVendedor.controladorSolicitudesDeReposicion;
 import vista.componentes.*;
 
 public class ModuloReposicionArticulos extends JPanel {
