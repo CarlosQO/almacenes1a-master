@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import controladorVendedor.ControladorVendedor;
 import controladorAdministrador.PaginaPrincipal;
 import controladorCliente.ControladorPrincipalCliente;
 import controladorSupervisor.ContraladorVistaSuper;
@@ -18,6 +19,7 @@ import vista.vistaAdministrador.PrincipalAdministradorVista;
 import vista.vistaLoginRegistro.Login;
 import vista.vistaLoginRegistro.Registro;
 import vista.vistaSupervisor.VistaSupervisor;
+import vista.vistaVendedor.VistaVendedor;
 import vista.vistaCliente.PanelPrincipal;
 
 public class PaginaLogin implements ActionListener {
@@ -110,6 +112,14 @@ public class PaginaLogin implements ActionListener {
 
                 break;
             case 3:
+                VistaVendedor vista = new VistaVendedor();
+                ControladorVendedor cv = new ControladorVendedor(vista);
+                vista.setResizable(false);
+                vista.setVisible(true);
+                vista.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+                login.setVisible(false);
+                configurarCierreVentana(vista);
                 System.out.println("Vendedor");
                 break;
             case 4:
