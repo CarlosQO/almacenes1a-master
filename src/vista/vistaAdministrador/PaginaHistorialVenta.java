@@ -46,7 +46,7 @@ public class PaginaHistorialVenta extends JFrame {
         contenedor.add(header);
 
         // Contenedor de fechas
-        containFechas = new FechasComponente(5, 0x000000, "Generar Reporte", "Historial de Venta");
+        containFechas = new FechasComponente(5, 0xffffff, "Generar Reporte", "Historial de Venta");
         containFechas.setBounds(10, 120, 200, 210);
         contenedor.add(containFechas);
 

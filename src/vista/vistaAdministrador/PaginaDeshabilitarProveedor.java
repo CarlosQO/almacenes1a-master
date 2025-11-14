@@ -18,7 +18,7 @@ import vista.componentes.RoundedJXButton;
 import vista.fuenteLetra.Fuente;
 import static vista.componentes.CamposConLimite.limitarCaracteres;
 
-public class PaginaHabilitarProveedor extends JFrame {
+public class PaginaDeshabilitarProveedor extends JFrame {
     private JLabel title;
     private Container contenedor;
     private Header header;
@@ -32,8 +32,8 @@ public class PaginaHabilitarProveedor extends JFrame {
     public JTable tablaProveInactivo;
     public JLabel noHayProvee;
 
-    public PaginaHabilitarProveedor() {
-        super("Habilitar proveedor");
+    public PaginaDeshabilitarProveedor() {
+        super("Deshabilitar proveedor");
         setSize(1300, 700);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -52,7 +52,7 @@ public class PaginaHabilitarProveedor extends JFrame {
         header = new Header();
         contenedor.add(header);
 
-        title = new JLabel("Habilitar proveedor");
+        title = new JLabel("Deshabilitar proveedor");
         title.setFont(fuente.fuente(2, false));
         title.setBounds(100, header.getHeight() + header.getY() + 30, (int) title.getPreferredSize().getWidth(),
                 40);
@@ -60,7 +60,7 @@ public class PaginaHabilitarProveedor extends JFrame {
 
         noHayProvee = new JLabel();
         noHayProvee.setVisible(false);
-        noHayProvee.setText("No hay proveedores por habilitar");
+        noHayProvee.setText("No hay proveedores por Deshabilitar");
         noHayProvee.setFont(fuente.fuente(3, false));
         noHayProvee.setBounds(400, title.getHeight() + title.getY() + 150,
                 (int) noHayProvee.getPreferredSize().getWidth() + 50,
@@ -132,7 +132,7 @@ public class PaginaHabilitarProveedor extends JFrame {
     }
 
     public static void main(String[] args) {
-        PaginaHabilitarProveedor ventana = new PaginaHabilitarProveedor();
+        PaginaDeshabilitarProveedor ventana = new PaginaDeshabilitarProveedor();
         ventana.setVisible(true);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }

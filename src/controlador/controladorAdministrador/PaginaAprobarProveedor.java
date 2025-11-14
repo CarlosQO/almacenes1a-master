@@ -16,7 +16,7 @@ public class PaginaAprobarProveedor implements ActionListener {
 
     public PaginaAprobarProveedor(vista.vistaAdministrador.PaginaAprobarProveedor paginaAprobarProveedor) {
         this.paginaAprobarProveedor = paginaAprobarProveedor;
-        cargarProveedoresInactivos();
+        cargarProveedoresPendientes();
         paginaAprobarProveedor.setVisible(true);
     }
 
@@ -27,7 +27,7 @@ public class PaginaAprobarProveedor implements ActionListener {
 
     private List<Proveedor> proveedores = new ArrayList<>();
 
-    private void cargarProveedoresInactivos() {
+    private void cargarProveedoresPendientes() {
         DefaultTableModel modelo = (DefaultTableModel) paginaAprobarProveedor.tablaProveedores.getModel();
         modelo.setRowCount(0);
 
@@ -69,11 +69,11 @@ public class PaginaAprobarProveedor implements ActionListener {
         if (totalCols > 6) {
             paginaAprobarProveedor.tablaProveedores.getColumnModel()
                     .getColumn(6)
-                    .setCellRenderer(new AccionesRendererEditor(() -> cargarProveedoresInactivos()));
+                    .setCellRenderer(new AccionesRendererEditor(() -> cargarProveedoresPendientes()));
 
             paginaAprobarProveedor.tablaProveedores.getColumnModel()
                     .getColumn(6)
-                    .setCellEditor(new AccionesRendererEditor(() -> cargarProveedoresInactivos()));
+                    .setCellEditor(new AccionesRendererEditor(() -> cargarProveedoresPendientes()));
 
             paginaAprobarProveedor.tablaProveedores.setRowHeight(35);
         } else {

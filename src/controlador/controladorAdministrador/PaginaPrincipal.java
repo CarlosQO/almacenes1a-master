@@ -64,6 +64,18 @@ public class PaginaPrincipal implements ActionListener {
     public PaginaAprobarProveedor controAproPro;
     public vista.vistaAdministrador.PaginaAprobarProveedor paginaAprobarProveedor;
 
+    // Habilitar proveedor
+    public PaginaHabilitarProveedor controHabPro;
+    public vista.vistaAdministrador.PaginaHabilitarProveedor paginaHabilitarProveedor;
+
+    // Deshabilitar proveedor
+    public PaginaDeshabilitarProveedor controDesPro;
+    public vista.vistaAdministrador.PaginaDeshabilitarProveedor paginaDeshabilitarProveedor;
+
+    // listar proveedores
+    public PaginaListarProveedor controListarProveedor;
+    public vista.vistaAdministrador.PaginaListarProveedores paginaListarProveedores;
+
     private String idAdministrador;
 
     public PaginaPrincipal(PrincipalAdministradorVista p, String id) throws IOException {
@@ -148,6 +160,30 @@ public class PaginaPrincipal implements ActionListener {
                 configurarCierreVentana(paginaAprobarProveedor);
             }
         });
+        p.habilitarProvee.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                paginaHabilitarProveedor = new vista.vistaAdministrador.PaginaHabilitarProveedor();
+                controHabPro = new PaginaHabilitarProveedor(paginaHabilitarProveedor);
+                configurarCierreVentana(paginaHabilitarProveedor);
+            }
+        });
+        p.deshabiliProvee.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                paginaDeshabilitarProveedor = new vista.vistaAdministrador.PaginaDeshabilitarProveedor();
+                controDesPro = new PaginaDeshabilitarProveedor(paginaDeshabilitarProveedor);
+                configurarCierreVentana(paginaDeshabilitarProveedor);
+            }
+        });
+        p.listaProvee.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                paginaListarProveedores = new vista.vistaAdministrador.PaginaListarProveedores();
+                controListarProveedor = new PaginaListarProveedor(paginaListarProveedores);
+                configurarCierreVentana(paginaListarProveedores);
+            }
+        });
     }
 
     private List<Rol> roles = new ArrayList<>();
@@ -160,9 +196,16 @@ public class PaginaPrincipal implements ActionListener {
                         JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
+
             if (r.numeCedula.getText().length() > 0 && r.numeCedula.getText().length() <= 10) {
                 String documento = r.numeCedula.getText();
                 Usuario user = uDao.obtenerUsuario(documento);
+                // validacion que no cambie el rol a ningun administrador
+                if (user != null && user.getIdRol() == 1) {
+                    JOptionPane.showMessageDialog(null, "No puede cambiar el rol del administrador", "",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
 
                 if (user != null) {
                     r.numeId.setText(user.getDocumento());

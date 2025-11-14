@@ -29,10 +29,10 @@ public class PrincipalAdministradorVista extends JFrame {
         private RoundedPanel principalContainer, header, cuerpo;
         private RoundedPanel carritoContain;
         private JLabel icono, user, titulo, permisos, promociones, reportes, historicos, proveedores, cerrarSesion;
-        private RoundedPanel listaProvee, contratoProvee, modificarInfo, deshabiliProvee,
-                        habilitarProvee;
+        private RoundedPanel contratoProvee, modificarInfo;
         public RoundedPanel confiRol, promoContain, producMasVendi, producMenVendi,
-                        informeGlobal, histoVentas, historiVentaPeri, historiTendeCompra, aprobarProvee;
+                        informeGlobal, histoVentas, historiVentaPeri, historiTendeCompra, aprobarProvee,
+                        habilitarProvee, deshabiliProvee, listaProvee;
         public JLabel actualizarPerfil;
         private static boolean carritoBooleano = false;
 
@@ -390,6 +390,7 @@ public class PrincipalAdministradorVista extends JFrame {
                 // listaProvee, aprobarProvee, contratoProvee, modificarInfo, deshabiliProvee,
                 // habilitarProvee
                 listaProvee = new RoundedPanel(20, 0x9E9C9C);
+                listaProvee.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 listaProvee.setShadowSize(1);
                 listaProvee.setLayout(null);
                 listaProvee.setBackground(Color.white);
@@ -451,6 +452,7 @@ public class PrincipalAdministradorVista extends JFrame {
 
                 // deshabiliProvee
                 deshabiliProvee = new RoundedPanel(20, 0x9E9C9C);
+                deshabiliProvee.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 deshabiliProvee.setShadowSize(1);
                 deshabiliProvee.setLayout(null);
                 deshabiliProvee.setBackground(Color.white);
@@ -466,6 +468,7 @@ public class PrincipalAdministradorVista extends JFrame {
 
                 // habilitarProvee
                 habilitarProvee = new RoundedPanel(20, 0x9E9C9C);
+                habilitarProvee.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 habilitarProvee.setShadowSize(1);
                 habilitarProvee.setLayout(null);
                 habilitarProvee.setBackground(Color.white);
