@@ -23,12 +23,12 @@ import vista.vistaCliente.tarjetas.TarjetasHistorial;
 
 public class ControladorActividad implements ActionListener {
     private PanelPrincipal panelPrincipal;
-    private static int idUsuario = 1002;
+    private int idUsuario;
     private FiltroTarjeta panelFiltroActividad;
     private DaoHistoria daoHistoria = new DaoHistoria();
     private ScrollPersonalizado scroll;
 
-    public ControladorActividad(PanelPrincipal panelPrincipal) {
+    public ControladorActividad(PanelPrincipal panelPrincipal, int idUsuario) {
         this.panelPrincipal = panelPrincipal;
         panelPrincipal.actividad.addActionListener(this);
     }
@@ -156,15 +156,4 @@ public class ControladorActividad implements ActionListener {
         ReportePedidos.generar(fechaInicio, fechaFin, listaPedidos, mapaProductos);
     }
 
-    public static void main(String[] args) throws IOException {
-        PanelPrincipal menu = new PanelPrincipal();
-        menu.setVisible(true);
-        menu.setSize(1300, 700);
-        ControladorCatalogo c = new ControladorCatalogo(menu);
-        ControladorActividad ca = new ControladorActividad(menu);
-        ControladorHistorial ch = new ControladorHistorial(menu);
-        ControladorSeguimiento cs = new ControladorSeguimiento(menu);
-        ControladorPQRS cpqrs = new ControladorPQRS(menu);
-        CrontoladorManejarMenu ccerrar = new CrontoladorManejarMenu(menu);
-    }
 }

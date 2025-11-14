@@ -22,14 +22,15 @@ import vista.vistaCliente.tarjetas.TarjetaSegumientoPedido;
 
 public class ControladorSeguimiento implements ActionListener {
     private PanelPrincipal panelPrincipal;
-    private static int idUsuario = 1002;
+    private int idUsuario;
     private FiltroTarjeta panelFiltroActividad;
     private DaoPedido daoPedido = new DaoPedido();
     private Pedido pedido;
     private ScrollPersonalizado scrollSeguimiento;
 
-    public ControladorSeguimiento(PanelPrincipal panelPrincipal) {
+    public ControladorSeguimiento(PanelPrincipal panelPrincipal, int idUsuario) {
         this.panelPrincipal = panelPrincipal;
+        this.idUsuario = idUsuario;
         // Solo escuchamos el evento de seguimiento, pedidos lo maneja
         // CrontoladorManejarMenu
         panelPrincipal.seguimientoOpcion.addActionListener(this);
@@ -159,17 +160,13 @@ public class ControladorSeguimiento implements ActionListener {
             System.out.println("Error al limpiar panel: " + e);
         }
     }
-
-    public static void main(String[] args) throws IOException {
-        PanelPrincipal menu = new PanelPrincipal();
-        menu.setVisible(true);
-        menu.setSize(1300, 700);
-        ControladorCatalogo c = new ControladorCatalogo(menu);
-        ControladorActividad ca = new ControladorActividad(menu);
-        ControladorHistorial ch = new ControladorHistorial(menu);
-        ControladorSeguimiento cs = new ControladorSeguimiento(menu);
-        ControladorPQRS cpqrs = new ControladorPQRS(menu);
-        CrontoladorManejarMenu ccerrar = new CrontoladorManejarMenu(menu);
+    
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
+    // Setter
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
 }
