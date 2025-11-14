@@ -40,7 +40,7 @@ import vista.vistaCliente.tarjetas.*;
 public class ControladorCatalogo implements ActionListener {
     private JFrame frame;
     private PanelPrincipal panelPrincipal;
-    private static int idUsuario = 1002;
+    private int idUsuario;
     private DaoCarrito daoCarrito;
     private ProductoDao daoProducto;
     private ScrollPersonalizado scrollPersonalizado, scrollPromociones;
@@ -52,8 +52,9 @@ public class ControladorCatalogo implements ActionListener {
     private PromocionDao daoPromociones;
     private MetodoPagoDao daoMetodoPago;
 
-    public ControladorCatalogo(PanelPrincipal panelPrincipal) {
+    public ControladorCatalogo(PanelPrincipal panelPrincipal, int idUsuario) {
         this.panelPrincipal = panelPrincipal;
+        this.idUsuario = idUsuario;
         panelPrincipal.catalogo.addActionListener(this);
         panelPrincipal.carrito.addActionListener(this);
         panelPrincipal.btnLimpiarCarrito.addActionListener(this);
@@ -480,6 +481,7 @@ public class ControladorCatalogo implements ActionListener {
 
         panelPrincipal.panelTarjetasProductos = new JPanel();
         panelPrincipal.panelTarjetasProductos.removeAll();
+        panelPrincipal.contenedorTarjetasCorritas.setOpaque(true);
         panelPrincipal.panelTarjetasProductos.setBackground(new Color(0x93E6FF));
         panelPrincipal.panelTarjetasProductos.setLayout(null);
         int posicionY = 0;
@@ -487,8 +489,10 @@ public class ControladorCatalogo implements ActionListener {
         try {
             if (obtenerCantidadPromociones() > 0) {
                 JPanel panelPromociones = new JPanel();
+                panelPromociones.setOpaque(true);
                 panelPromociones.setLayout(null);
                 panelPromociones.setBackground(new Color(0x93E6FF));
+
                 getListarPromociones(panelPromociones);
 
                 // Calculamos el ancho total (cada tarjeta mide 650 + 30 de margen)
@@ -507,6 +511,9 @@ public class ControladorCatalogo implements ActionListener {
                 scrollPromociones.setBounds(0, posicionY, 990, 470);
                 scrollPromociones.setBorder(null);
                 scrollPromociones.getHorizontalScrollBar().setUnitIncrement(20); // velocidad del scroll
+                scrollPromociones.revalidate();
+                scrollPromociones.repaint();
+                scrollPromociones.setOpaque(true);
 
                 panelPrincipal.panelTarjetasProductos.add(scrollPromociones);// agregar al panel principal del catalogo
                 posicionY += 480; // Dejamos espacio debajo para productos
@@ -576,7 +583,7 @@ public class ControladorCatalogo implements ActionListener {
 
         int numeroTarjetasC = obtenerCantidadCarrito(idUsuario) + cantidadPromociones;
 
-        if (numeroTarjetasC > 0) {
+        if (numeroTarjetasC > 2) {
             CalcularTamañoPanel calcCarrito = new CalcularTamañoPanel();
             int altoCalculadoCarrito = calcCarrito.calcularAltoPanel(
                     numeroTarjetasC,
@@ -592,7 +599,7 @@ public class ControladorCatalogo implements ActionListener {
             scrollPersonalizado.setBounds(40, 60, 300, 290);
             panelPrincipal.carritoContenedor.add(scrollPersonalizado);
 
-        } else {
+        } else if (numeroTarjetasC <= 0) {
             panelPrincipal.contenedorTarjetasCorritas.setBounds(40, 60, 300, 290);
             panelPrincipal.carritoContenedor.add(panelPrincipal.contenedorTarjetasCorritas);
 
@@ -1023,5 +1030,28 @@ public class ControladorCatalogo implements ActionListener {
     // Salgo
     public double getSaldo() {
         return 10000000.00;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    // Setter
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public static void main(String[] args) throws IOException {
+        String id = "1060676543";
+        int idConvertido = Integer.parseInt(id);
+        PanelPrincipal menu = new PanelPrincipal();
+        menu.setVisible(true);
+        menu.setSize(1300, 700);
+        ControladorCatalogo c = new ControladorCatalogo(menu, idConvertido);
+        ControladorActividad ca = new ControladorActividad(menu, idConvertido);
+        ControladorSeguimiento cs = new ControladorSeguimiento(menu, idConvertido);
+        ControladorHistorial ch = new ControladorHistorial(menu, idConvertido);
+        ControladorPQRS cpqrs = new ControladorPQRS(menu, id);
+        CrontoladorManejarMenu ccerrar = new CrontoladorManejarMenu(menu);
     }
 }

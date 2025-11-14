@@ -61,7 +61,7 @@ public class FiltroTarjeta extends JPanel {
 
         buscar = new JButton(nombreBoton);
         buscar.setBounds(500, 100, 150, 40);
-        Color colorBoton = new Color(180, 230, 255, 133);
+        Color colorBoton = new Color(180, 230, 255);
         buscar.setBackground(colorBoton);
         buscar.setBorderPainted(false);
         buscar.setFocusPainted(false);

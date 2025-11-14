@@ -24,6 +24,7 @@ import vista.vistaAdministrador.PaginaHistoricoVentas;
 import vista.vistaAdministrador.PaginaProductoMasVendidos;
 import vista.vistaAdministrador.PaginaProductoMenosVendidos;
 import vista.vistaAdministrador.PaginaListarConfigRolModal;
+import vista.vistaAdministrador.PaginaDeshabilitarProveedor;
 import vista.vistaAdministrador.PrincipalAdministradorVista;
 
 public class PaginaPrincipal implements ActionListener {

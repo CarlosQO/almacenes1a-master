@@ -13,13 +13,14 @@ import vista.vistaCliente.tarjetas.TarjetaPQRS;
 
 public class ControladorPQRS implements ActionListener {
     private PanelPrincipal panelPrincipal;
-    private static int idUsuario = 1002;
+    private String idUsuario;
     private TarjetaPQRS tarjetaPqrsDialog;
     private JFrame frame;
     private DaoPQRS daoPQRS;
 
-    public ControladorPQRS(PanelPrincipal panelPrincipal) {
+    public ControladorPQRS(PanelPrincipal panelPrincipal, String idUsuario) {
         this.panelPrincipal = panelPrincipal;
+        this.idUsuario = idUsuario;
         panelPrincipal.btnPQRS.addActionListener(this);
         frame = new JFrame();
         daoPQRS = new DaoPQRS();
@@ -50,19 +51,20 @@ public class ControladorPQRS implements ActionListener {
         boolean respuesta = daoPQRS.enviarPQRS(idUsuario, asunto, cuerpo);
         if (!respuesta) {
             return "Error PQRS enviada";
+        }else{
+            tarjetaPqrsDialog.dialogo.dispose();
+            return "PQRS enviada";
         }
-        return "PQRS enviada";
+       
     }
 
-    public static void main(String[] args) throws IOException {
-        PanelPrincipal menu = new PanelPrincipal();
-        menu.setVisible(true);
-        menu.setSize(1300, 700);
-        ControladorCatalogo c = new ControladorCatalogo(menu);
-        ControladorActividad ca = new ControladorActividad(menu);
-        ControladorHistorial ch = new ControladorHistorial(menu);
-        ControladorSeguimiento cs = new ControladorSeguimiento(menu);
-        ControladorPQRS cpqrs = new ControladorPQRS(menu);
-        CrontoladorManejarMenu ccerrar = new CrontoladorManejarMenu(menu);
+    public String getIdUsuario() {
+    return idUsuario;
     }
+
+    // Setter
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
 }

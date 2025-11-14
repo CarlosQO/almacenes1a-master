@@ -15,13 +15,13 @@ public class ControladorPrincipalCliente {
 
     public ControladorPrincipalCliente(PanelPrincipal p, String id) throws IOException {
         this.panelPrincipal = p;
-
+        int idUsuario = Integer.parseInt(id);
         controladorManejarMenu = new CrontoladorManejarMenu(panelPrincipal);
-        controladorModuloActividad = new ControladorActividad(panelPrincipal);
-        controladorModuloCatalogo = new ControladorCatalogo(panelPrincipal);
-        controladorModuloHistorialDeCompras = new ControladorHistorial(panelPrincipal);
-        controladorSeguimiento = new ControladorSeguimiento(panelPrincipal);
-        controladorOpcionPQRS = new ControladorPQRS(panelPrincipal);
+        controladorModuloActividad = new ControladorActividad(panelPrincipal, idUsuario);
+        controladorModuloCatalogo = new ControladorCatalogo(panelPrincipal, idUsuario);
+        controladorModuloHistorialDeCompras = new ControladorHistorial(panelPrincipal, idUsuario);
+        controladorSeguimiento = new ControladorSeguimiento(panelPrincipal, idUsuario);
+        controladorOpcionPQRS = new ControladorPQRS(panelPrincipal, id);
 
         panelPrincipal.setLocationRelativeTo(null);
         panelPrincipal.setVisible(true);
