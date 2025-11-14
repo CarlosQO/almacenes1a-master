@@ -465,9 +465,9 @@ public class ControladorCatalogo implements ActionListener {
         panelPrincipal.panelCentroContenido.revalidate();
         panelPrincipal.panelCentroContenido.repaint();
         
-
         panelPrincipal.panelTarjetasProductos = new JPanel();
         panelPrincipal.panelTarjetasProductos.removeAll();
+        panelPrincipal.contenedorTarjetasCorritas.setOpaque(true);
         panelPrincipal.panelTarjetasProductos.setBackground(new Color(0x93E6FF));
         panelPrincipal.panelTarjetasProductos.setLayout(null);
         int posicionY = 0;
@@ -475,8 +475,10 @@ public class ControladorCatalogo implements ActionListener {
         try {
             if (obtenerCantidadPromociones() > 0) {
                 JPanel panelPromociones = new JPanel();
+                panelPromociones.setOpaque(true);
                 panelPromociones.setLayout(null);
                 panelPromociones.setBackground(new Color(0x93E6FF));
+                
                 getListarPromociones(panelPromociones);
 
                 // Calculamos el ancho total (cada tarjeta mide 650 + 30 de margen)
@@ -493,6 +495,9 @@ public class ControladorCatalogo implements ActionListener {
                 scrollPromociones.setBounds(0, posicionY, 990, 470);
                 scrollPromociones.setBorder(null);
                 scrollPromociones.getHorizontalScrollBar().setUnitIncrement(20); // velocidad del scroll
+                scrollPromociones.revalidate();
+                scrollPromociones.repaint();
+                scrollPromociones.setOpaque(true);
 
                 panelPrincipal.panelTarjetasProductos.add(scrollPromociones);//agregar al panel principal del catalogo
                 posicionY += 480; // Dejamos espacio debajo para productos
@@ -560,7 +565,7 @@ public class ControladorCatalogo implements ActionListener {
 
         int numeroTarjetasC = obtenerCantidadCarrito(idUsuario) + cantidadPromociones;
 
-        if (numeroTarjetasC > 0) {
+        if (numeroTarjetasC > 2 &&  numeroTarjetasC > 0) {
             CalcularTamañoPanel calcCarrito = new CalcularTamañoPanel();
             int altoCalculadoCarrito = calcCarrito.calcularAltoPanel(
                     numeroTarjetasC,

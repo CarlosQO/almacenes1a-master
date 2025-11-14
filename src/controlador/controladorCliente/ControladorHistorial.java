@@ -71,7 +71,7 @@ public class ControladorHistorial implements ActionListener {
         // Panel interno (donde van las tarjeta
         panelPrincipal.panelHistorialCentrado = new JPanel();
         panelPrincipal.panelHistorialCentrado.removeAll();
-        panelPrincipal.panelHistorialCentrado.setBackground(new Color(180, 230, 255, 133));
+        panelPrincipal.panelHistorialCentrado.setBackground(new Color(180, 230, 255));
         panelPrincipal.panelHistorialCentrado.setLayout(null);
 
         int yTarjeta = 10, alturaExtra = 0;
