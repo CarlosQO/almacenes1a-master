@@ -13,6 +13,7 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
     private final RoundedJXButton btnRechazar;
     private int idProveedorActual;
     private AccionProveedorListener listener;
+    ProveedorDao proveedorDao = new ProveedorDao();
 
     public AccionesRendererEditor(AccionProveedorListener listener) {
         panel = new JPanel();
@@ -38,7 +39,7 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
 
         // Evento botón Aprobar
         btnAprobar.addActionListener(e -> {
-            ProveedorDao proveedorDao = new ProveedorDao();
+
             int confirm = JOptionPane.showConfirmDialog(null,
                     "¿Desea aprobar al proveedor con Documento " + idProveedorActual + "?",
                     "Confirmar Aprobación",
@@ -69,7 +70,14 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
                     "Confirmar Rechazo",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                JOptionPane.showMessageDialog(null, "Proveedor rechazado correctamente.");
+
+                int result = proveedorDao.CambiarEstado(idProveedorActual, 4);
+
+                if (result != 0) {
+                    JOptionPane.showMessageDialog(null, "Se Rechazo correctamente el proveedor");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo actualizar el estado del proveedor");
+                }
 
                 SwingUtilities.invokeLater(() -> {
                     stopCellEditing();
