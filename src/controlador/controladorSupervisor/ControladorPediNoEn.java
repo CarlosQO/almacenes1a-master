@@ -1,4 +1,4 @@
-package controlador.controladorSupervisor;
+package controladorSupervisor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
