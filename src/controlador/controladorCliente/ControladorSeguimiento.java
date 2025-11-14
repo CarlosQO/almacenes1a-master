@@ -56,7 +56,7 @@ public class ControladorSeguimiento implements ActionListener {
         // panelSeguimientoCentrado
         panelPrincipal.panelSeguimientoCentrado = new JPanel();
         panelPrincipal.panelSeguimientoCentrado.removeAll();
-        panelPrincipal.panelSeguimientoCentrado.setBackground(new Color(180, 230, 255, 133));
+        panelPrincipal.panelSeguimientoCentrado.setBackground(new Color(180, 230, 255));
         panelPrincipal.panelSeguimientoCentrado.setLayout(null);
 
         int yTarjeta = 10, alturaExtra = 0;

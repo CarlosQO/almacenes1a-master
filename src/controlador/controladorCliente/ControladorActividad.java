@@ -70,7 +70,8 @@ public class ControladorActividad implements ActionListener {
         // Panel interno (donde van las tarjetas)
         panelPrincipal.panelActividadCentrado = new JPanel();
         panelPrincipal.panelActividadCentrado.removeAll();
-        panelPrincipal.panelActividadCentrado.setBackground(new Color(180, 230, 255, 133));
+        panelPrincipal.panelActividadCentrado.setOpaque(true);
+        panelPrincipal.panelActividadCentrado.setBackground(new Color(180, 230, 255));
         panelPrincipal.panelActividadCentrado.setLayout(null);
 
         int yTarjeta = 10, alturaExtra = 0;
