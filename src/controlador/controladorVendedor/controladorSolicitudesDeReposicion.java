@@ -1,4 +1,4 @@
-package controlador.controladorVendedor;
+package controladorVendedor;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;

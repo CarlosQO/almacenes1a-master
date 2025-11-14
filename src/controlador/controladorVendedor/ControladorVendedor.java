@@ -1,4 +1,4 @@
-package controlador.controladorVendedor;
+package controladorVendedor;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -15,7 +15,7 @@ import vista.vistaVendedor.ModuloRegistrarModulos;
 import vista.vistaVendedor.ModuloReposicionArticulos;
 import vista.vistaVendedor.RecepcionDeOrdenes;
 import vista.vistaVendedor.VistaVendedor;
-import controlador.controladorVendedor.controladorRecepcionOrdenes;
+import controladorVendedor.controladorRecepcionOrdenes;
 
 public class ControladorVendedor implements MouseListener {
 

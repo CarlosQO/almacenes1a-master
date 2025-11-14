@@ -1,4 +1,4 @@
-package controlador.controladorVendedor;
+package controladorVendedor;
 
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
