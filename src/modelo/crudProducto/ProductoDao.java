@@ -365,7 +365,7 @@ public class ProductoDao implements CrudProducto<Producto> {
     @Override
     public List<Producto> listarProductosSinProveedor() {
         List<Producto> productos = new ArrayList<>();
-        String sql = "SELECT id, nombre FROM producto WHERE id_proveedor IS NULL";
+        String sql = "SELECT p.id, p.nombre FROM producto p LEFT JOIN proveedor pr ON p.id = pr.idProducto WHERE pr.idProducto IS NULL;";
 
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql);
@@ -382,24 +382,6 @@ public class ProductoDao implements CrudProducto<Producto> {
         }
 
         return productos;
-    }
-
-    @Override
-    public boolean asignarProveedor(int idProducto, int idProveedor) {
-        String sql = "UPDATE producto SET id_proveedor = ? WHERE id = ?";
-
-        try (Connection con = Conexion.getInstance().getConnection();
-                PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, idProveedor);
-            ps.setInt(2, idProducto);
-
-            int result = ps.executeUpdate();
-            return result > 0;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.toString(), "Error al asignar proveedor", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
     }
 
     @Override

@@ -253,4 +253,23 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
         }
         return proveedores;
     }
+
+    @Override
+    public boolean existeProveedorPorNit(String nit) {
+        String sql = "SELECT COUNT(*) FROM proveedor WHERE documento = ?";
+        try (Connection con = Conexion.getInstance().getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nit);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0; // Si el conteo es > 0, ya existe
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error verificando NIT existente: " + e.getMessage());
+        }
+        return false;
+    }
 }
