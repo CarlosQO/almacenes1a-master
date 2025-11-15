@@ -1,4 +1,4 @@
-package controladorSupervisor;
+package controlador.controladorSupervisor;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -115,7 +115,7 @@ public class ContraladorVistaSuper implements MouseListener {
     private void seguimientoVendedor() {
         vs.setVisible(false);
         SeguimientoVendedor vsv = new SeguimientoVendedor();
-        // new ControladorSeguimientoAdmin(vsv);
+        new ControladorSeguimientoVendedor(vsv);
         vsv.setVisible(true);
 
         vsv.addWindowListener(new WindowAdapter() {
