@@ -1,4 +1,4 @@
-package controlador.controladorSupervisor;
+package controladorSupervisor;
 
 import java.text.NumberFormat;
 import java.util.Calendar;
