@@ -23,12 +23,12 @@ import vista.vistaCliente.tarjetas.TarjetasHistorial;
 
 public class ControladorActividad implements ActionListener {
     private PanelPrincipal panelPrincipal;
-    private static int idUsuario = 1002;
+    private int idUsuario;
     private FiltroTarjeta panelFiltroActividad;
     private DaoHistoria daoHistoria = new DaoHistoria();
     private ScrollPersonalizado scroll;
 
-    public ControladorActividad(PanelPrincipal panelPrincipal) {
+    public ControladorActividad(PanelPrincipal panelPrincipal, int idUsuario) {
         this.panelPrincipal = panelPrincipal;
         panelPrincipal.actividad.addActionListener(this);
     }
@@ -70,7 +70,8 @@ public class ControladorActividad implements ActionListener {
         // Panel interno (donde van las tarjetas)
         panelPrincipal.panelActividadCentrado = new JPanel();
         panelPrincipal.panelActividadCentrado.removeAll();
-        panelPrincipal.panelActividadCentrado.setBackground(new Color(180, 230, 255, 133));
+        panelPrincipal.panelActividadCentrado.setOpaque(true);
+        panelPrincipal.panelActividadCentrado.setBackground(new Color(180, 230, 255));
         panelPrincipal.panelActividadCentrado.setLayout(null);
 
         int yTarjeta = 10, alturaExtra = 0;
@@ -155,15 +156,4 @@ public class ControladorActividad implements ActionListener {
         ReportePedidos.generar(fechaInicio, fechaFin, listaPedidos, mapaProductos);
     }
 
-    public static void main(String[] args) throws IOException {
-        PanelPrincipal menu = new PanelPrincipal();
-        menu.setVisible(true);
-        menu.setSize(1300, 700);
-        ControladorCatalogo c = new ControladorCatalogo(menu);
-        ControladorActividad ca = new ControladorActividad(menu);
-        ControladorHistorial ch = new ControladorHistorial(menu);
-        ControladorSeguimiento cs = new ControladorSeguimiento(menu);
-        ControladorPQRS cpqrs = new ControladorPQRS(menu);
-        CrontoladorManejarMenu ccerrar = new CrontoladorManejarMenu(menu);
-    }
 }

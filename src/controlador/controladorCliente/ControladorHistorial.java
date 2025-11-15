@@ -22,15 +22,16 @@ import vista.vistaCliente.tarjetas.TarjetaFactura;
 
 public class ControladorHistorial implements ActionListener {
     private PanelPrincipal panelPrincipal;
-    private static int idUsuario = 1002;
+    private int idUsuario;
     private FiltroTarjeta panelFiltroHistorial;
     private DaoFactura daoFactura = new DaoFactura();
     private Pedido pedido;
     private ProductoDetalleFactura produto;
     private ScrollPersonalizado scrollHistorial;
 
-    public ControladorHistorial(PanelPrincipal panelPrincipal) {
+    public ControladorHistorial(PanelPrincipal panelPrincipal, int idUsuario) {
         this.panelPrincipal = panelPrincipal;
+        this.idUsuario = idUsuario;
         panelPrincipal.historialDeComprasOpcion.addActionListener(this);
     }
 
@@ -71,7 +72,7 @@ public class ControladorHistorial implements ActionListener {
         // Panel interno (donde van las tarjeta
         panelPrincipal.panelHistorialCentrado = new JPanel();
         panelPrincipal.panelHistorialCentrado.removeAll();
-        panelPrincipal.panelHistorialCentrado.setBackground(new Color(180, 230, 255, 133));
+        panelPrincipal.panelHistorialCentrado.setBackground(new Color(180, 230, 255));
         panelPrincipal.panelHistorialCentrado.setLayout(null);
 
         int yTarjeta = 10, alturaExtra = 0;
@@ -137,15 +138,11 @@ public class ControladorHistorial implements ActionListener {
         FacturaPDF.generar(fechaInicio, fechaFin, idFactura, productosDeFactura, totalFactura);
     }
 
-    public static void main(String[] args) throws IOException {
-        PanelPrincipal menu = new PanelPrincipal();
-        menu.setVisible(true);
-        menu.setSize(1300, 700);
-        ControladorCatalogo c = new ControladorCatalogo(menu);
-        ControladorActividad ca = new ControladorActividad(menu);
-        ControladorHistorial ch = new ControladorHistorial(menu);
-        ControladorSeguimiento cs = new ControladorSeguimiento(menu);
-        ControladorPQRS cpqrs = new ControladorPQRS(menu);
-        CrontoladorManejarMenu ccerrar = new CrontoladorManejarMenu(menu);
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }

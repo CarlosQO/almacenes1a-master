@@ -49,7 +49,6 @@ public class Producto {
         this.idCategoria = idCategoria;
         this.idEstado = idEstado;
         this.fechaRegistro = fechaRegistro;
-        this.idProveedor = idProveedor;
     }
 
     public int getId() {

@@ -24,6 +24,7 @@ import vista.vistaAdministrador.PaginaHistoricoVentas;
 import vista.vistaAdministrador.PaginaProductoMasVendidos;
 import vista.vistaAdministrador.PaginaProductoMenosVendidos;
 import vista.vistaAdministrador.PaginaListarConfigRolModal;
+import vista.vistaAdministrador.PaginaDeshabilitarProveedor;
 import vista.vistaAdministrador.PrincipalAdministradorVista;
 
 public class PaginaPrincipal implements ActionListener {
@@ -172,7 +173,7 @@ public class PaginaPrincipal implements ActionListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 paginaDeshabilitarProveedor = new vista.vistaAdministrador.PaginaDeshabilitarProveedor();
-                controDesPro = new PaginaDeshabilitarProveedor(paginaDeshabilitarProveedor);
+                controDesPro = new PaginaDeshabilitarProveedor();
                 configurarCierreVentana(paginaDeshabilitarProveedor);
             }
         });

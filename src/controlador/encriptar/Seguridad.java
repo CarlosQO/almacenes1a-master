@@ -13,4 +13,5 @@ public class Seguridad {
     public static boolean verificar(String contrasena, String hash) {
         return BCrypt.checkpw(contrasena, hash);
     }
+    
 }
