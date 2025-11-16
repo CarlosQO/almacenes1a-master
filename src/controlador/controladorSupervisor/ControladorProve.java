@@ -194,6 +194,7 @@ public class ControladorProve implements ActionListener {
                 cargarProductosSinProveedor(vista.getCboProductoEmpresa());
                 cargarProductosSinProveedor(vista.getCboProductoPersona());
             }
+            limpiarCampos();
         } else {
             JOptionPane.showMessageDialog(null, "No se pudo agregar el proveedor. Revise la conexión o los datos.",
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -286,6 +287,8 @@ public class ControladorProve implements ActionListener {
                 JOptionPane.showMessageDialog(null,
                         "El proveedor se registró, pero falló al guardar los datos del representante.",
                         "Aviso", JOptionPane.WARNING_MESSAGE);
+            } else {
+                limpiarCampos();
             }
         }
     }
@@ -337,5 +340,28 @@ public class ControladorProve implements ActionListener {
         nuevo.setEstado(3);
 
         validarYRegistrarProveedor(nuevo);
+    }
+
+    public void limpiarCampos() {
+        // Limpiar formulario Persona
+        vista.setPersonaNumeroDoc("");
+        vista.setPersonaNombre("");
+        vista.setPersonaDireccion("");
+        vista.setPersonaTelefono("");
+        vista.setPersonaCorreo("");
+        vista.setPersonaMedioDePago(0);
+
+        // Limpiar formulario Empresa
+        vista.setEmpresaNit("");
+        vista.setEmpresaNombreEntidad("");
+        vista.setEmpresaDireccion("");
+        vista.setEmpresaCorreo("");
+        vista.setEmpresaMedioDePago(0);
+
+        // Limpiar campos del representante
+        vista.setRepresentanteNumeroDoc("");
+        vista.setRepresentanteNombre("");
+        vista.setRepresentanteTelefono("");
+        vista.setRepresentanteCorreo("");
     }
 }
