@@ -710,8 +710,7 @@ public class ControladorCatalogo implements ActionListener {
                 int disponiblePromo = getCantidadDisponiblePromocion(promo.getIdPromocion());
                 int opcion = JOptionPane.showConfirmDialog(null,
                         "La promoción: " + promo.getNombreProducto() +
-                                " solo tiene disponible " + disponiblePromo
-                                + " unidades.\n¿Deseas continuar con la compra?",
+                        " solo tiene disponible " + disponiblePromo + " unidades.\n¿Deseas continuar con la compra?",
                         "Stock insuficiente en promoción", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (opcion == JOptionPane.NO_OPTION) {
                     stockSuficiente = false;
@@ -763,8 +762,7 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     // metodos de pago
-    public void mostrarDialogoTarjeta(String tipoTrajeta, double valor, List<ProductosCarrito> productos,
-            List<PromocionCarrito> promociones) {
+    public void mostrarDialogoTarjeta(String tipoTrajeta, double valor, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
         tarjeta = new Tarjetas(frame, tipoTrajeta);
         tarjeta.btnFinalizar.addActionListener(e -> {
 
@@ -773,8 +771,7 @@ public class ControladorCatalogo implements ActionListener {
                 String numeroTarjeta = tarjeta.getTxtTarjeta().getText().trim();
                 String cvv = tarjeta.getTxtCVV().getText().trim();
                 String nombreTitular = tarjeta.getTxtNombreTarjeta().getText().trim();
-                String fecha = tarjeta.getCbAnio().getSelectedItem().toString() + "-"
-                        + tarjeta.getCbMes().getSelectedItem().toString();
+                String fecha = tarjeta.getCbAnio().getSelectedItem().toString() + "-"+ tarjeta.getCbMes().getSelectedItem().toString();
 
                 // Asignar a factory
                 factory.setNumeroTarjeta(numeroTarjeta);
@@ -824,20 +821,16 @@ public class ControladorCatalogo implements ActionListener {
                         limpiarCarrito(idUsuario);
                         tarjeta.dialogoTarjeta.dispose();
                         pasarela.getDialogo().setVisible(false);
-
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null,
-                            "Se produjo un error al conectar con la pasarela de pago.", "Error de conexión",
-                            JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null,"Se produjo un error al conectar con la pasarela de pago.", "Error de conexión", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
         tarjeta.dialogoTarjeta.setVisible(true);
     }
 
-    public void mostrarDialogoConsignacion(double valor, List<ProductosCarrito> productos,
-            List<PromocionCarrito> promociones) {
+    public void mostrarDialogoConsignacion(double valor, List<ProductosCarrito> productos,List<PromocionCarrito> promociones) {
 
         tarjetaConsignacion = new Consignacion(frame, valor, cargarTiposDocumento(), listarBancos());
 
@@ -847,8 +840,7 @@ public class ControladorCatalogo implements ActionListener {
                 String nombreConsignacion = tarjetaConsignacion.getTxtNombreConsignacion().getText().trim();
                 String documentoConsignacion = tarjetaConsignacion.getTxtDocumentoConsignacion().getText().trim();
                 String numeroCuentaConsignacion = tarjetaConsignacion.getTxtNumCuenta().getText().trim();
-                String tipoDocConsignacion = tarjetaConsignacion.getCbTipoDocConsignacion().getSelectedItem()
-                        .toString();
+                String tipoDocConsignacion = tarjetaConsignacion.getCbTipoDocConsignacion().getSelectedItem().toString();
                 String bancoConsignacion = tarjetaConsignacion.getCbBancoConsignacion().getSelectedItem().toString();
                 String tipoCuentaConsignacion = tarjetaConsignacion.getCbTipoCuenta().getSelectedItem().toString();
 
@@ -888,9 +880,7 @@ public class ControladorCatalogo implements ActionListener {
                         tarjetaConsignacion.dialogoConsignacion.dispose();
                         pasarela.getDialogo().setVisible(false);
                     } else {
-                        JOptionPane.showMessageDialog(null,
-                                "Se produjo un error al conectar con la pasarela de pago.", "Error de conexión",
-                                JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null,"Se produjo un error al conectar con la pasarela de pago.", "Error de conexión",JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -950,8 +940,7 @@ public class ControladorCatalogo implements ActionListener {
                         tarjetaBilletera.dialogoBilleteraElectronica.dispose();
                         pasarela.getDialogo().setVisible(false);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Se produjo un error al conectar con la pasarela de pago.",
-                                "Error de conexión", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Se produjo un error al conectar con la pasarela de pago.", "Error de conexión", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
