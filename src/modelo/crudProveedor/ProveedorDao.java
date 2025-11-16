@@ -43,7 +43,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
 
     @Override
     public int setAgregar(Proveedor p) {
-        String sql = "INSERT INTO proveedor (tipo, nombre, documento, metodo_pago, direccion, telefono, correo, estado) VALUES (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO proveedor (tipo, nombre, documento, metodo_pago, direccion, telefono, correo,idProducto, estado) VALUES (?,?,?,?,?,?,?,?,?)";
 
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -54,7 +54,8 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
             ps.setString(5, p.getDireccion());
             ps.setString(6, p.getTelefono());
             ps.setString(7, p.getCorreo());
-            ps.setInt(8, p.getEstado());
+            ps.setInt(8, p.getIdProducto());
+            ps.setInt(9, p.getEstado());
 
             int affected = ps.executeUpdate();
             if (affected == 0) {
