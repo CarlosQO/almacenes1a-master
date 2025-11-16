@@ -141,7 +141,7 @@ public class ControladorActualizarProductos implements ActionListener {
                 .parseDouble(moduloActualizarDatosProductos.formularioActualizar.getTxtPrecioVenta().getText().trim());
 
         // imagen pendiente
-        String imagen = "src/productos/CamisasFormalesHombre/camisa MangaLarga Blanca.jpg";
+        String imagen = moduloActualizarDatosProductos.formularioActualizar.getUrlImagen();
         //
 
         String talla = "M";
