@@ -136,4 +136,9 @@ public class ProveedorEmpresaDao implements CrudProveedor<ProveedorEmpresa> {
     public List<ProveedorEmpresa> listarProveedorActivosInactivos() {
         return null;
     }
+
+    @Override
+    public boolean existeProveedorPorNit(String nit) {
+        return false;
+    }
 }

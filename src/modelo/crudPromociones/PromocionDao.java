@@ -174,9 +174,6 @@ public class PromocionDao implements CrudPromocion<Producto> {
 
             int filasAfectadas = ps.executeUpdate();
             if (filasAfectadas > 0) {
-                JOptionPane.showMessageDialog(null,
-                        "Stock de la promoción actualizado correctamente.",
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null,
                         "No se encontró la promoción con el ID especificado.",

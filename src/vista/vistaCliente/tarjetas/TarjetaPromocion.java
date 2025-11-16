@@ -49,18 +49,21 @@ public class TarjetaPromocion extends JPanel {
         panelPromocion.setPreferredSize(new Dimension(800, 400));
         panelPromocion.setBackground(Color.WHITE);
         panelPromocion.setShadowSize(5);
+        panelPromocion.setOpaque(true);
 
         if (!rutaImagen2.equals("null")) {
             imagen1 = cargarImagenSegura(rutaImagen1, 250, 250, 40, 20);
             panelPromocion.add(imagen1);
 
             imagen2 = cargarImagenSegura(rutaImagen2, 250, 250, 350, 20);
+            imagen2.setMinimumSize(imagen2.getSize());
             panelPromocion.add(imagen2);
         } else {
             imagen1 = cargarImagenSegura(rutaImagen1, 300, 250, 150, 20);
             panelPromocion.add(imagen1);
         }
 
+        imagen1.setMinimumSize(imagen1.getSize());
         lblTitulo = new JLabel(nombrePromocion);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
         lblTitulo.setBounds(50, 280, 900, 30);
