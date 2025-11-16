@@ -172,8 +172,8 @@ public class Formulario extends JPanel {
             File archivoSeleccionado = fileChooser.getSelectedFile();
 
             // 📁 Carpeta destino dentro del proyecto
-            String carpetaDestino = "src/productos/" + comboCategoria.getSelectedItem().toString(); // puedes cambiar el
-            // nombre
+            String carpetaDestino = "src/productos/"
+                    + comboCategoria.getSelectedItem().toString().replaceAll("\\s+", "");
 
             // quitar espacios en blanco entre las palabras del comboCategoria
             urlImagen = carpetaDestino.replaceAll("\\s+", "") + "/" + archivoSeleccionado.getName();
