@@ -385,24 +385,6 @@ public class ProductoDao implements CrudProducto<Producto> {
     }
 
     @Override
-    public boolean asignarProveedor(int idProducto, int idProveedor) {
-        String sql = "UPDATE producto SET id_proveedor = ? WHERE id = ?";
-
-        try (Connection con = Conexion.getInstance().getConnection();
-                PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, idProveedor);
-            ps.setInt(2, idProducto);
-
-            int result = ps.executeUpdate();
-            return result > 0;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.toString(), "Error al asignar proveedor", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
-
-    @Override
     public boolean registrarProducto(int id, String nombre, int cantidad, double precio, String descripcion,
             String talla, String imagen, int idCategoria, int idEstado) {
 

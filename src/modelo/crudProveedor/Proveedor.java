@@ -128,6 +128,7 @@ public class Proveedor {
     public void setEstadoVarchar(String estadoVarchar) {
         this.estadoVarchar = estadoVarchar;
     }
+
     public int getIdProducto() {
         return idProducto;
     }
@@ -135,5 +136,4 @@ public class Proveedor {
     public void setIdProducto(int idProducto) {
         this.idProducto = idProducto;
     }
-
 }
