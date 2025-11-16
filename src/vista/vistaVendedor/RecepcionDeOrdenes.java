@@ -22,13 +22,14 @@ import vista.vistaVendedor.componentes.Header;
 
 public class RecepcionDeOrdenes extends JFrame {
 
-    private JPanel header, panelP;
+    private JPanel panelP;
     private JLabel lRecepOrden, lEstadoOrden;
     private Font customFont;
     private JComboBox<String> cBEO;
     private JTable tablaOrdenes;
     private DefaultTableModel camposOrdenes;
     private JScrollPane jSPane;
+    private Header header;
 
     public RecepcionDeOrdenes() {
         setTitle("Recepción de Órdenes");
@@ -43,7 +44,7 @@ public class RecepcionDeOrdenes extends JFrame {
         panelP.setLayout(null);
         panelP.setBounds(0, 0, 1300, 700);
 
-        header = new Header().headerCopiar(Color.WHITE, 1300);
+        header = new Header();
         panelP.add(header);
 
         try {

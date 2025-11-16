@@ -17,11 +17,12 @@ import vista.vistaVendedor.componentes.RoundedPanel;
 
 public class VistaVendedor extends JFrame {
 
-    private JPanel panelP, header, panelBtn, panelRecepcionOrdenes, panelActuProducto, panelSolicitudReposicion,
+    private JPanel panelP, panelBtn, panelRecepcionOrdenes, panelActuProducto, panelSolicitudReposicion,
             panelRegistroProducto;
     private JLabel lTitulo, lRecepcionOrdenes, lIRO, lBajoStock, lIBS, lSolicitudReposicion, lISR, lRegistroProducto,
             lIRP;
     private Font customFont;
+    private Header header;
 
     public VistaVendedor() {
         setTitle("Vista Vendedor");
@@ -51,7 +52,7 @@ public class VistaVendedor extends JFrame {
         lTitulo.setBounds(400, 80, 480, lTitulo.getFont().getSize() * 2);
         panelP.add(lTitulo);
 
-        header = new Header().headerCopiar(new Color(255, 255, 255, 255), 1300);
+        header = new Header();
         header.setBounds(0, 0, header.getWidth(), header.getHeight());
 
         panelP.add(header);
