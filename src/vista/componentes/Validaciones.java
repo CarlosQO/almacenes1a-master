@@ -33,7 +33,7 @@ public class Validaciones {
     }
 
     public static boolean validarCedula(String cedula) {
-        String patron = "^[0-9]{10,11}$";
+        String patron = "^[0-9]{9,10}$";
         if (cedula == null || cedula.trim().isEmpty()) {
             return false;
         }
@@ -69,11 +69,11 @@ public class Validaciones {
         return true;
     }
 
-     public static boolean validarNumeros(String texto) {
+    public static boolean validarNumeros(String texto) {
         return Pattern.matches("^\\d+$", texto);
     }
 
-     //productos
+    // productos
     public static boolean validarPrecio(String texto) {
         // Acepta decimales con hasta 2 cifras después del punto
         return Pattern.matches("^\\d+(\\.\\d{1,2})?$", texto);
@@ -94,20 +94,19 @@ public class Validaciones {
         String regex = "^(?=.*[a-zA-ZáéíóúÁÉÍÓÚñÑ])[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\\s]*$";
         return Pattern.matches(regex, texto.trim());
     }
-    
-    //tamño descripcionProducto
+
+    // tamño descripcionProducto
     public static boolean validarDescripcionEntre25y55Caracteres(String texto) {
         int longitud = texto.trim().length();
         return longitud >= 25 && longitud <= 55;
     }
-    
-    //validar cantidad
+
+    // validar cantidad
     public static boolean validarCantidad(String texto) {
         // Debe ser un número entero positivo (sin ceros a la izquierda)
         String regex = "^[1-9]\\d*$";
         return Pattern.matches(regex, texto.trim());
     }
-
 
     public static boolean validarDescripcion(String texto) {
         if (texto == null)

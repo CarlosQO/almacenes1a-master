@@ -1,9 +1,14 @@
 package controladorAdministrador.action;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.table.*;
 
+import modelo.crudProveedor.Proveedor;
 import modelo.crudProveedor.ProveedorDao;
 import vista.componentes.RoundedJXButton;
 
@@ -12,6 +17,9 @@ public class AccionesHabilitarProveedor extends AbstractCellEditor implements Ta
     private final RoundedJXButton btnAprobar;
     private int idProveedorActual;
     private AccionProveedorListener listener;
+    private String documentoSegundoProveedor;
+    private String nombreSegundoProveedor;
+    ProveedorDao proveedorDao = new ProveedorDao();
 
     public AccionesHabilitarProveedor(AccionProveedorListener listener) {
         panel = new JPanel();
@@ -30,19 +38,51 @@ public class AccionesHabilitarProveedor extends AbstractCellEditor implements Ta
 
         // Evento botón Aprobar
         btnAprobar.addActionListener(e -> {
-            ProveedorDao proveedorDao = new ProveedorDao();
+
             int confirm = JOptionPane.showConfirmDialog(null,
                     "¿Desea Habilitar al proveedor con Documento " + idProveedorActual + "?",
                     "Confirmar Habilitación",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                int result = proveedorDao.CambiarEstado(idProveedorActual, 1);
-                if (result != 0) {
-                    JOptionPane.showMessageDialog(null, "Se Habilito correctamente el proveedor");
+                String documentoProveedorActual = Integer.toString(idProveedorActual);
+                if (procesoParaHabilitarYdeshabilitarProveedor(documentoProveedorActual)) {
+                    int opcion = JOptionPane.showConfirmDialog(null,
+                            "Ya existe un proveedor asociado a este producto.\n"
+                                    + "Proveedor: " + nombreSegundoProveedor + "\n"
+                                    + "Documento: " + documentoSegundoProveedor + "\n"
+                                    + "¿Desea deshabilitar este proveedor y habilitar el nuevo?",
+                            "Proveedor Asociado Encontrado",
+                            JOptionPane.YES_NO_OPTION);
+                    if (opcion == JOptionPane.YES_OPTION) {
+                        int resultadoDeshabilitarAnterior = proveedorDao
+                                .CambiarEstado(Integer.parseInt(documentoSegundoProveedor), 2);
+                        int resultadoHabilitarNuevo = proveedorDao
+                                .CambiarEstado(idProveedorActual, 1);
+                        if (resultadoDeshabilitarAnterior != 0 && resultadoHabilitarNuevo != 0) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Se Deshabilito correctamente el proveedor asociado y se habilitó el nuevo.");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No se pudo deshabilitar el proveedor asociado");
+                        }
+                        SwingUtilities.invokeLater(() -> {
+                            stopCellEditing();
+                            if (listener != null)
+                                listener.onProveedorActualizado();
+                        });
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "No se pudo habilitar el proveedor");
+                    int result = proveedorDao.CambiarEstado(idProveedorActual, 1);
+                    if (result != 0) {
+                        JOptionPane.showMessageDialog(null, "Se Habilito correctamente el proveedor");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se pudo habilitar el proveedor");
+                    }
+                    SwingUtilities.invokeLater(() -> {
+                        stopCellEditing();
+                        if (listener != null)
+                            listener.onProveedorActualizado();
+                    });
                 }
-
                 // Finaliza la edición antes de recargar la tabla
                 SwingUtilities.invokeLater(() -> {
                     stopCellEditing();
@@ -80,5 +120,21 @@ public class AccionesHabilitarProveedor extends AbstractCellEditor implements Ta
     @Override
     public Object getCellEditorValue() {
         return idProveedorActual;
+    }
+
+    private boolean procesoParaHabilitarYdeshabilitarProveedor(String documentoProveedorActual) {
+        List<Proveedor> proveedores = proveedorDao.listarProveedorPorID(documentoProveedorActual);
+        if (proveedores.isEmpty()) {
+            return false;
+        }
+        int idProducto = proveedores.get(0).getIdProducto();
+        Proveedor segundoProveedor = proveedorDao.validarProductoAsociadoAProveedor(idProducto);
+        if (segundoProveedor == null) {
+            return false;
+        }
+        nombreSegundoProveedor = segundoProveedor.getNombre();
+        documentoSegundoProveedor = segundoProveedor.getDocumento();
+
+        return true;
     }
 }

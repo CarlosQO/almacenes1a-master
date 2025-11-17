@@ -75,7 +75,8 @@ public class PaginaLogin implements ActionListener {
                     System.out.println("Error al redirigir: " + e1.getMessage());
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Contraseña Incorrecta", "", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Contraseña Incorrecta, intente nuevamente",
+                        "Error de autenticación", JOptionPane.WARNING_MESSAGE);
             }
         }
     }
