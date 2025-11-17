@@ -30,6 +30,7 @@ public class PaginaLogin implements ActionListener {
     private PaginaRegistro pr;
     private AdministradorDao aDao = new AdministradorDao();
     public static String usuario, documento;
+    public static int rol, idSesionAdmin;
 
     public PaginaLogin() {
     }
@@ -77,6 +78,8 @@ public class PaginaLogin implements ActionListener {
                     // redirigir segun el rol
                     this.usuario = existe.getNombre() + " " + existe.getApellido();
                     this.documento = existe.getDocumento();
+                    this.rol = existe.getIdRol();
+
                     regirigirSegunElRol(existe.getIdRol());
                 } catch (IOException e1) {
                     System.out.println("Error al redirigir: " + e1.getMessage());
@@ -105,6 +108,7 @@ public class PaginaLogin implements ActionListener {
                 PaginaPrincipal c = new PaginaPrincipal(v, login.inputNumero.getText());
                 v.setResizable(false);
                 int idSesion = aDao.registrarHoraIngreso(login.inputNumero.getText());
+                this.idSesionAdmin = idSesion;
                 v.setVisible(true);
                 v.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 login.setVisible(false);

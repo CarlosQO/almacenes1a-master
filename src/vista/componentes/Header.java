@@ -5,7 +5,6 @@ import java.awt.Cursor;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import controladorLogin.PaginaLogin;
@@ -19,7 +18,6 @@ public class Header extends JPanel {
     MiAjustes miAjustes;
     MiAjustesControlador miAjustesControlador;
     PaginaLogin paginaLogin = new PaginaLogin();
-    public static String usuario;
 
     public Header() {
         setBackground(new Color(207, 207, 207));
@@ -48,7 +46,8 @@ public class Header extends JPanel {
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 miAjustes = new MiAjustes();
                 miAjustes.setBounds(lblUser.getX(), lblUser.getY() + 190, 200, 250);
-                miAjustesControlador = new MiAjustesControlador(miAjustes, PaginaLogin.usuario, PaginaLogin.documento);
+                miAjustesControlador = new MiAjustesControlador(miAjustes, PaginaLogin.usuario, PaginaLogin.documento,
+                        PaginaLogin.rol, PaginaLogin.idSesionAdmin);
             }
         });
         add(lblUser);

@@ -2,7 +2,10 @@ package controladorCliente;
 
 import java.io.IOException;
 
+import controladorLogin.PaginaLogin;
+import controladorMisAjuste.MiAjustesControlador;
 import vista.vistaCliente.PanelPrincipal;
+import vista.vistaMiAjustes.MiAjustes;
 
 public class ControladorPrincipalCliente {
     private ControladorActividad controladorModuloActividad;
@@ -12,6 +15,8 @@ public class ControladorPrincipalCliente {
     private ControladorSeguimiento controladorSeguimiento;
     private CrontoladorManejarMenu controladorManejarMenu;
     private PanelPrincipal panelPrincipal;
+    private MiAjustes ajustes;
+    PaginaLogin paginaLogin = new PaginaLogin();
 
     public ControladorPrincipalCliente(PanelPrincipal p, String id) throws IOException {
         this.panelPrincipal = p;
@@ -22,6 +27,9 @@ public class ControladorPrincipalCliente {
         controladorModuloHistorialDeCompras = new ControladorHistorial(panelPrincipal, idUsuario);
         controladorSeguimiento = new ControladorSeguimiento(panelPrincipal, idUsuario);
         controladorOpcionPQRS = new ControladorPQRS(panelPrincipal, id);
+
+        ajustes = new MiAjustes();
+        new MiAjustesControlador(ajustes, PaginaLogin.usuario, PaginaLogin.documento, PaginaLogin.rol, panelPrincipal);
 
         panelPrincipal.setLocationRelativeTo(null);
         panelPrincipal.setVisible(true);

@@ -82,5 +82,5 @@ public class MiAjustes extends JFrame {
         this.usuario = usuario;
         usuarioLabel.setText(usuario);
     }
-    
+
 }
