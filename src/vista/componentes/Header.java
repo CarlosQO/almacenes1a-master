@@ -5,13 +5,19 @@ import java.awt.Cursor;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import controladorLogin.PaginaLogin;
+import controladorMisAjuste.MiAjustesControlador;
+import vista.vistaMiAjustes.MiAjustes;
 
 public class Header extends JPanel {
 
     private JLabel lblLogo;
     private JLabel lblUser;
+    MiAjustes miAjustes;
+    MiAjustesControlador miAjustesControlador;
+    PaginaLogin paginaLogin = new PaginaLogin();
 
     public Header() {
         setBackground(new Color(207, 207, 207));
@@ -38,7 +44,10 @@ public class Header extends JPanel {
         lblUser.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                JOptionPane.showMessageDialog(null, "Click desde icono user promociones");
+                miAjustes = new MiAjustes();
+                miAjustes.setBounds(lblUser.getX(), lblUser.getY() + 190, 200, 250);
+                miAjustesControlador = new MiAjustesControlador(miAjustes, PaginaLogin.usuario, PaginaLogin.documento,
+                        PaginaLogin.rol, PaginaLogin.idSesionAdmin);
             }
         });
         add(lblUser);

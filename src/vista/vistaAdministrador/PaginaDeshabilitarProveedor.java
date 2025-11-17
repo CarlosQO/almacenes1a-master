@@ -132,8 +132,9 @@ public class PaginaDeshabilitarProveedor extends JFrame {
     }
 
     public static void main(String[] args) {
-        PaginaDeshabilitarProveedor ventana = new PaginaDeshabilitarProveedor();
-        ventana.setVisible(true);
-        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        PaginaDeshabilitarProveedor p = new PaginaDeshabilitarProveedor();
+        controladorAdministrador.PaginaDeshabilitarProveedor cdp = new controladorAdministrador.PaginaDeshabilitarProveedor(
+                p);
     }
+
 }

@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import vista.vistaVendedor.componentes.Header;
+import vista.componentes.*;
 import vista.vistaVendedor.componentes.RoundedPanel;
 
 public class VistaVendedor extends JFrame {
@@ -22,6 +22,7 @@ public class VistaVendedor extends JFrame {
     private JLabel lTitulo, lRecepcionOrdenes, lIRO, lBajoStock, lIBS, lSolicitudReposicion, lISR, lRegistroProducto,
             lIRP;
     private Font customFont;
+
     private Header header;
 
     public VistaVendedor() {
@@ -53,6 +54,7 @@ public class VistaVendedor extends JFrame {
         panelP.add(lTitulo);
 
         header = new Header();
+        // header = new Header().headerCopiar(new Color(255, 255, 255, 255), 1300);
         header.setBounds(0, 0, header.getWidth(), header.getHeight());
 
         panelP.add(header);

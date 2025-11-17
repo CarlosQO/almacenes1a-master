@@ -75,15 +75,7 @@ public class ControladorVendedor implements MouseListener {
         RecepcionDeOrdenes vro = new RecepcionDeOrdenes();
         new controladorRecepcionOrdenes(vro);
         vro.setVisible(true);
-
-        vro.addWindowListener(new WindowAdapter() {
-
-            @Override
-            public void windowClosed(WindowEvent e) {
-                vv.setVisible(true);
-            }
-        });
-        vv.setVisible(false);
+        configurarCierreVentana(vro);
     }
 
     private void registroProducto() {

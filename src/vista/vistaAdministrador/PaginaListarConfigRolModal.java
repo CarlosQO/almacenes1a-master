@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import vista.componentes.Validaciones;
 
 public class PaginaListarConfigRolModal extends JFrame {
     public JTextField numeCedula;
@@ -167,5 +168,22 @@ public class PaginaListarConfigRolModal extends JFrame {
         numeNombres.setText("");
         numeApellidos.setText("");
         tipoDeRol.removeAllItems();
+    }
+
+    public boolean validaciones() {
+        String cedula = numeCedula.getText();
+        if (cedula.isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "El campo de cédula no debe estar vacío", "Cédula inválida",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        if (!Validaciones.validarCedula(cedula)) {
+            JOptionPane.showMessageDialog(null,
+                    "La cédula no es válida, debe ser numérica y tener 9 o 10 dígitos", "Cédula inválida",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        return true;
     }
 }

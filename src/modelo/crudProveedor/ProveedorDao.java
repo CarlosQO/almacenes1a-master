@@ -215,6 +215,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
                 proveedor.setEstado(rs.getInt("estado"));
                 proveedor.setProducto(rs.getString("nombreProduc"));
                 proveedor.setMetodoPagoVarchar(rs.getString("metodoPago"));
+                proveedor.setIdProducto(rs.getInt("idProducto"));
                 proveedores.add(proveedor);
             }
             return proveedores;
@@ -265,12 +266,43 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt(1) > 0; // Si el conteo es > 0, ya existe
+                    return rs.getInt(1) > 0;
                 }
             }
         } catch (Exception e) {
             System.err.println("Error verificando NIT existente: " + e.getMessage());
         }
         return false;
+    }
+
+    @Override
+    public Proveedor validarProductoAsociadoAProveedor(int idProducto) {
+        String sql = "SELECT * FROM proveedor WHERE idProducto = ? AND estado = 1";
+        try (
+                Connection con = Conexion.getInstance().getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idProducto);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Proveedor pv = new Proveedor();
+                    pv.setId(rs.getInt(1));
+                    pv.setTipo(rs.getString(2));
+                    pv.setNombre(rs.getString(3));
+                    pv.setDocumento(rs.getString(4));
+                    pv.setMetodoDePago(rs.getInt(5));
+                    pv.setDireccion(rs.getString(6));
+                    pv.setTelefono(rs.getString(7));
+                    pv.setCorreo(rs.getString(8));
+                    pv.setIdProducto(rs.getInt(9));
+                    pv.setEstado(rs.getInt(10));
+                    return pv;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error validando producto asociado a proveedor: " + e.getMessage());
+        }
+        return null;
     }
 }

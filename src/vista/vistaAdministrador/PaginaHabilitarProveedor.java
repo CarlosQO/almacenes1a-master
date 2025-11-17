@@ -130,10 +130,4 @@ public class PaginaHabilitarProveedor extends JFrame {
         contenedor.add(containInfo);
 
     }
-
-    public static void main(String[] args) {
-        PaginaHabilitarProveedor ventana = new PaginaHabilitarProveedor();
-        ventana.setVisible(true);
-        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
 }
