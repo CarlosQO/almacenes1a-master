@@ -29,6 +29,10 @@ public class PaginaLogin implements ActionListener {
     private Registro r;
     private PaginaRegistro pr;
     private AdministradorDao aDao = new AdministradorDao();
+    public static String usuario, documento;
+
+    public PaginaLogin() {
+    }
 
     public PaginaLogin(Login l) {
         this.login = l;
@@ -70,6 +74,9 @@ public class PaginaLogin implements ActionListener {
             Usuario existe = uDao.validarCredencialesUsuario(documento, contraseña);
             if (existe != null) {
                 try {
+                    // redirigir segun el rol
+                    this.usuario = existe.getNombre() + " " + existe.getApellido();
+                    this.documento = existe.getDocumento();
                     regirigirSegunElRol(existe.getIdRol());
                 } catch (IOException e1) {
                     System.out.println("Error al redirigir: " + e1.getMessage());
