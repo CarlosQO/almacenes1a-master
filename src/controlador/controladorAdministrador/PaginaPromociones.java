@@ -219,8 +219,7 @@ public class PaginaPromociones implements ActionListener {
                     .replace("$", "")
                     .replace(",", "")
                     .replace(" ", "");
-
-            double precioTotal = Double.parseDouble(textoPrecio);
+            int precioTotal = Integer.parseInt(textoPrecio.substring(0, textoPrecio.length() - 2));
             p.setTotal(precioTotal);
 
         } catch (NumberFormatException e) {

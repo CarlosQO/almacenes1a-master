@@ -24,7 +24,6 @@ import vista.vistaAdministrador.PaginaHistoricoVentas;
 import vista.vistaAdministrador.PaginaProductoMasVendidos;
 import vista.vistaAdministrador.PaginaProductoMenosVendidos;
 import vista.vistaAdministrador.PaginaListarConfigRolModal;
-import vista.vistaAdministrador.PaginaDeshabilitarProveedor;
 import vista.vistaAdministrador.PrincipalAdministradorVista;
 
 public class PaginaPrincipal implements ActionListener {
@@ -70,7 +69,7 @@ public class PaginaPrincipal implements ActionListener {
     public vista.vistaAdministrador.PaginaHabilitarProveedor paginaHabilitarProveedor;
 
     // Deshabilitar proveedor
-    public PaginaDeshabilitarProveedor controDesPro;
+    public controladorAdministrador.PaginaDeshabilitarProveedor controDesPro;
     public vista.vistaAdministrador.PaginaDeshabilitarProveedor paginaDeshabilitarProveedor;
 
     // listar proveedores
@@ -173,7 +172,7 @@ public class PaginaPrincipal implements ActionListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 paginaDeshabilitarProveedor = new vista.vistaAdministrador.PaginaDeshabilitarProveedor();
-                controDesPro = new PaginaDeshabilitarProveedor();
+                controDesPro = new controladorAdministrador.PaginaDeshabilitarProveedor(paginaDeshabilitarProveedor);
                 configurarCierreVentana(paginaDeshabilitarProveedor);
             }
         });
@@ -192,9 +191,14 @@ public class PaginaPrincipal implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == r.buscar) {
+            if (!r.validaciones()) {
+                r.limpiarCampos();
+                return;
+            }
             if (r.numeCedula.getText().equals(idAdministrador)) {
                 JOptionPane.showMessageDialog(null, "No puede cambiar el rol del administrador", "",
                         JOptionPane.INFORMATION_MESSAGE);
+                r.limpiarCampos();
                 return;
             }
 
@@ -205,6 +209,7 @@ public class PaginaPrincipal implements ActionListener {
                 if (user != null && user.getIdRol() == 1) {
                     JOptionPane.showMessageDialog(null, "No puede cambiar el rol del administrador", "",
                             JOptionPane.INFORMATION_MESSAGE);
+                    r.limpiarCampos();
                     return;
                 }
 
@@ -237,13 +242,13 @@ public class PaginaPrincipal implements ActionListener {
                 } else {
                     // Si no se encuentra el usuario, limpiar todo
                     r.limpiarCampos();
-                    JOptionPane.showMessageDialog(null, "No se encontró ningún usuario con esa cédula.");
+                    System.out.println("No se encontró usuario con cédula: " + documento);
                 }
 
             } else {
                 // Si el campo está vacío o no cumple con la longitud
                 r.limpiarCampos();
-                JOptionPane.showMessageDialog(null, "El campo cédula no debe estar vacío.");
+                System.out.println("Por favor ingrese una cédula válida.");
             }
         }
 
@@ -278,6 +283,7 @@ public class PaginaPrincipal implements ActionListener {
             } else {
                 JOptionPane.showMessageDialog(null, "Por favor primero busca un usuario");
             }
+
         }
     }
 

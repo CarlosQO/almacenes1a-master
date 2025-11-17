@@ -337,55 +337,48 @@ public class Registro extends JFrame {
         public boolean ValidarCampos() {
                 String contrasena = new String(inputContrasena.getPassword());
                 String confirmar = new String(inputConfirmarContrasena.getPassword());
+                boolean pasaOno = true;
+                String cadena = "<html><h1 style='color:red';>Se encontran los siguientes errores:</h1></html>";
                 if (!Validaciones.validarCedula(inputNumeroDoc.getText())) {
-                        JOptionPane.showMessageDialog(null,
-                                        "La cedula no es valida, debe ser numerica y tener 9 o 10 digitos", "",
-                                        JOptionPane.WARNING_MESSAGE);
-                        return false;
+
+                        cadena += "La cedula no es valida, debe ser numerica y tener 9 o 10 digitos\n";
+                        pasaOno = false;
                 }
                 if (!Validaciones.validarSoloLetras(inputNombres.getText())) {
-                        JOptionPane.showMessageDialog(null, "El nombre no es valido, solo debe tener letras", "",
-                                        JOptionPane.WARNING_MESSAGE);
-                        return false;
+
+                        cadena += "El nombre no es valido, solo debe tener letras\n";
+                        pasaOno = false;
                 }
                 if (!Validaciones.validarSoloLetras(inputApellido.getText())) {
-                        JOptionPane.showMessageDialog(null, "El apellido no es valido, solo debe tener letras", "",
-                                        JOptionPane.WARNING_MESSAGE);
-                        return false;
+                        cadena += "El apellido no es valido, solo debe tener letras\n";
+                        pasaOno = false;
                 }
                 if (!Validaciones.validarCorreo(inputCorreoElectronico.getText())) {
-                        JOptionPane.showMessageDialog(null,
-                                        "El correo no es valido, debe tener un formato valido( @ | . )", "",
-                                        JOptionPane.WARNING_MESSAGE);
-                        return false;
+                        cadena += "El correo no es valido, debe tener un formato valido( @ | . )\n";
+                        pasaOno = false;
                 }
                 if (!Validaciones.validarTelefono(inputTelefono.getText())) {
-                        JOptionPane.showMessageDialog(null, "El telefono no es valido, debe tener 10 o 11 digitos", "",
-                                        JOptionPane.WARNING_MESSAGE);
-                        return false;
-                }
-                if (!Validaciones.validarContrasena(contrasena)) {
-                        JOptionPane.showMessageDialog(null,
-                                        "La contrasena no es valida, debe tener 8 o mas caracteres, una mayuscula, una minuscula y un numero",
-                                        "",
-                                        JOptionPane.WARNING_MESSAGE);
-                        return false;
-                }
-
-                if (!contrasena.equals(confirmar)) {
-                        JOptionPane.showMessageDialog(null, "Las contrasenas no coinciden", "",
-                                        JOptionPane.WARNING_MESSAGE);
-                        return false;
+                        cadena += "El telefono no es valido, debe tener 10 o 11 digitos y ser numerico\n";
+                        pasaOno = false;
                 }
 
                 if (!Validaciones.validarDireccion(inputDireccion.getText())) {
-                        JOptionPane.showMessageDialog(null,
-                                        "La direccion no es valida, debe tener al menos 5 caracteres, una letra y un numero",
-                                        "",
-                                        JOptionPane.WARNING_MESSAGE);
-                        return false;
+                        cadena += "La direccion no es valida, debe tener al menos 5 caracteres, una letra y un numero\n";
+                        pasaOno = false;
+                }
+                if (!Validaciones.validarContrasena(contrasena)) {
+                        cadena += "La contrasena no es valida, debe tener 8 o mas caracteres, una mayuscula, una minuscula y un numero\n";
+                        pasaOno = false;
                 }
 
-                return true;
+                if (!contrasena.equals(confirmar)) {
+                        cadena += "Las contrasenas no coinciden\n";
+                        pasaOno = false;
+                }
+                if (!pasaOno) {
+                        JOptionPane.showMessageDialog(null, cadena, "Error de validacion",
+                                        JOptionPane.WARNING_MESSAGE);
+                }
+                return pasaOno;
         }
 }

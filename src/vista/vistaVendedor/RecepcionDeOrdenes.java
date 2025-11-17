@@ -17,8 +17,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-
-import vista.vistaVendedor.componentes.Header;
+import vista.componentes.Header;
 
 public class RecepcionDeOrdenes extends JFrame {
 

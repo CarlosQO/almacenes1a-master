@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 import modelo.crudCategoriasProductos.*;
 import modelo.crudProducto.*;
 import vista.vistaVendedor.ModuloRegistrarModulos;
-import vista.vistaVendedor.*;
 
 public class ControladorRegistrarProductos implements ActionListener {
     private JFrame frame;

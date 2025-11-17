@@ -13,5 +13,17 @@ public class Seguridad {
     public static boolean verificar(String contrasena, String hash) {
         return BCrypt.checkpw(contrasena, hash);
     }
+
+    public static void main(String[] args) {
+        String contrasena = "mi_contrasena_segura";
+        String hash = encriptar(contrasena);
+
+        System.out.println("Contraseña original: " + contrasena);
+        System.out.println("Hash generado: " + hash);
+
+        // Verificación
+        boolean esValida = verificar(contrasena, hash);
+        System.out.println("¿La contraseña es válida? " + esValida);
+    }
     
 }

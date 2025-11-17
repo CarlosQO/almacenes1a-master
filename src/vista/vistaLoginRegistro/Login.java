@@ -157,7 +157,7 @@ public class Login extends JFrame {
         String contrasena = new String(inputContra.getPassword());
         if (!Validaciones.validarCedula(inputNumero.getText())) {
             JOptionPane.showMessageDialog(null,
-                    "La cedula no es valida, debe ser numerica y tener 9 o 10 digitos", "",
+                    "La cedula no es valida, debe ser numerica y tener 9 o 10 digitos", "Cédula inválida",
                     JOptionPane.WARNING_MESSAGE);
             return false;
         }

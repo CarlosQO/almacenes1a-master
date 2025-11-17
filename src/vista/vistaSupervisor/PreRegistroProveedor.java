@@ -337,6 +337,99 @@ public class PreRegistroProveedor extends JFrame {
         return txtCorreo != null ? txtCorreo.getText().trim() : "";
     }
 
+    // Setters para limpiar campos del formulario Persona
+    public void setPersonaNumeroDoc(String text) {
+        if (txtPersonaNumeroDoc != null) {
+            txtPersonaNumeroDoc.setText(text);
+        }
+    }
+
+    public void setPersonaNombre(String text) {
+        if (txtPersonaNombre != null) {
+            txtPersonaNombre.setText(text);
+        }
+    }
+
+    public void setPersonaMedioDePago(int index) {
+        if (cboPersonaMedioPago != null && cboPersonaMedioPago.getItemCount() > 0) {
+            cboPersonaMedioPago.setSelectedIndex(index);
+        }
+    }
+
+    public void setPersonaDireccion(String text) {
+        if (txtPersonaDireccion != null) {
+            txtPersonaDireccion.setText(text);
+        }
+    }
+
+    public void setPersonaTelefono(String text) {
+        if (txtPersonaTelefono != null) {
+            txtPersonaTelefono.setText(text);
+        }
+    }
+
+    public void setPersonaCorreo(String text) {
+        if (txtPersonaCorreo != null) {
+            txtPersonaCorreo.setText(text);
+        }
+    }
+
+    // Setters para limpiar campos del formulario Empresa
+    public void setEmpresaNit(String text) {
+        if (txtNit != null) {
+            txtNit.setText(text);
+        }
+    }
+
+    public void setEmpresaNombreEntidad(String text) {
+        if (txtNombreEntidad != null) {
+            txtNombreEntidad.setText(text);
+        }
+    }
+
+    public void setEmpresaMedioDePago(int index) {
+        if (cboMedioPago != null && cboMedioPago.getItemCount() > 0) {
+            cboMedioPago.setSelectedIndex(index);
+        }
+    }
+
+    public void setEmpresaDireccion(String text) {
+        if (txtDireccion != null) {
+            txtDireccion.setText(text);
+        }
+    }
+
+    public void setEmpresaCorreo(String text) {
+        if (txtCorreoEntidad != null) {
+            txtCorreoEntidad.setText(text);
+        }
+    }
+
+    // Setters para limpiar campos del Representante
+    public void setRepresentanteNumeroDoc(String text) {
+        if (txtNumeroDoc != null) {
+            txtNumeroDoc.setText(text);
+        }
+    }
+
+    public void setRepresentanteNombre(String text) {
+        if (txtNombre != null) {
+            txtNombre.setText(text);
+        }
+    }
+
+    public void setRepresentanteTelefono(String text) {
+        if (txtTelefono != null) {
+            txtTelefono.setText(text);
+        }
+    }
+
+    public void setRepresentanteCorreo(String text) {
+        if (txtCorreo != null) {
+            txtCorreo.setText(text);
+        }
+    }
+
     public Producto getProductoSeleccionado() {
         // Si el panel persona está visible, tomar de su combo; si no, tomar del de
         // empresa

@@ -26,7 +26,6 @@ public class controladorSolicitudesDeReposicion implements ActionListener {
         this.daoSolicitudesReposicion = new DaoSolicitudesReposicion();
         this.frame = frame;
         cargarModuloReposicion();
-
     }
 
     @Override

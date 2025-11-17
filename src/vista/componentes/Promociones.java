@@ -23,7 +23,6 @@ import javax.swing.text.JTextComponent;
 import vista.fuenteLetra.Fuente;
 import vista.vistaAdministrador.RoundedPanel;
 
-
 public class Promociones extends JFrame {
 
     private Container container;
@@ -190,21 +189,23 @@ public class Promociones extends JFrame {
     }
 
     public boolean validarCampos() {
+        String mensajeError = "<html><h1 style='color:red';>Se encontran los siguientes errores:</h1></html>";
+        boolean camposValidos = true;
         if (!Validaciones.validarNombrePromocion(nombreProm.getText())) {
-            JOptionPane.showMessageDialog(null,
-                    "El nombre de la promocion no es valido, debe tener entre 10 y 15 letras, ademas debe tener mas del 50% de letras");
-            return false;
+            mensajeError += "El nombre de la promocion no es valido, debe tener entre 10 y 15 letras, ademas debe tener mas del 50% de letras.\n";
+            camposValidos = false;
         }
         if (!Validaciones.validarDescripcion(descripcionProm.getText())) {
-            JOptionPane.showMessageDialog(null,
-                    "La descripcion de la promocion no es valida, debe tener entre 20 y 55 letras, ademas debe tener mas del 50% de letras");
-            return false;
+            mensajeError += "La descripcion de la promocion no es valida, debe tener entre 20 y 55 letras, ademas debe tener mas del 50% de letras.\n";
+            camposValidos = false;
         }
         if (!Validaciones.validarCantidadPromocionar(cantidad.getText())) {
-            JOptionPane.showMessageDialog(null,
-                    "La cantidad de productos a promocionar debe ser mayor a 0 o no debe contener letras");
-            return false;
+            mensajeError += "La cantidad de productos a promocionar debe ser mayor a 0 o no debe contener letras.\n";
+            camposValidos = false;
         }
-        return true;
+        if (!camposValidos) {
+            JOptionPane.showMessageDialog(null, mensajeError, "Error en los campos", JOptionPane.ERROR_MESSAGE);
+        }
+        return camposValidos;
     }
 }
