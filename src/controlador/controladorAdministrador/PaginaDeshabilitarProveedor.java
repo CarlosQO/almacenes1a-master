@@ -32,6 +32,7 @@ public class PaginaDeshabilitarProveedor implements ActionListener {
                 JOptionPane.showMessageDialog(null, "No se encontró ningún proveedor con ese NIT", "Error",
                         JOptionPane.ERROR_MESSAGE);
                 proveedorInactivoID.clear();
+                cargarProveedoresActivos();
                 return;
             }
             // validar que el proveedor tenga el estado activo
@@ -42,6 +43,7 @@ public class PaginaDeshabilitarProveedor implements ActionListener {
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
                 proveedorInactivoID.clear();
+                cargarProveedoresActivos();
                 return;
             }
             // validar que el proveedor tenga el estado pendiente
@@ -52,6 +54,7 @@ public class PaginaDeshabilitarProveedor implements ActionListener {
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
                 proveedorInactivoID.clear();
+                cargarProveedoresActivos();
                 return;
             }
 

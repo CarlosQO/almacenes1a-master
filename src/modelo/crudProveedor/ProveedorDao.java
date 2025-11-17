@@ -265,7 +265,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt(1) > 0; // Si el conteo es > 0, ya existe
+                    return rs.getInt(1) > 0;
                 }
             }
         } catch (Exception e) {

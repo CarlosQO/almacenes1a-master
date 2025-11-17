@@ -70,7 +70,7 @@ public class PaginaPrincipal implements ActionListener {
     public vista.vistaAdministrador.PaginaHabilitarProveedor paginaHabilitarProveedor;
 
     // Deshabilitar proveedor
-    public PaginaDeshabilitarProveedor controDesPro;
+    public controladorAdministrador.PaginaDeshabilitarProveedor controDesPro;
     public vista.vistaAdministrador.PaginaDeshabilitarProveedor paginaDeshabilitarProveedor;
 
     // listar proveedores
@@ -173,7 +173,7 @@ public class PaginaPrincipal implements ActionListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 paginaDeshabilitarProveedor = new vista.vistaAdministrador.PaginaDeshabilitarProveedor();
-                controDesPro = new PaginaDeshabilitarProveedor();
+                controDesPro = new controladorAdministrador.PaginaDeshabilitarProveedor(paginaDeshabilitarProveedor);
                 configurarCierreVentana(paginaDeshabilitarProveedor);
             }
         });

@@ -13,6 +13,7 @@ import controladorVendedor.ControladorVendedor;
 import controladorAdministrador.PaginaPrincipal;
 import controladorCliente.ControladorPrincipalCliente;
 import controladorSupervisor.ContraladorVistaSuper;
+import modelo.crudAdministradorSesion.AdministradorDao;
 import modelo.crudUsuario.Usuario;
 import modelo.crudUsuario.UsuarioDao;
 import vista.vistaAdministrador.PrincipalAdministradorVista;
@@ -27,6 +28,7 @@ public class PaginaLogin implements ActionListener {
     private UsuarioDao uDao = new UsuarioDao();
     private Registro r;
     private PaginaRegistro pr;
+    private AdministradorDao aDao = new AdministradorDao();
 
     public PaginaLogin(Login l) {
         this.login = l;
@@ -94,11 +96,11 @@ public class PaginaLogin implements ActionListener {
                 PrincipalAdministradorVista v = new PrincipalAdministradorVista();
                 PaginaPrincipal c = new PaginaPrincipal(v, login.inputNumero.getText());
                 v.setResizable(false);
+                int idSesion = aDao.registrarHoraIngreso(login.inputNumero.getText());
                 v.setVisible(true);
                 v.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-
                 login.setVisible(false);
-                configurarCierreVentana(v);
+                configurarCierreVentana(v, idSesion);
                 break;
             case 2:
                 PanelPrincipal paginaCliente = new PanelPrincipal();
@@ -108,7 +110,7 @@ public class PaginaLogin implements ActionListener {
                 paginaCliente.setVisible(true);
                 paginaCliente.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 login.setVisible(false);
-                configurarCierreVentana(paginaCliente);
+                configurarCierreVentana(paginaCliente, 0);
 
                 break;
             case 3:
@@ -119,7 +121,7 @@ public class PaginaLogin implements ActionListener {
                 vista.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
                 login.setVisible(false);
-                configurarCierreVentana(vista);
+                configurarCierreVentana(vista, 0);
                 System.out.println("Vendedor");
                 break;
             case 4:
@@ -129,7 +131,7 @@ public class PaginaLogin implements ActionListener {
                 vs.setVisible(true);
                 vs.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 login.setVisible(false);
-                configurarCierreVentana(vs);
+                configurarCierreVentana(vs, 0);
                 break;
             default:
                 System.out.println("Rol no reconocido");
@@ -147,7 +149,7 @@ public class PaginaLogin implements ActionListener {
         }
     }
 
-    private void configurarCierreVentana(JFrame ventanaSecundaria) {
+    private void configurarCierreVentana(JFrame ventanaSecundaria, int idSesion) {
         login.setVisible(false);
 
         javax.swing.SwingUtilities.invokeLater(() -> {
@@ -163,8 +165,10 @@ public class PaginaLogin implements ActionListener {
 
                     if (opcion == JOptionPane.YES_OPTION) {
                         // Cierra la ventana secundaria
+                        if (idSesion > 0) {
+                            aDao.registrarHoraSalida(idSesion);
+                        }
                         ventanaSecundaria.setVisible(false);
-                        // Muestra la ventana principal (por ejemplo, el login)
                         login.limpiarCampos();
                         login.setVisible(true);
                     } else {
