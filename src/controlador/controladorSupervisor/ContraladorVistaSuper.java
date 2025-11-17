@@ -4,9 +4,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import vista.vistaSupervisor.PedidosEntregados;
@@ -102,14 +101,7 @@ public class ContraladorVistaSuper implements MouseListener {
         PreRegistroProveedor vprp = new PreRegistroProveedor();
         new ControladorProve(vprp);
         vprp.setVisible(true);
-
-        vprp.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                vs.setVisible(true);
-            }
-        });
-        vs.setVisible(false);
+        configurarCierreVentana(vprp);
     }
 
     private void seguimientoVendedor() {
@@ -117,14 +109,7 @@ public class ContraladorVistaSuper implements MouseListener {
         SeguimientoVendedor vsv = new SeguimientoVendedor();
         new ControladorSeguimientoVendedor(vsv);
         vsv.setVisible(true);
-
-        vsv.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                vs.setVisible(true);
-            }
-        });
-        vs.setVisible(false);
+        configurarCierreVentana(vsv);
     }
 
     private void seguimientoAdministrador() {
@@ -132,62 +117,31 @@ public class ContraladorVistaSuper implements MouseListener {
         SeguimientoAdministrador vsa = new SeguimientoAdministrador();
         new ControladorSeguimientoAdmin(vsa);
         vsa.setVisible(true);
-
-        vsa.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                vs.setVisible(true);
-            }
-        });
-        vs.setVisible(false);
+        configurarCierreVentana(vsa);
     }
 
     private void reportesOperativos() {
         vs.setVisible(false);
         ReportesOperativos vro = new ReportesOperativos();
         new ControladorReportesOperativos(vro);
-
         vro.setVisible(true);
-
-        vro.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                vs.setVisible(true);
-            }
-        });
-        vs.setVisible(false);
+        configurarCierreVentana(vro);
     }
 
     private void PQRS() {
         vs.setVisible(false);
         VistaPQRS vpqrs = new VistaPQRS();
         new ControladorPQRS(vpqrs);
-
         vpqrs.setVisible(true);
-
-        vpqrs.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                vs.setVisible(true);
-            }
-        });
-        vs.setVisible(false);
+        configurarCierreVentana(vpqrs);
     }
 
     private void pedidoEntregado() {
         vs.setVisible(false);
         PedidosEntregados vpe = new PedidosEntregados();
         new ControladorPediEn(vpe);
-
         vpe.setVisible(true);
-
-        vpe.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                vs.setVisible(true);
-            }
-        });
-        vs.setVisible(false);
+        configurarCierreVentana(vpe);
     }
 
     private void pedidoNoEntregado() {
@@ -195,30 +149,28 @@ public class ContraladorVistaSuper implements MouseListener {
         PedidosNoEntregados vpne = new PedidosNoEntregados();
         new ControladorPediNoEn(vpne);
         vpne.setVisible(true);
-
-        vpne.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                vs.setVisible(true);
-            }
-        });
-        vs.setVisible(false);
+        configurarCierreVentana(vpne);
     }
 
     private void soliReposiciones() {
         vs.setVisible(false);
         SolicitudesReposiciones vsr = new SolicitudesReposiciones();
         new ControladorSoliRepo(vsr);
-
         vsr.setVisible(true);
+        configurarCierreVentana(vsr);
+    }
 
-        vsr.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                vs.setVisible(true);
-            }
-        });
+    private void configurarCierreVentana(JFrame ventanaSecundaria) {
         vs.setVisible(false);
+
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            ventanaSecundaria.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                    vs.setVisible(true);
+                }
+            });
+        });
     }
 
     private void colorSa(JPanel vs) {
