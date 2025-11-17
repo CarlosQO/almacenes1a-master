@@ -189,6 +189,7 @@ public class Tarjetas {
                     "Se encontraron los siguientes errores:\n\n" + errores,
                     "Errores en los campos de la tarjeta",
                     JOptionPane.WARNING_MESSAGE);
+            return false;
         }
 
         return true;

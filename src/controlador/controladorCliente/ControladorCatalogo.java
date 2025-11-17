@@ -765,7 +765,7 @@ public class ControladorCatalogo implements ActionListener {
     public void mostrarDialogoTarjeta(String tipoTrajeta, double valor, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
         tarjeta = new Tarjetas(frame, tipoTrajeta);
         tarjeta.btnFinalizar.addActionListener(e -> {
-
+            
             if (tarjeta.validarCamposTarjeta()) {
                 // Obtener datos
                 String numeroTarjeta = tarjeta.getTxtTarjeta().getText().trim();
@@ -894,7 +894,6 @@ public class ControladorCatalogo implements ActionListener {
 
         tarjetaBilletera.btnConsignarBilletera.addActionListener(eBilletera -> {
             boolean validacionesBilleteraElectronica = tarjetaBilletera.validarCamposBilletera();
-            JOptionPane.showMessageDialog(null, validacionesBilleteraElectronica);
             if (validacionesBilleteraElectronica) {
                 String bancoBilletera = tarjetaBilletera.getCbBancoBilletera().getSelectedItem().toString();
                 String tipoDocBilletera = tarjetaBilletera.getCbTipoDocBilletera().getSelectedItem().toString().trim();
@@ -1031,7 +1030,7 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     public static void main(String[] args) throws IOException {
-        String id = "1060676543";
+        String id = "1060676542";
         int idConvertido = Integer.parseInt(id);
         PanelPrincipal menu = new PanelPrincipal();
         menu.setVisible(true);
