@@ -22,7 +22,6 @@ public class VistaVendedor extends JFrame {
     private JLabel lTitulo, lRecepcionOrdenes, lIRO, lBajoStock, lIBS, lSolicitudReposicion, lISR, lRegistroProducto,
             lIRP;
     private Font customFont;
-    private Header header;
 
     private Header header;
 
