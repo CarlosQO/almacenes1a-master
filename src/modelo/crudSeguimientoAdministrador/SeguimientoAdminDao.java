@@ -10,7 +10,7 @@ import modelo.Conexion;
 
 public class SeguimientoAdminDao implements CrudSeguimientoAdmin {
 
-    public List<SeguimientoAdmin> listarPorMesAno(int mes, int ano, String idAdministrador) {
+    public List<SeguimientoAdmin> listarPorMesAno(int mes, int ano) {
         List<SeguimientoAdmin> lista = new ArrayList<>();
         String sql = "SELECT DAY(fecha) AS dia, "
                 + "COUNT(*) AS conexiones, "
@@ -20,10 +20,6 @@ public class SeguimientoAdminDao implements CrudSeguimientoAdmin {
                 + "FROM administradorsesion "
                 + "WHERE MONTH(fecha) = ? AND YEAR(fecha) = ?";
 
-        if (idAdministrador != null && !idAdministrador.trim().isEmpty()) {
-            sql += " AND idAdministrador = ?";
-        }
-
         sql += " GROUP BY DAY(fecha) ORDER BY dia";
 
         try (Connection con = Conexion.getInstance().getConnection();
@@ -31,9 +27,6 @@ public class SeguimientoAdminDao implements CrudSeguimientoAdmin {
 
             ps.setInt(1, mes);
             ps.setInt(2, ano);
-            if (idAdministrador != null && !idAdministrador.trim().isEmpty()) {
-                ps.setString(3, idAdministrador);
-            }
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
