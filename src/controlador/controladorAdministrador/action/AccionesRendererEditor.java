@@ -1,9 +1,12 @@
 package controladorAdministrador.action;
 
 import java.awt.*;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.table.*;
 
+import modelo.crudProveedor.Proveedor;
 import modelo.crudProveedor.ProveedorDao;
 import vista.componentes.RoundedJXButton;
 
@@ -13,6 +16,7 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
     private final RoundedJXButton btnRechazar;
     private int idProveedorActual;
     private AccionProveedorListener listener;
+    ProveedorDao proveedorDao = new ProveedorDao();
 
     public AccionesRendererEditor(AccionProveedorListener listener) {
         panel = new JPanel();
@@ -38,20 +42,31 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
 
         // Evento botón Aprobar
         btnAprobar.addActionListener(e -> {
-            ProveedorDao proveedorDao = new ProveedorDao();
+
             int confirm = JOptionPane.showConfirmDialog(null,
                     "¿Desea aprobar al proveedor con Documento " + idProveedorActual + "?",
                     "Confirmar Aprobación",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                int result = proveedorDao.CambiarEstado(idProveedorActual, 1);
-                if (result != 0) {
-                    JOptionPane.showMessageDialog(null, "Se actualizó correctamente el estado del proveedor");
+                String documentoString = Integer.toString(idProveedorActual);
+                if (validarQueExistaProveedorAsociadoAlProducto(documentoString)) {
+                    int result = proveedorDao.CambiarEstado(idProveedorActual, 2);
+                    if (result != 0) {
+                        JOptionPane.showMessageDialog(null,
+                                "Ya existe un proveedor asociado a este producto.\nSe actualizó correctamente el estado del proveedor a Inhabilitado.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se pudo actualizar el estado del proveedor");
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "No se pudo actualizar el estado del proveedor");
+                    int result = proveedorDao.CambiarEstado(idProveedorActual, 1);
+                    if (result != 0) {
+                        JOptionPane.showMessageDialog(null,
+                                "Se actualizó correctamente el estado del proveedor a Habilitado.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se pudo actualizar el estado del proveedor");
+                    }
                 }
-
-                // ✅ Finaliza la edición antes de recargar la tabla
+                // Finaliza la edición antes de recargar la tabla
                 SwingUtilities.invokeLater(() -> {
                     stopCellEditing();
                     if (listener != null)
@@ -69,7 +84,14 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
                     "Confirmar Rechazo",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                JOptionPane.showMessageDialog(null, "Proveedor rechazado correctamente.");
+
+                int result = proveedorDao.CambiarEstado(idProveedorActual, 4);
+
+                if (result != 0) {
+                    JOptionPane.showMessageDialog(null, "Se Rechazo correctamente el proveedor");
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se pudo actualizar el estado del proveedor");
+                }
 
                 SwingUtilities.invokeLater(() -> {
                     stopCellEditing();
@@ -86,7 +108,7 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
             int row, int column) {
-        panel.setOpaque(false); // 🔹 Siempre transparente
+        panel.setOpaque(false); // Siempre transparente
         return panel;
     }
 
@@ -100,12 +122,25 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
                 idProveedorActual = -1;
             }
         }
-        panel.setOpaque(false); // 🔹 También transparente cuando se edita
+        panel.setOpaque(false);
         return panel;
     }
 
     @Override
     public Object getCellEditorValue() {
         return idProveedorActual;
+    }
+
+    private boolean validarQueExistaProveedorAsociadoAlProducto(String documentoProveedorActual) {
+
+        List<Proveedor> proveedores = proveedorDao.listarProveedorPorID(documentoProveedorActual);
+
+        if (proveedores.isEmpty()) {
+            return false;
+        }
+
+        int idProducto = proveedores.get(0).getIdProducto();
+
+        return proveedorDao.validarProductoAsociadoAProveedor(idProducto) != null;
     }
 }

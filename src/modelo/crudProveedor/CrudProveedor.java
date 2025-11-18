@@ -17,5 +17,13 @@ public interface CrudProveedor<T> {
 
     public List<T> listarProveedorInactivo();
 
+    public List<T> listarProveedorPorID(String documento);
+
+    public List<T> listarProveedorActivosInactivos();
+
+    public boolean existeProveedorPorNit(String nit);
+
     public int CambiarEstado(int id, int estado);
+
+    public Proveedor validarProductoAsociadoAProveedor(int documento);
 }

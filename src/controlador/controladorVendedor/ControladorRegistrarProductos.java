@@ -11,9 +11,8 @@ import javax.swing.JFrame;
 import modelo.crudCategoriasProductos.*;
 import modelo.crudProducto.*;
 import vista.vistaVendedor.ModuloRegistrarModulos;
-import vista.vistaVendedor.*;
 
-public class ControladorRegistrarProductos implements ActionListener{
+public class ControladorRegistrarProductos implements ActionListener {
     private JFrame frame;
     private int idVendedor;
     private ModuloRegistrarModulos moduloRegistroProductos;
@@ -23,7 +22,7 @@ public class ControladorRegistrarProductos implements ActionListener{
     public ControladorRegistrarProductos(JFrame frame, int idVendedor) {
         this.frame = frame;
         this.idVendedor = idVendedor;
-        daoCategoria= new DaoCategoriaProductos();
+        daoCategoria = new DaoCategoriaProductos();
         daoProducto = new ProductoDao();
         cargarModuloProductos();
         moduloRegistroProductos.formularioRegistro.btnGuardar.addActionListener(this);
@@ -31,17 +30,17 @@ public class ControladorRegistrarProductos implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==moduloRegistroProductos.formularioRegistro.btnGuardar){
+        if (e.getSource() == moduloRegistroProductos.formularioRegistro.btnGuardar) {
             boolean validarCampos = moduloRegistroProductos.validarCampos();
-            if(validarCampos){
+            if (validarCampos) {
                 registrarProductos();
             }
         }
     }
-    
-    public void cargarModuloProductos(){
+
+    public void cargarModuloProductos() {
         frame.setSize(1300, 700);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.getContentPane().removeAll(); // limpia el contenido anterior
 
@@ -49,25 +48,28 @@ public class ControladorRegistrarProductos implements ActionListener{
         moduloRegistroProductos.setLayout(null);
         moduloRegistroProductos.setBounds(0, 0, 1300, 700);
 
-        frame.add(moduloRegistroProductos); 
+        frame.add(moduloRegistroProductos);
         frame.revalidate(); // actualiza la interfaz
         frame.repaint(); // repinta la ventana
     }
-    
-    public boolean registrarProductos(){
+
+    public boolean registrarProductos() {
         // obtiene los datos desde los campos de texto
         int id = Integer.parseInt(moduloRegistroProductos.formularioRegistro.getTxtIdProducto().getText().trim());
         String nombre = moduloRegistroProductos.formularioRegistro.getTxtNombre().getText().trim();
         String descripcion = moduloRegistroProductos.formularioRegistro.getTxtDescripcion().getText().trim();
         int cantidad = Integer.parseInt(moduloRegistroProductos.formularioRegistro.getTxtCantidad().getText().trim());
-        double precio = Double.parseDouble(moduloRegistroProductos.formularioRegistro.getTxtPrecioVenta().getText().trim());
+        double precio = Double
+                .parseDouble(moduloRegistroProductos.formularioRegistro.getTxtPrecioVenta().getText().trim());
 
-        //imagen pendiente
-        String imagen = "src/productos/CamisasFormalesHombre/camisa MangaLarga Blanca.jpg";
+        // imagen pendiente
+        String imagen = moduloRegistroProductos.formularioRegistro.getUrlImagen();
+
         //
-        
+
         String talla = "M";
-        String categoriaSeleccionada = (String) moduloRegistroProductos.formularioRegistro.getComboCategoria().getSelectedItem();
+        String categoriaSeleccionada = (String) moduloRegistroProductos.formularioRegistro.getComboCategoria()
+                .getSelectedItem();
         int idCategoria = -1;
 
         for (Map.Entry<Integer, String> entry : getListarCatgorias().entrySet()) {
@@ -77,19 +79,20 @@ public class ControladorRegistrarProductos implements ActionListener{
             }
         }
         int idEstado = 1;
-        boolean resultadoRegistro = daoProducto.registrarProducto(id, nombre, cantidad, precio, descripcion, talla, imagen, idCategoria, idEstado);
+        boolean resultadoRegistro = daoProducto.registrarProducto(id, nombre, cantidad, precio, descripcion, talla,
+                imagen, idCategoria, idEstado);
         if (resultadoRegistro) {
             moduloRegistroProductos.formularioRegistro.limpiarFormulario();
-           return true; 
-        }else{
+            return true;
+        } else {
             return false;
         }
-        
+
     }
-    
-    public Map<Integer, String> getListarCatgorias(){
+
+    public Map<Integer, String> getListarCatgorias() {
         Map<Integer, String> categoriasMap = new HashMap<>();
-        List<Categoria> lista = daoCategoria.cargarCategorias(); 
+        List<Categoria> lista = daoCategoria.cargarCategorias();
 
         if (lista != null) {
             for (Categoria c : lista) {
@@ -98,11 +101,11 @@ public class ControladorRegistrarProductos implements ActionListener{
         }
         return categoriasMap;
     }
-    
-     public static void main(String[] args) {
+
+    public static void main(String[] args) {
         // Crear el frame principal
         JFrame frame = new JFrame("Registro de Productos");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1300, 700);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
@@ -116,4 +119,4 @@ public class ControladorRegistrarProductos implements ActionListener{
         // Mostrar la ventana
         frame.setVisible(true);
     }
-} 
+}

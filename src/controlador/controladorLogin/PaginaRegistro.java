@@ -44,11 +44,17 @@ public class PaginaRegistro implements ActionListener {
             if (Registro.ValidarCampos()) {
                 String documento = Registro.inputNumeroDoc.getText();
                 if (uDao.buscarUsuario(documento) > 0) {
-                    JOptionPane.showMessageDialog(null, "El usuario ya se encuentra registrado");
+                    int opcion = JOptionPane.showConfirmDialog(null,
+                            "El usuario ya se encuentra registrado.\n¿Desea iniciar sesión?", "Usuario existente",
+                            JOptionPane.YES_NO_OPTION);
+                    if (opcion == JOptionPane.YES_OPTION) {
+                        redirigirLogin(opcion);
+                    }
                     return;
                 }
                 if (uDao.buscarCorreo(Registro.inputCorreoElectronico.getText()) > 0) {
-                    JOptionPane.showMessageDialog(null, "El correo ya se encuentra registrado");
+                    JOptionPane.showMessageDialog(null, "El correo ya se encuentra registrado", "Correo existente",
+                            JOptionPane.WARNING_MESSAGE);
                     return;
                 }
                 if (!ValidarCampos()) {
@@ -90,10 +96,10 @@ public class PaginaRegistro implements ActionListener {
                         // Verifica la opción seleccionada
                         redirigirLogin(opcion);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Error al registrar usuario");
+                        System.out.println("Error al registrar el usuario.");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Las contrasenas no coinciden");
+                    System.out.println("Las contraseñas no coinciden.");
                 }
             } else {
                 return;

@@ -1,0 +1,48 @@
+package modelo.crudAdministradorSesion;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import modelo.Conexion;
+
+public class AdministradorDao implements CrudAdministrador {
+    private Connection con;
+    private PreparedStatement ps;
+    private ResultSet rs;
+
+    @Override
+    public int registrarHoraIngreso(String idAdministrador) {
+        String sql = "INSERT INTO administradorsesion " +
+                "(idAdministrador, fecha, horaIngreso) " +
+                "VALUES (?, CURDATE(), CURTIME())";
+        try {
+            con = Conexion.getInstance().getConnection();
+            ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, idAdministrador);
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al registrar hora de ingreso del administrador: " + e.getMessage());
+        }
+        return -1;
+    }
+
+    @Override
+    public int registrarHoraSalida(int idSesion) {
+        String sql = "UPDATE administradorsesion SET horaSalida = NOW(), tiempoConexion = TIMEDIFF(NOW(), horaIngreso) WHERE idSesion = ?";
+        try {
+            con = Conexion.getInstance().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idSesion);
+            return ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error al registrar hora de salida del administrador: " + e.getMessage());
+        }
+        return -1;
+    }
+}

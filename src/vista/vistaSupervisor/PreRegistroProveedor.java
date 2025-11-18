@@ -7,40 +7,34 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.io.InputStream;
-import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import modelo.crudMetodoDePago.MetodoPago;
-import modelo.crudMetodoDePago.MetodoPagoDao;
 import modelo.crudProducto.Producto;
-import modelo.crudProducto.ProductoDao;
 import vista.componentes.Header;
 import vista.vistaSupervisor.componentes.RoundedPanel;
 
 public class PreRegistroProveedor extends JFrame {
 
+    private JComboBox<Producto> cboProductoPersona;
+    private JComboBox<Producto> cboProductoEmpresa;
+    private JComboBox<MetodoPago> cboPersonaMedioPago;
+    private JComboBox<MetodoPago> cboMedioPago;
     private JComboBox<String> tipoEntidad;
-    private ProductoDao productoDao;
+
+    private JButton btnAgregarProPersona, btnAgregarProEmpresa, btnEnviarPersona, btnEnviarEmpresa;
 
     private JPanel panelTipoEntidad, panelFormu, panelAuxFormu, panelPer, panelCards, panelAuxEmp, panelReEmp;
-
     private JTextField txtPersonaNumeroDoc, txtPersonaNombre, txtPersonaDireccion,
             txtPersonaTelefono, txtPersonaCorreo,
             txtNumeroDoc, txtNombre, txtDireccion, txtTelefono, txtCorreo,
-            txtNit, txtNombreEntidad, txtTelefonoEntidad, txtCorreoEntidad;
-    private JComboBox<Producto> cboProductoPersona;
-    private JComboBox<Producto> cboProductoEmpresa;
-    private JComboBox<MetodoPago> cboPersonaMedioPago, cboMedioPago;
-    private MetodoPagoDao metodoPagoDao;
-    private JButton btnAgregarProPersona, btnAgregarProEmpresa, btnEnviarPersona, btnEnviarEmpresa;
+            txtNit, txtNombreEntidad, txtCorreoEntidad;
     private JLabel lTipoE, lPreRegis;
     // Paneles de formularios
     private JPanel panelPersona;
@@ -55,9 +49,6 @@ public class PreRegistroProveedor extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
-
-        productoDao = new ProductoDao();
-        metodoPagoDao = new MetodoPagoDao();
 
         try {
             InputStream is = PreRegistroProveedor.class.getResourceAsStream("/fonts/newCentury.ttf");
@@ -141,7 +132,7 @@ public class PreRegistroProveedor extends JFrame {
 
         cboProductoPersona = new JComboBox<>();
         cboProductoPersona.setBorder(new TitledBorder("Productos"));
-        cargarProductosSinProveedor(cboProductoPersona);
+
         btnAgregarProPersona = new JButton("Agregar");
         btnAgregarProPersona.setPreferredSize(new Dimension(80, 38));
         panelAuxFormu = new JPanel(new GridLayout(1, 2, 10, 0));
@@ -152,7 +143,6 @@ public class PreRegistroProveedor extends JFrame {
 
         cboPersonaMedioPago = new JComboBox<>();
         cboPersonaMedioPago.setBorder(new TitledBorder("Medio de Pago"));
-        cargarMetodosPago(cboPersonaMedioPago);
 
         txtPersonaDireccion = new JTextField(25);
         txtPersonaDireccion.setBorder(new TitledBorder("Direccion"));
@@ -183,74 +173,6 @@ public class PreRegistroProveedor extends JFrame {
         return panelFormu;
     }
 
-    private void cargarProductosSinProveedor(JComboBox<Producto> comboBox) {
-        comboBox.removeAllItems();
-        List<Producto> productos = productoDao.listarProductosSinProveedor();
-        for (Producto producto : productos) {
-            comboBox.addItem(producto);
-        }
-
-        if (comboBox.getItemCount() > 0) {
-            comboBox.setSelectedIndex(0);
-        }
-    }
-
-    private void cargarMetodosPago(JComboBox<MetodoPago> comboBox) {
-        comboBox.removeAllItems();
-        List<MetodoPago> metodos = metodoPagoDao.listarMetodosPago();
-        for (MetodoPago metodo : metodos) {
-            comboBox.addItem(metodo);
-        }
-
-        if (comboBox.getItemCount() > 0) {
-            comboBox.setSelectedIndex(0);
-        }
-    }
-
-    public JButton getBtnAgregarProPersona() {
-        return btnAgregarProPersona;
-    }
-
-    public JButton getBtnAgregarProEmpresa() {
-        return btnAgregarProEmpresa;
-    }
-
-    public void asignarProveedorAProducto(int idProveedor) {
-        System.out.println("Intentando asignar producto al proveedor: " + idProveedor);
-        Producto selectedProducto = getProductoSeleccionado();
-        if (selectedProducto == null) {
-            System.out.println("Error: No hay producto seleccionado");
-            JOptionPane.showMessageDialog(this, "Por favor seleccione un producto", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        try {
-            System.out.println("Producto seleccionado: ID=" + selectedProducto.getId() + ", Nombre="
-                    + selectedProducto.getNombre());
-
-            if (productoDao.asignarProveedor(selectedProducto.getId(), idProveedor)) {
-                System.out.println("Asignación exitosa");
-                JOptionPane.showMessageDialog(this, "Producto asignado exitosamente", "Éxito",
-                        JOptionPane.INFORMATION_MESSAGE);
-                // Recargar ambas listas por seguridad
-                if (cboProductoPersona != null)
-                    cargarProductosSinProveedor(cboProductoPersona);
-                if (cboProductoEmpresa != null)
-                    cargarProductosSinProveedor(cboProductoEmpresa);
-            } else {
-                System.out.println("Error en la asignación");
-                JOptionPane.showMessageDialog(this, "Error al asignar el producto", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception e) {
-            System.out.println("Error inesperado: " + e.getMessage());
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error inesperado al asignar el producto: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
     // --- Formulario Empresa ---
     private JPanel crearFormularioEmpresa() {
 
@@ -278,16 +200,13 @@ public class PreRegistroProveedor extends JFrame {
         txtNombreEntidad.setBorder(new TitledBorder("Nombre Entidad"));
         cboProductoEmpresa = new JComboBox<>();
         cboProductoEmpresa.setBorder(new TitledBorder("Productos"));
-        cargarProductosSinProveedor(cboProductoEmpresa);
+
         btnAgregarProEmpresa = new JButton("Agregar");
         btnAgregarProEmpresa.setPreferredSize(new Dimension(120, 38));
         cboMedioPago = new JComboBox<>();
         cboMedioPago.setBorder(new TitledBorder("Medio de Pago"));
-        cargarMetodosPago(cboMedioPago);
         txtDireccion = new JTextField(15);
         txtDireccion.setBorder(new TitledBorder("Dirección Entidad"));
-        txtTelefonoEntidad = new JTextField(15);
-        txtTelefonoEntidad.setBorder(new TitledBorder("Teléfono Entidad"));
         txtCorreoEntidad = new JTextField(15);
         txtCorreoEntidad.setBorder(new TitledBorder("Correo Entidad"));
 
@@ -336,9 +255,6 @@ public class PreRegistroProveedor extends JFrame {
     }
 
     // Getters para Controlador
-    public JComboBox<String> getTipoEntidad() {
-        return tipoEntidad;
-    }
 
     public JPanel getPanelCards() {
         return panelCards;
@@ -350,14 +266,6 @@ public class PreRegistroProveedor extends JFrame {
 
     public JPanel getPanelEmpresa() {
         return panelEmpresa;
-    }
-
-    public JButton getBtnEnviarPersona() {
-        return btnEnviarPersona;
-    }
-
-    public JButton getBtnEnviarEmpresa() {
-        return btnEnviarEmpresa;
     }
 
     // Getters para campos del formulario Persona (usados por el controlador)
@@ -405,7 +313,7 @@ public class PreRegistroProveedor extends JFrame {
     }
 
     public String getEmpresaTelefono() {
-        return txtTelefonoEntidad != null ? txtTelefonoEntidad.getText().trim() : "";
+        return txtTelefono != null ? txtTelefono.getText().trim() : "";
     }
 
     public String getEmpresaCorreo() {
@@ -429,6 +337,99 @@ public class PreRegistroProveedor extends JFrame {
         return txtCorreo != null ? txtCorreo.getText().trim() : "";
     }
 
+    // Setters para limpiar campos del formulario Persona
+    public void setPersonaNumeroDoc(String text) {
+        if (txtPersonaNumeroDoc != null) {
+            txtPersonaNumeroDoc.setText(text);
+        }
+    }
+
+    public void setPersonaNombre(String text) {
+        if (txtPersonaNombre != null) {
+            txtPersonaNombre.setText(text);
+        }
+    }
+
+    public void setPersonaMedioDePago(int index) {
+        if (cboPersonaMedioPago != null && cboPersonaMedioPago.getItemCount() > 0) {
+            cboPersonaMedioPago.setSelectedIndex(index);
+        }
+    }
+
+    public void setPersonaDireccion(String text) {
+        if (txtPersonaDireccion != null) {
+            txtPersonaDireccion.setText(text);
+        }
+    }
+
+    public void setPersonaTelefono(String text) {
+        if (txtPersonaTelefono != null) {
+            txtPersonaTelefono.setText(text);
+        }
+    }
+
+    public void setPersonaCorreo(String text) {
+        if (txtPersonaCorreo != null) {
+            txtPersonaCorreo.setText(text);
+        }
+    }
+
+    // Setters para limpiar campos del formulario Empresa
+    public void setEmpresaNit(String text) {
+        if (txtNit != null) {
+            txtNit.setText(text);
+        }
+    }
+
+    public void setEmpresaNombreEntidad(String text) {
+        if (txtNombreEntidad != null) {
+            txtNombreEntidad.setText(text);
+        }
+    }
+
+    public void setEmpresaMedioDePago(int index) {
+        if (cboMedioPago != null && cboMedioPago.getItemCount() > 0) {
+            cboMedioPago.setSelectedIndex(index);
+        }
+    }
+
+    public void setEmpresaDireccion(String text) {
+        if (txtDireccion != null) {
+            txtDireccion.setText(text);
+        }
+    }
+
+    public void setEmpresaCorreo(String text) {
+        if (txtCorreoEntidad != null) {
+            txtCorreoEntidad.setText(text);
+        }
+    }
+
+    // Setters para limpiar campos del Representante
+    public void setRepresentanteNumeroDoc(String text) {
+        if (txtNumeroDoc != null) {
+            txtNumeroDoc.setText(text);
+        }
+    }
+
+    public void setRepresentanteNombre(String text) {
+        if (txtNombre != null) {
+            txtNombre.setText(text);
+        }
+    }
+
+    public void setRepresentanteTelefono(String text) {
+        if (txtTelefono != null) {
+            txtTelefono.setText(text);
+        }
+    }
+
+    public void setRepresentanteCorreo(String text) {
+        if (txtCorreo != null) {
+            txtCorreo.setText(text);
+        }
+    }
+
     public Producto getProductoSeleccionado() {
         // Si el panel persona está visible, tomar de su combo; si no, tomar del de
         // empresa
@@ -448,7 +449,6 @@ public class PreRegistroProveedor extends JFrame {
             // ignore
         }
 
-        // fallback: prefer persona combo if available
         if (cboProductoPersona != null && cboProductoPersona.getItemCount() > 0) {
             return (Producto) cboProductoPersona.getSelectedItem();
         }
@@ -458,10 +458,39 @@ public class PreRegistroProveedor extends JFrame {
         return null;
     }
 
-    public void actualizarListaProductos() {
-        if (cboProductoPersona != null)
-            cargarProductosSinProveedor(cboProductoPersona);
-        if (cboProductoEmpresa != null)
-            cargarProductosSinProveedor(cboProductoEmpresa);
+    public JComboBox<Producto> getCboProductoPersona() {
+        return cboProductoPersona;
+    }
+
+    public JComboBox<Producto> getCboProductoEmpresa() {
+        return cboProductoEmpresa;
+    }
+
+    public JComboBox<MetodoPago> getCboPersonaMedioPago() {
+        return cboPersonaMedioPago;
+    }
+
+    public JComboBox<MetodoPago> getCboMedioPago() {
+        return cboMedioPago;
+    }
+
+    public JComboBox<String> getTipoEntidad() {
+        return tipoEntidad;
+    }
+
+    public JButton getBtnAgregarProPersona() {
+        return btnAgregarProPersona;
+    }
+
+    public JButton getBtnAgregarProEmpresa() {
+        return btnAgregarProEmpresa;
+    }
+
+    public JButton getBtnEnviarPersona() {
+        return btnEnviarPersona;
+    }
+
+    public JButton getBtnEnviarEmpresa() {
+        return btnEnviarEmpresa;
     }
 }

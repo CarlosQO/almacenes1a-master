@@ -9,15 +9,18 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import controladorVendedor.ControladorVendedor;
 import controladorAdministrador.PaginaPrincipal;
 import controladorCliente.ControladorPrincipalCliente;
 import controladorSupervisor.ContraladorVistaSuper;
+import modelo.crudAdministradorSesion.AdministradorDao;
 import modelo.crudUsuario.Usuario;
 import modelo.crudUsuario.UsuarioDao;
 import vista.vistaAdministrador.PrincipalAdministradorVista;
 import vista.vistaLoginRegistro.Login;
 import vista.vistaLoginRegistro.Registro;
 import vista.vistaSupervisor.VistaSupervisor;
+import vista.vistaVendedor.VistaVendedor;
 import vista.vistaCliente.PanelPrincipal;
 
 public class PaginaLogin implements ActionListener {
@@ -25,6 +28,12 @@ public class PaginaLogin implements ActionListener {
     private UsuarioDao uDao = new UsuarioDao();
     private Registro r;
     private PaginaRegistro pr;
+    private AdministradorDao aDao = new AdministradorDao();
+    public static String usuario, documento;
+    public static int rol, idSesionAdmin;
+
+    public PaginaLogin() {
+    }
 
     public PaginaLogin(Login l) {
         this.login = l;
@@ -66,12 +75,18 @@ public class PaginaLogin implements ActionListener {
             Usuario existe = uDao.validarCredencialesUsuario(documento, contraseña);
             if (existe != null) {
                 try {
+                    // redirigir segun el rol
+                    this.usuario = existe.getNombre() + " " + existe.getApellido();
+                    this.documento = existe.getDocumento();
+                    this.rol = existe.getIdRol();
+
                     regirigirSegunElRol(existe.getIdRol());
                 } catch (IOException e1) {
                     System.out.println("Error al redirigir: " + e1.getMessage());
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Contraseña Incorrecta", "", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Contraseña Incorrecta, intente nuevamente",
+                        "Error de autenticación", JOptionPane.WARNING_MESSAGE);
             }
         }
     }
@@ -92,11 +107,12 @@ public class PaginaLogin implements ActionListener {
                 PrincipalAdministradorVista v = new PrincipalAdministradorVista();
                 PaginaPrincipal c = new PaginaPrincipal(v, login.inputNumero.getText());
                 v.setResizable(false);
+                int idSesion = aDao.registrarHoraIngreso(login.inputNumero.getText());
+                this.idSesionAdmin = idSesion;
                 v.setVisible(true);
                 v.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-
                 login.setVisible(false);
-                configurarCierreVentana(v);
+                configurarCierreVentana(v, idSesion);
                 break;
             case 2:
                 PanelPrincipal paginaCliente = new PanelPrincipal();
@@ -106,10 +122,18 @@ public class PaginaLogin implements ActionListener {
                 paginaCliente.setVisible(true);
                 paginaCliente.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 login.setVisible(false);
-                configurarCierreVentana(paginaCliente);
+                configurarCierreVentana(paginaCliente, 0);
 
                 break;
             case 3:
+                VistaVendedor vista = new VistaVendedor();
+                ControladorVendedor cv = new ControladorVendedor(vista);
+                vista.setResizable(false);
+                vista.setVisible(true);
+                vista.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+                login.setVisible(false);
+                configurarCierreVentana(vista, 0);
                 System.out.println("Vendedor");
                 break;
             case 4:
@@ -119,7 +143,7 @@ public class PaginaLogin implements ActionListener {
                 vs.setVisible(true);
                 vs.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 login.setVisible(false);
-                configurarCierreVentana(vs);
+                configurarCierreVentana(vs, 0);
                 break;
             default:
                 System.out.println("Rol no reconocido");
@@ -137,7 +161,7 @@ public class PaginaLogin implements ActionListener {
         }
     }
 
-    private void configurarCierreVentana(JFrame ventanaSecundaria) {
+    private void configurarCierreVentana(JFrame ventanaSecundaria, int idSesion) {
         login.setVisible(false);
 
         javax.swing.SwingUtilities.invokeLater(() -> {
@@ -153,8 +177,10 @@ public class PaginaLogin implements ActionListener {
 
                     if (opcion == JOptionPane.YES_OPTION) {
                         // Cierra la ventana secundaria
+                        if (idSesion > 0) {
+                            aDao.registrarHoraSalida(idSesion);
+                        }
                         ventanaSecundaria.setVisible(false);
-                        // Muestra la ventana principal (por ejemplo, el login)
                         login.limpiarCampos();
                         login.setVisible(true);
                     } else {

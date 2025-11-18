@@ -30,6 +30,7 @@ public class PaginaHabilitarProveedor extends JFrame {
     private JScrollPane scrollTabla;
     public JPanel containInfo;
     public JTable tablaProveInactivo;
+    public JLabel noHayProvee;
 
     public PaginaHabilitarProveedor() {
         super("Habilitar proveedor");
@@ -51,11 +52,20 @@ public class PaginaHabilitarProveedor extends JFrame {
         header = new Header();
         contenedor.add(header);
 
-        title = new JLabel("Aprobar proveedor");
+        title = new JLabel("Habilitar proveedor");
         title.setFont(fuente.fuente(2, false));
         title.setBounds(100, header.getHeight() + header.getY() + 30, (int) title.getPreferredSize().getWidth(),
                 40);
         contenedor.add(title);
+
+        noHayProvee = new JLabel();
+        noHayProvee.setVisible(false);
+        noHayProvee.setText("No hay proveedores por habilitar");
+        noHayProvee.setFont(fuente.fuente(3, false));
+        noHayProvee.setBounds(400, title.getHeight() + title.getY() + 150,
+                (int) noHayProvee.getPreferredSize().getWidth() + 50,
+                40);
+        contenedor.add(noHayProvee);
 
         panelBusqueda = new RoundedPanel(20, 0x000000);
         panelBusqueda.setBounds(title.getX(), header.getHeight() + header.getY() + 100, 300, 50);
@@ -70,7 +80,6 @@ public class PaginaHabilitarProveedor extends JFrame {
         busqueda.setBorder(null);
         limitarCaracteres(busqueda, 10);
         busqueda.setBounds(8, 5, 270, 40);
-        limitarCaracteres(busqueda, 10);
         panelBusqueda.add(busqueda);
 
         buscar = new RoundedJXButton("Buscar");
@@ -87,18 +96,18 @@ public class PaginaHabilitarProveedor extends JFrame {
 
         String[] columnas = { "<html><p>Nombres<br>Proveedor</p></html>", "<html><p>Documento<br>NIT</p></html>",
                 "<html><p>Producto/<br>Servicio</p></html>",
-                "Medio de Pago", "Contacto", "Estado Actual", "Acciones" };
+                "Medio de Pago", "Contacto", "Acciones" };
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column >= 0 && column < getColumnCount() && column == 6;
+                return column >= 0 && column < getColumnCount() && column == 5;
             }
 
         };
         tablaProveInactivo = new JTable(modeloTabla);
         tablaProveInactivo.getColumnModel().getColumn(1).setPreferredWidth(20);
         tablaProveInactivo.getColumnModel().getColumn(4).setPreferredWidth(10);
-        tablaProveInactivo.getColumnModel().getColumn(6).setPreferredWidth(140);
+        tablaProveInactivo.getColumnModel().getColumn(5).setPreferredWidth(140);
         tablaProveInactivo.getTableHeader().setPreferredSize(new java.awt.Dimension(0, 45));
         tablaProveInactivo.getTableHeader().setFont(fuente.fuente(5, true));
         tablaProveInactivo.getColumnModel().setColumnMargin(10);
@@ -120,11 +129,5 @@ public class PaginaHabilitarProveedor extends JFrame {
 
         contenedor.add(containInfo);
 
-    }
-
-    public static void main(String[] args) {
-        PaginaHabilitarProveedor ventana = new PaginaHabilitarProveedor();
-        ventana.setVisible(true);
-        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }

@@ -1,7 +1,6 @@
 package vista.vistaCliente;
 
-import controladorCliente.*;
-import static vista.componentes.RoundedPanel.*;
+import static vista.componentes.RoundedPanel.resizeImage;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -21,7 +20,6 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
-
 import vista.componentes.RoundedButton;
 
 public class PanelPrincipal extends JFrame {

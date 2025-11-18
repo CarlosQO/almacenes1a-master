@@ -39,32 +39,32 @@ public class DaoPQRS implements CrudPQRS<Pqrs> {
     }
 
     @Override
-public String obtenerCorreo(String idUsuario) {
-    String sql = "SELECT correo FROM usuarios WHERE documento = ?";
-    try (
-        Connection con = Conexion.getInstance().getConnection();
-        PreparedStatement ps = con.prepareStatement(sql);
-    ) {
-        ps.setString(1, idUsuario);
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                // Usuario encontrado, devolver correo
-                return rs.getString("correo");
-            } else {
-                // Usuario NO encontrado
-                JOptionPane.showMessageDialog(
-                    null,
-                    "No se encontró un usuario con el documento: " + idUsuario,
-                    "Usuario no encontrado",
-                    JOptionPane.WARNING_MESSAGE
-                );
+    public String obtenerCorreo(String idUsuario) {
+        String sql = "SELECT correo FROM usuarios WHERE documento = ?";
+        try (
+            Connection con = Conexion.getInstance().getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+        ) {
+            ps.setString(1, idUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // Usuario encontrado, devolver correo
+                    return rs.getString("correo");
+                } else {
+                    // Usuario NO encontrado
+                    JOptionPane.showMessageDialog(
+                        null,
+                        "No se encontró un usuario con el documento: " + idUsuario,
+                        "Usuario no encontrado",
+                        JOptionPane.WARNING_MESSAGE
+                    );
+                }
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "Error al obtener correo", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, e.toString(), "Error al obtener correo", JOptionPane.ERROR_MESSAGE);
+        return null;
     }
-    return null;
-}
 
     @Override
     public List<Pqrs> listar() {

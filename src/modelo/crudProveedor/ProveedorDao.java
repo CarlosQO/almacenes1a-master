@@ -43,7 +43,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
 
     @Override
     public int setAgregar(Proveedor p) {
-        String sql = "INSERT INTO proveedor (tipo, nombre, documento, metodo_pago, direccion, telefono, correo, estado) VALUES (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO proveedor (tipo, nombre, documento, metodo_pago, direccion, telefono, correo,idProducto, estado) VALUES (?,?,?,?,?,?,?,?,?)";
 
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -54,7 +54,8 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
             ps.setString(5, p.getDireccion());
             ps.setString(6, p.getTelefono());
             ps.setString(7, p.getCorreo());
-            ps.setInt(8, p.getEstado());
+            ps.setInt(8, p.getIdProducto());
+            ps.setInt(9, p.getEstado());
 
             int affected = ps.executeUpdate();
             if (affected == 0) {
@@ -91,7 +92,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
     @Override
     public List<Proveedor> listarProveedorPendiente() {
         List<Proveedor> proveedores = new ArrayList<>();
-        String sql = "SELECT proveedor.*, producto.nombre FROM proveedor INNER JOIN producto ON proveedor.id = producto.id_proveedor WHERE proveedor.estado = 3";
+        String sql = "SELECT proveedor.*, producto.nombre AS nombreProduc FROM proveedor INNER JOIN producto ON proveedor.idProducto = producto.id WHERE proveedor.estado = 3";
         try {
             Connection con = Conexion.getInstance().getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
@@ -106,7 +107,8 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
                 proveedor.setDireccion(rs.getString(6));
                 proveedor.setTelefono(rs.getString(7));
                 proveedor.setCorreo(rs.getString(8));
-                proveedor.setEstado(rs.getInt(9));
+                proveedor.setEstado(rs.getInt("estado"));
+                proveedor.setProducto(rs.getString("nombreProduc"));
                 proveedores.add(proveedor);
             }
             return proveedores;
@@ -119,7 +121,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
     @Override
     public List<Proveedor> listarProveedorActivos() {
         List<Proveedor> proveedores = new ArrayList<>();
-        String sql = "SELECT proveedor.*, producto.nombre FROM proveedor INNER JOIN producto ON proveedor.id = producto.id_proveedor WHERE proveedor.estado = 1";
+        String sql = "SELECT proveedor.*, producto.nombre AS nombreProduc, metodo_pago.nombre AS metodoPago FROM proveedor INNER JOIN producto ON proveedor.idProducto = producto.id INNER JOIN metodo_pago ON proveedor.metodo_pago = metodo_pago.id WHERE proveedor.estado = 1";
         try {
             Connection con = Conexion.getInstance().getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
@@ -134,7 +136,9 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
                 proveedor.setDireccion(rs.getString(6));
                 proveedor.setTelefono(rs.getString(7));
                 proveedor.setCorreo(rs.getString(8));
-                proveedor.setEstado(rs.getInt(9));
+                proveedor.setEstado(rs.getInt("estado"));
+                proveedor.setProducto(rs.getString("nombreProduc"));
+                proveedor.setMetodoPagoVarchar(rs.getString("metodoPago"));
                 proveedores.add(proveedor);
             }
             return proveedores;
@@ -147,7 +151,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
     @Override
     public List<Proveedor> listarProveedorInactivo() {
         List<Proveedor> proveedores = new ArrayList<>();
-        String sql = "SELECT proveedor.*, producto.nombre FROM proveedor INNER JOIN producto ON proveedor.id = producto.id_proveedor WHERE proveedor.estado = 2";
+        String sql = "SELECT proveedor.*, producto.nombre AS nombreProduc, metodo_pago.nombre AS metodoPago FROM proveedor INNER JOIN producto ON proveedor.idProducto = producto.id INNER JOIN metodo_pago ON proveedor.metodo_pago = metodo_pago.id WHERE proveedor.estado = 2";
         try {
             Connection con = Conexion.getInstance().getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
@@ -162,8 +166,9 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
                 proveedor.setDireccion(rs.getString(6));
                 proveedor.setTelefono(rs.getString(7));
                 proveedor.setCorreo(rs.getString(8));
-                proveedor.setEstado(rs.getInt(9));
-                proveedor.setProducto(rs.getString(10));
+                proveedor.setEstado(rs.getInt("estado"));
+                proveedor.setProducto(rs.getString("nombreProduc"));
+                proveedor.setMetodoPagoVarchar(rs.getString("metodoPago"));
                 proveedores.add(proveedor);
             }
             return proveedores;
@@ -188,4 +193,116 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
         return 0;
     }
 
+    @Override
+    public List<Proveedor> listarProveedorPorID(String documento) {
+        List<Proveedor> proveedores = new ArrayList<>();
+        String sql = "SELECT proveedor.*, producto.nombre AS nombreProduc, metodo_pago.nombre AS metodoPago FROM proveedor INNER JOIN producto ON proveedor.idProducto = producto.id INNER JOIN metodo_pago ON proveedor.metodo_pago = metodo_pago.id WHERE proveedor.documento = ?";
+        try {
+            Connection con = Conexion.getInstance().getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, documento);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Proveedor proveedor = new Proveedor();
+                proveedor.setId(rs.getInt(1));
+                proveedor.setTipo(rs.getString(2));
+                proveedor.setDocumento(rs.getString("documento"));
+                proveedor.setNombre(rs.getString("nombre"));
+                proveedor.setMetodoDePago(rs.getInt(5));
+                proveedor.setDireccion(rs.getString(6));
+                proveedor.setTelefono(rs.getString(7));
+                proveedor.setCorreo(rs.getString(8));
+                proveedor.setEstado(rs.getInt("estado"));
+                proveedor.setProducto(rs.getString("nombreProduc"));
+                proveedor.setMetodoPagoVarchar(rs.getString("metodoPago"));
+                proveedor.setIdProducto(rs.getInt("idProducto"));
+                proveedores.add(proveedor);
+            }
+            return proveedores;
+        } catch (Exception e) {
+            System.out.println("Error al listar proveedor por ID: " + e.getMessage());
+        }
+        return proveedores;
+    }
+
+    @Override
+    public List<Proveedor> listarProveedorActivosInactivos() {
+        List<Proveedor> proveedores = new ArrayList<>();
+        String sql = "SELECT proveedor.*, producto.nombre AS nombreProduc, metodo_pago.nombre AS metodoPago,  proveedor_estado.nombre AS proveedorEstadoVarchar FROM proveedor INNER JOIN producto ON proveedor.idProducto = producto.id INNER JOIN metodo_pago ON proveedor.metodo_pago = metodo_pago.id INNER JOIN proveedor_estado ON proveedor.estado = proveedor_estado.id WHERE proveedor.estado IN (1, 2)";
+        try {
+            Connection con = Conexion.getInstance().getConnection();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Proveedor proveedor = new Proveedor();
+                proveedor.setId(rs.getInt(1));
+                proveedor.setTipo(rs.getString(2));
+                proveedor.setNombre(rs.getString(3));
+                proveedor.setDocumento(rs.getString(4));
+                proveedor.setMetodoDePago(rs.getInt(5));
+                proveedor.setDireccion(rs.getString(6));
+                proveedor.setTelefono(rs.getString(7));
+                proveedor.setCorreo(rs.getString(8));
+                proveedor.setEstado(rs.getInt(9));
+                proveedor.setProducto(rs.getString("nombreProduc"));
+                proveedor.setMetodoPagoVarchar(rs.getString("metodoPago"));
+                proveedor.setEstadoVarchar(rs.getString("proveedorEstadoVarchar"));
+                proveedores.add(proveedor);
+            }
+            return proveedores;
+        } catch (Exception e) {
+            System.out.println("Error al listar proveedores activos e inactivos: " + e.getMessage());
+        }
+        return proveedores;
+    }
+
+    @Override
+    public boolean existeProveedorPorNit(String nit) {
+        String sql = "SELECT COUNT(*) FROM proveedor WHERE documento = ?";
+        try (Connection con = Conexion.getInstance().getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, nit);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error verificando NIT existente: " + e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public Proveedor validarProductoAsociadoAProveedor(int idProducto) {
+        String sql = "SELECT * FROM proveedor WHERE idProducto = ? AND estado = 1";
+        try (
+                Connection con = Conexion.getInstance().getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, idProducto);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Proveedor pv = new Proveedor();
+                    pv.setId(rs.getInt(1));
+                    pv.setTipo(rs.getString(2));
+                    pv.setNombre(rs.getString(3));
+                    pv.setDocumento(rs.getString(4));
+                    pv.setMetodoDePago(rs.getInt(5));
+                    pv.setDireccion(rs.getString(6));
+                    pv.setTelefono(rs.getString(7));
+                    pv.setCorreo(rs.getString(8));
+                    pv.setIdProducto(rs.getInt(9));
+                    pv.setEstado(rs.getInt(10));
+                    return pv;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error validando producto asociado a proveedor: " + e.getMessage());
+        }
+        return null;
+    }
 }

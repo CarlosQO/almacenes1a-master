@@ -2,7 +2,6 @@ package vista.vistaCliente.pasarelaVista;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
 import java.time.Year;
 import javax.swing.BorderFactory;
@@ -190,6 +189,7 @@ public class Tarjetas {
                     "Se encontraron los siguientes errores:\n\n" + errores,
                     "Errores en los campos de la tarjeta",
                     JOptionPane.WARNING_MESSAGE);
+            return false;
         }
 
         return true;

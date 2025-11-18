@@ -11,9 +11,12 @@ public class Proveedor {
     private String correo;
     private int estado;
     private String producto;
+    private String metodoPagoVarchar;
+    private String estadoVarchar;
+    private int idProducto;
 
     public Proveedor(int id, String tipo, String nombre, String documento, int metodoDePago, String direccion,
-            String telefono, String correo, int estado) {
+            String telefono, String correo, int estado, int idProducto) {
         this.id = id;
         this.tipo = tipo;
         this.nombre = nombre;
@@ -23,6 +26,7 @@ public class Proveedor {
         this.telefono = telefono;
         this.correo = correo;
         this.estado = estado;
+        this.idProducto = idProducto;
     }
 
     public Proveedor() {
@@ -107,5 +111,29 @@ public class Proveedor {
 
     public void setProducto(String producto) {
         this.producto = producto;
+    }
+
+    public String getMetodoPagoVarchar() {
+        return metodoPagoVarchar;
+    }
+
+    public void setMetodoPagoVarchar(String metodoPagoVarchar) {
+        this.metodoPagoVarchar = metodoPagoVarchar;
+    }
+
+    public String getEstadoVarchar() {
+        return estadoVarchar;
+    }
+
+    public void setEstadoVarchar(String estadoVarchar) {
+        this.estadoVarchar = estadoVarchar;
+    }
+
+    public int getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
     }
 }

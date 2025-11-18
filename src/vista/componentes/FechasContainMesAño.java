@@ -21,10 +21,10 @@ public class FechasContainMesAño extends RoundedPanel {
 
     public FechasContainMesAño() {
         super(20, 0xFFFFFF); // Bordes redondeados, color blanco
+        setShadowSize(1);
         setLayout(null);
-        setBackground(new Color(0xFFFFFF));
+        setBackground(new Color(0xCFCFCF));
         setBounds(10, 120, 200, 180);
-        setShadowSize(2);
 
         Font fontLabel = fuente.fuente(6, true);
         Font fontTitulo = fuente.fuente(5, true);
@@ -77,8 +77,8 @@ public class FechasContainMesAño extends RoundedPanel {
         generar = new JButton("Generar Histórico");
         generar.setFocusPainted(false);
         generar.setFocusable(false);
-        generar.setBackground(new Color(0x007BFF));
-        generar.setForeground(Color.white);
+        generar.setBackground(new Color(0xDFF6FD));
+        generar.setForeground(Color.BLACK);
         generar.setFont(fuente.fuente(6, true));
         generar.setBounds(20, 140, 160, 30);
         generar.setCursor(new Cursor(Cursor.HAND_CURSOR));
