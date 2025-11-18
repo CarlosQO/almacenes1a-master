@@ -8,7 +8,10 @@ import javax.swing.JOptionPane;
 
 import controladorLogin.PaginaLogin;
 import modelo.crudAdministradorSesion.AdministradorDao;
+import modelo.crudUsuario.Usuario;
+import modelo.crudUsuario.UsuarioDao;
 import vista.vistaLoginRegistro.Login;
+import vista.vistaMiAjustes.ActualizarPerfil;
 import vista.vistaMiAjustes.MiAjustes;
 import vista.vistaCliente.PanelPrincipal;
 
@@ -20,6 +23,9 @@ public class MiAjustesControlador implements ActionListener {
     private PaginaLogin pl;
     private AdministradorDao aDao = new AdministradorDao();
     private PanelPrincipal panelPrincipal;
+    private ActualizarPerfil actualizarPerfil;
+    private ActualizarPerfilControlador actualizarPerfilControlador;
+    private UsuarioDao uDao = new UsuarioDao();
 
     public MiAjustesControlador(MiAjustes ajusteV, String usuario, String documento, int rol, int idSesionAdmin) {
         this.ajusteV = ajusteV;
@@ -33,7 +39,18 @@ public class MiAjustesControlador implements ActionListener {
         ajusteV.actualizarDatos.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("Actualizar datos de: " + usuario + " con documento: " + documento);
+                actualizarPerfil = new ActualizarPerfil();
+                actualizarPerfilControlador = new ActualizarPerfilControlador(actualizarPerfil, documento);
+                actualizarPerfil.mostrarComoModal(actualizarPerfil, "Actualizar Perfil");
+                // capturar la ventana al salir
+                if (actualizarPerfil.isVisible() == false || actualizarPerfil.isShowing() == false
+                        || actualizarPerfil.isActive() == false) {
+                    Usuario usuario = uDao.obtenerUsuario(documento);
+                    ajusteV.setUsuario(usuario.getNombre() + " " + usuario.getApellido());
+                    ajusteV.repintar();
+                    ajusteV.repaint();
+                    ajusteV.revalidate();
+                }
             }
         });
         ajusteV.cerrarSesion.addMouseListener(new MouseAdapter() {
@@ -75,7 +92,11 @@ public class MiAjustesControlador implements ActionListener {
             }
         }
         if (e.getSource() == panelPrincipal.btnActualizarInfo) {
-            System.out.println("Actualizar datos de: " + usuario + " con documento: " + documento);
+            actualizarPerfil = new ActualizarPerfil();
+            actualizarPerfilControlador = new ActualizarPerfilControlador(actualizarPerfil, documento);
+            actualizarPerfil.mostrarComoModal(actualizarPerfil, "Actualizar Perfil");
+            // capturar la ventana al salir
+
         }
     }
 
@@ -95,4 +116,5 @@ public class MiAjustesControlador implements ActionListener {
         l.setVisible(true);
         l.setLocationRelativeTo(null);
     }
+
 }
