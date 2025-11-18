@@ -43,7 +43,7 @@ public class ControladorCatalogo implements ActionListener {
     private int idUsuario;
     private DaoCarrito daoCarrito;
     private ProductoDao daoProducto;
-    private ScrollPersonalizado scrollPersonalizado, scrollPromociones;
+    private ScrollPersonalizado scrollPersonalizado;
     private PasarelaPagosVista pasarela;
     private Tarjetas tarjeta;
     private Consignacion tarjetaConsignacion;
@@ -124,8 +124,7 @@ public class ControladorCatalogo implements ActionListener {
                 });
 
                 pasarela.btnBilletera.addActionListener(evBilletera -> {
-                    mostrarDiaologoBilleteraElectronica(getValorTotal(), listaCarritoExistente,
-                            listaPromocionesExistente);
+                    mostrarDiaologoBilleteraElectronica(getValorTotal(), listaCarritoExistente, listaPromocionesExistente);
                 });
 
                 pasarela.getDialogo().setVisible(true);
@@ -167,7 +166,6 @@ public class ControladorCatalogo implements ActionListener {
             if (listaPromociones != null) {
                 totalItems += listaPromociones.size();
             }
-
             return totalItems;
 
         } catch (Exception e) {
@@ -176,9 +174,7 @@ public class ControladorCatalogo implements ActionListener {
         }
     }
 
-    public int obtenerCantidadPromociones() {
-        return daoPromociones.numeroPromociones();
-    }
+    public int obtenerCantidadPromociones() { return daoPromociones.numeroPromociones();}
 
     // buscar categorias
     public String buscarCategoria(int idCategoria) {
@@ -236,8 +232,7 @@ public class ControladorCatalogo implements ActionListener {
                             p.getDescripcion(), p.getPrecio());
 
                     tarjeta.agregarAlCarrito.addActionListener(e -> {
-                        agregarACarritoProductosDeCompras(tarjeta.getIdentificadorTarjeta(), idUsuario,
-                                tarjeta.getImagen(), 1, tarjeta.getPrecio());
+                        agregarACarritoProductosDeCompras(tarjeta.getIdentificadorTarjeta(), idUsuario, tarjeta.getImagen(), 1, tarjeta.getPrecio());
                         cargarProductosACarrito();
                     });
 
@@ -246,28 +241,25 @@ public class ControladorCatalogo implements ActionListener {
                         pasarela = new PasarelaPagosVista(frame);
                         factory = new Factory();
                         ProductosCarrito productoConvertidoACarrito = new ProductosCarrito(
-                                p.getNombre(), p.getImagen(), 0, idUsuario, p.getId(), 1, p.getPrecio(), p.getPrecio());
+                            p.getNombre(), p.getImagen(), 0, idUsuario, p.getId(), 1, p.getPrecio(), p.getPrecio()
+                        );
                         List<ProductosCarrito> productosCompraInstantanea = new ArrayList<>();
                         productosCompraInstantanea.add(productoConvertidoACarrito);
 
                         pasarela.btnTarjetaCredito.addActionListener(ev -> {
-                            mostrarDialogoTarjeta("credito", p.getPrecio(), productosCompraInstantanea,
-                                    new ArrayList<PromocionCarrito>());
+                            mostrarDialogoTarjeta("credito", p.getPrecio(), productosCompraInstantanea, new ArrayList<PromocionCarrito>());
                         });
 
                         pasarela.btnTarjetaDebito.addActionListener(ev -> {
-                            mostrarDialogoTarjeta("debito", p.getPrecio(), productosCompraInstantanea,
-                                    new ArrayList<PromocionCarrito>());
+                            mostrarDialogoTarjeta("debito", p.getPrecio(), productosCompraInstantanea, new ArrayList<PromocionCarrito>());
                         });
 
                         pasarela.btnConsignacion.addActionListener(evConsignacion -> {
-                            mostrarDialogoConsignacion(p.getPrecio(), productosCompraInstantanea,
-                                    new ArrayList<PromocionCarrito>());
+                            mostrarDialogoConsignacion(p.getPrecio(), productosCompraInstantanea, new ArrayList<PromocionCarrito>());
                         });
 
                         pasarela.btnBilletera.addActionListener(evBilletera -> {
-                            mostrarDiaologoBilleteraElectronica(p.getPrecio(), productosCompraInstantanea,
-                                    new ArrayList<PromocionCarrito>());
+                            mostrarDiaologoBilleteraElectronica(p.getPrecio(), productosCompraInstantanea, new ArrayList<PromocionCarrito>());
                         });
 
                         pasarela.getDialogo().setVisible(true);
@@ -315,15 +307,15 @@ public class ControladorCatalogo implements ActionListener {
                             prm.getIdPromomocion(), prm.getNombrePromocion(),
                             prm.getDescripcionPromocion(), prm.getPorcentajeDescuento(),
                             prm.getRutaImagenPrimera(), prm.getRutaImagenSegunda(),
-                            prm.getTotal());
+                            prm.getTotal()
+                        );
 
                     tarjetaPromocion.panelPromocion.setLayout(null);
                     tarjetaPromocion.panelPromocion.setBounds(x, 50, 650, 400);
                     x += 680;
 
                     tarjetaPromocion.btnAgregarCarrito.addActionListener(e -> {
-                        agregarACarritoPromociones(prm.getIdPromomocion(), idUsuario, prm.getRutaImagenPrimera(), 1,
-                                prm.getTotal());
+                        agregarACarritoPromociones(prm.getIdPromomocion(), idUsuario, prm.getRutaImagenPrimera(), 1,prm.getTotal());
                         cargarProductosACarrito();
                     });
 
@@ -350,23 +342,19 @@ public class ControladorCatalogo implements ActionListener {
 
                         // Pasarela de pago para promoción (sin productos)
                         pasarela.btnTarjetaCredito.addActionListener(ev -> {
-                            mostrarDialogoTarjeta("credito", prm.getTotal(), new ArrayList<ProductosCarrito>(),
-                                    listaPromocionesInstantaneas);
+                            mostrarDialogoTarjeta("credito", prm.getTotal(), new ArrayList<ProductosCarrito>(), listaPromocionesInstantaneas);
                         });
 
                         pasarela.btnTarjetaDebito.addActionListener(ev -> {
-                            mostrarDialogoTarjeta("debito", prm.getTotal(), new ArrayList<ProductosCarrito>(),
-                                    listaPromocionesInstantaneas);
+                            mostrarDialogoTarjeta("debito", prm.getTotal(), new ArrayList<ProductosCarrito>(), listaPromocionesInstantaneas);
                         });
 
                         pasarela.btnConsignacion.addActionListener(ev -> {
-                            mostrarDialogoConsignacion(prm.getTotal(), new ArrayList<ProductosCarrito>(),
-                                    listaPromocionesInstantaneas);
+                            mostrarDialogoConsignacion(prm.getTotal(), new ArrayList<ProductosCarrito>(), listaPromocionesInstantaneas);
                         });
 
                         pasarela.btnBilletera.addActionListener(ev -> {
-                            mostrarDiaologoBilleteraElectronica(prm.getTotal(), new ArrayList<ProductosCarrito>(),
-                                    listaPromocionesInstantaneas);
+                            mostrarDiaologoBilleteraElectronica(prm.getTotal(), new ArrayList<ProductosCarrito>(), listaPromocionesInstantaneas);
                         });
 
                         pasarela.getDialogo().setVisible(true);
@@ -414,7 +402,8 @@ public class ControladorCatalogo implements ActionListener {
                     for (PromocionCarrito p : listaPromocion) {
                         TarjetasProductoCarrito tarjetaCarritoPromocion = new TarjetasProductoCarrito(
                                 p.getIdPromocion(), p.getImagen(), p.getNombreProducto(),
-                                p.getCantidadPromocion(), p.getPrecioUnitarioPromocion(), p.getSubtotalPorPromocion());
+                                p.getCantidadPromocion(), p.getPrecioUnitarioPromocion(), p.getSubtotalPorPromocion()
+                        );
 
                         tarjetaCarritoPromocion.setLayout(null);
                         tarjetaCarritoPromocion.setBounds(7, y, 280, 100);
@@ -436,7 +425,8 @@ public class ControladorCatalogo implements ActionListener {
                 for (ProductosCarrito c : listaCarrito) {
                     TarjetasProductoCarrito tarjetaCarrito = new TarjetasProductoCarrito(
                             c.getIdProducto(), c.getImagen(), c.getNombreProducto(),
-                            c.getCantidadProducto(), c.getPrecioUnitarioProducto(), c.getSubtotalPorProducto());
+                            c.getCantidadProducto(), c.getPrecioUnitarioProducto(), c.getSubtotalPorProducto()
+                    );
 
                     tarjetaCarrito.setLayout(null);
                     tarjetaCarrito.setBounds(7, y, 280, 100);
@@ -461,8 +451,6 @@ public class ControladorCatalogo implements ActionListener {
             protected void process(List<TarjetasProductoCarrito> chunks) {
                 for (TarjetasProductoCarrito tarjeta : chunks) {
                     panelCarritoTarjetas.add(tarjeta);
-                    // panelCarritoTarjetas.revalidate();
-                    // panelCarritoTarjetas.repaint();
                 }
             }
 
@@ -492,15 +480,12 @@ public class ControladorCatalogo implements ActionListener {
                 panelPromociones.setOpaque(true);
                 panelPromociones.setLayout(null);
                 panelPromociones.setBackground(new Color(0x93E6FF));
-
                 getListarPromociones(panelPromociones);
 
                 // Calculamos el ancho total (cada tarjeta mide 650 + 30 de margen)
                 int cantidadPromos = obtenerCantidadPromociones();
                 int anchoTotal = cantidadPromos * 680;
-                if (anchoTotal < 1000) {
-                    anchoTotal = 1000;
-                }
+                if (anchoTotal < 1000) { anchoTotal = 1000; }
 
                 panelPromociones.setPreferredSize(new Dimension(anchoTotal, 400));
 
@@ -522,7 +507,6 @@ public class ControladorCatalogo implements ActionListener {
             JPanel panelProductos = new JPanel();
             panelProductos.setLayout(null);
             panelProductos.setBackground(new Color(0x93E6FF));
-
             getListarProductos(panelProductos);
 
             int numeroCategorias = daoProducto.obtenerCantidadCategoriasConProductos();
@@ -594,8 +578,7 @@ public class ControladorCatalogo implements ActionListener {
             );
 
             panelPrincipal.contenedorTarjetasCorritas.setPreferredSize(new Dimension(300, altoCalculadoCarrito));
-            scrollPersonalizado = new ScrollPersonalizado(panelPrincipal.contenedorTarjetasCorritas, "vertical", 300,
-                    290);
+            scrollPersonalizado = new ScrollPersonalizado(panelPrincipal.contenedorTarjetasCorritas, "vertical", 300,290);
             scrollPersonalizado.setBounds(40, 60, 300, 290);
             panelPrincipal.carritoContenedor.add(scrollPersonalizado);
 
@@ -618,16 +601,14 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     // carrito acciones
-    public void agregarACarritoProductosDeCompras(int idProducto, int idUsuario, String imagen, int cantidad,
-            double precioUnitario) {
+    public void agregarACarritoProductosDeCompras(int idProducto, int idUsuario, String imagen, int cantidad, double precioUnitario) {
         daoCarrito.agregarProductosAlCarrito(idProducto, idUsuario, imagen, cantidad, precioUnitario);
         if (panelPrincipal.carritoContenedor.isVisible()) {
             cargarProductosACarrito();
         }
     }
 
-    public void agregarACarritoPromociones(int idPromocion, int idUsuario, String imagen, int cantidad,
-            double precioUnitario) {
+    public void agregarACarritoPromociones(int idPromocion, int idUsuario, String imagen, int cantidad, double precioUnitario) {
         daoCarrito.agregarPromocionAlCarrito(idPromocion, idUsuario, imagen, cantidad, precioUnitario);
         if (panelPrincipal.carritoContenedor.isVisible()) {
             cargarProductosACarrito();
@@ -684,9 +665,9 @@ public class ControladorCatalogo implements ActionListener {
             if (!hayStock) {
                 int disponible = getCantidadDisponible(c.getIdProducto());
                 int opcion = JOptionPane.showConfirmDialog(null,
-                        "El producto: " + c.getNombreProducto() +
-                                " solo tiene disponible " + disponible + " unidades.\n¿Deseas continuar con la compra?",
-                        "Stock insuficiente", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                        "El producto: " + c.getNombreProducto() + " solo tiene disponible " + disponible + " unidades.\n¿Deseas continuar con la compra?",
+                        "Stock insuficiente", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE
+                    );
 
                 if (opcion == JOptionPane.NO_OPTION) {
                     stockSuficiente = false;
@@ -740,13 +721,9 @@ public class ControladorCatalogo implements ActionListener {
         return daoPromociones.validarStockPromocion(idPromocion, cantidadPromocion);
     }
 
-    public int getCantidadDisponible(int idProducto) {
-        return daoProducto.stockProducto(idProducto);
-    }
+    public int getCantidadDisponible(int idProducto) { return daoProducto.stockProducto(idProducto);}
 
-    public int getCantidadDisponiblePromocion(int idPromocion) {
-        return daoPromociones.cantidadEnStockPromociones(idPromocion);
-    }
+    public int getCantidadDisponiblePromocion(int idPromocion) { return daoPromociones.cantidadEnStockPromociones(idPromocion);}
 
     // disminuir cantridad en las tablas
     public List<Integer> getIdsProductosPromociones(int idPromocion) {
@@ -831,7 +808,6 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     public void mostrarDialogoConsignacion(double valor, List<ProductosCarrito> productos,List<PromocionCarrito> promociones) {
-
         tarjetaConsignacion = new Consignacion(frame, valor, cargarTiposDocumento(), listarBancos());
 
         tarjetaConsignacion.btnConsignar.addActionListener(eConsignar -> {
@@ -888,8 +864,7 @@ public class ControladorCatalogo implements ActionListener {
         tarjetaConsignacion.dialogoConsignacion.setVisible(true);
     }
 
-    public void mostrarDiaologoBilleteraElectronica(double valortotal, List<ProductosCarrito> productos,
-            List<PromocionCarrito> promociones) {
+    public void mostrarDiaologoBilleteraElectronica(double valortotal, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
         tarjetaBilletera = new BilleterElectronica(frame, cargarTiposDocumento(), listarBancos());
 
         tarjetaBilletera.btnConsignarBilletera.addActionListener(eBilletera -> {
@@ -978,13 +953,11 @@ public class ControladorCatalogo implements ActionListener {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al obtener la lista de bancos: " + e.getMessage());
         }
-
         return listaBancos;
     }
 
     // procesos para la venta
-    public void procesarFactura(int idUsuario, int idMetodoPago, double total, List<ProductosCarrito> productos,
-            List<PromocionCarrito> promociones) {
+    public void procesarFactura(int idUsuario, int idMetodoPago, double total, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
         int idFactura = daoCarrito.facturaInsert(idUsuario, idMetodoPago, total);
         if (idFactura != -1) {
             for (ProductosCarrito p : productos) {
@@ -999,10 +972,8 @@ public class ControladorCatalogo implements ActionListener {
             if (promociones.size() > 0) {
                 for (PromocionCarrito pro : promociones) {
                     daoCarrito.detFacturaInsertPromocion(
-                            idFactura, pro.getIdPromocion(),
-                            pro.getCantidadPromocion(),
-                            pro.getPrecioUnitarioPromocion(),
-                            pro.getPrecioUnitarioPromocion());
+                            idFactura, pro.getIdPromocion(), pro.getCantidadPromocion(),
+                            pro.getPrecioUnitarioPromocion(), pro.getPrecioUnitarioPromocion());
                 }
             }
             daoCarrito.registrarPedido(idFactura);
@@ -1011,17 +982,15 @@ public class ControladorCatalogo implements ActionListener {
         }
     }
 
-    public void guardarVenta(int idProducto, int cantidad) {
-        daoProducto.guardarVenta(idProducto, cantidad);
-    }
+    public void guardarVenta(int idProducto, int cantidad) { daoProducto.guardarVenta(idProducto, cantidad);}
 
     // Salgo
     public double getSaldo() {
         return 10000000.00;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public int getIdUsuario() { 
+        return idUsuario; 
     }
 
     // Setter
