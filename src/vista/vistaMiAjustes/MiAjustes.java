@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -81,6 +82,17 @@ public class MiAjustes extends JFrame {
     public void setUsuario(String usuario) {
         this.usuario = usuario;
         usuarioLabel.setText(usuario);
+        revalidate();
+        repaint();
     }
 
+    public void mostrarComoModal(JFrame parent, String m) {
+        JDialog dialog = new JDialog(parent, m, true);
+        dialog.setUndecorated(true);
+        dialog.setContentPane(this.getContentPane());
+        dialog.setSize(this.getSize());
+        dialog.setLocationRelativeTo(parent);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setVisible(true);
+    }
 }

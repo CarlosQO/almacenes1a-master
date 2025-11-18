@@ -49,6 +49,21 @@ public class UsuarioDao implements CrudUsuario<Usuario> {
 
     @Override
     public int Actualizar(Usuario u) {
+        String sql = "UPDATE usuarios SET nombre = ?, apellido = ?, telefono = ? WHERE documento = ?";
+        try {
+            con = Conexion.getInstance().getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, u.getNombre());
+            ps.setString(2, u.getApellido());
+            ps.setString(3, u.getTelefono());
+            ps.setString(4, u.getDocumento());
+            int filas = ps.executeUpdate();
+            if (filas > 0) {
+                return 1;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar usuario: " + e);
+        }
         return 0;
     }
 
