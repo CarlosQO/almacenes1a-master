@@ -60,8 +60,7 @@ public class PromocionDao implements CrudPromocion<Producto> {
             return lista;
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.toString(), "Error al consultar promociones",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e.toString(), "Error al consultar promociones", JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }

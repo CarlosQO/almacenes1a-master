@@ -192,7 +192,6 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
 
                 while (rsProd.next()) {
                     int idProducto = rsProd.getInt("id_producto");
-                    int stock = rsProd.getInt("cantidad");
                     int estado = rsProd.getInt("id_estado");
 
                     // Se elimina solo si el estado es 2 (inactivo)

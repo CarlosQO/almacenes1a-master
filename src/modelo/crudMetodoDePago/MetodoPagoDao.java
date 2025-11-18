@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
-import modelo.crudDocumento.DocumentoDao;
 
 public class MetodoPagoDao implements CrudMetodosPago<MetodoPago>{
     @Override
@@ -26,8 +25,7 @@ public class MetodoPagoDao implements CrudMetodosPago<MetodoPago>{
                 metodos.add(mp);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.toString(), "Error al cargar métodos de pago",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, e.toString(), "Error al cargar métodos de pago", JOptionPane.ERROR_MESSAGE);
         }
 
         return metodos;
@@ -45,7 +43,7 @@ public class MetodoPagoDao implements CrudMetodosPago<MetodoPago>{
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                 return rs.getInt("id"); //  Retorna el ID si existe
+                 return rs.getInt("id"); //  Retorna el id si existe
             } else {
                  JOptionPane.showMessageDialog(null, "Método de pago no esta disponible por el momento... ");
                 return 0; //No existe el mtodo de pago
@@ -56,10 +54,4 @@ public class MetodoPagoDao implements CrudMetodosPago<MetodoPago>{
             return -1; // Error en la consulta o conexión
         }
     }
-public static void main(String[] args) {
-    MetodoPagoDao dao = new MetodoPagoDao(); // o tu clase real
-    int id = dao.buscarMetodoDePagoPorId("Tarjeta de Crédito");
-    System.out.println("Resultado: " + id);
-}
-
 }

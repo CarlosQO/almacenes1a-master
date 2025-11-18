@@ -1037,7 +1037,7 @@ public class ControladorCatalogo implements ActionListener {
         menu.setSize(1300, 700);
         ControladorCatalogo c = new ControladorCatalogo(menu, idConvertido);
         ControladorActividad ca = new ControladorActividad(menu, id);
-        ControladorSeguimiento cs = new ControladorSeguimiento(menu, idConvertido);
+        ControladorSeguimiento cs = new ControladorSeguimiento(menu, id);
         ControladorHistorial ch = new ControladorHistorial(menu, id);
         ControladorPQRS cpqrs = new ControladorPQRS(menu, id);
         CrontoladorManejarMenu ccerrar = new CrontoladorManejarMenu(menu);
