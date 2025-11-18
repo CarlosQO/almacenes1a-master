@@ -48,6 +48,7 @@ public class Header extends JPanel {
                 miAjustes.setBounds(lblUser.getX(), lblUser.getY() + 190, 200, 250);
                 miAjustesControlador = new MiAjustesControlador(miAjustes, PaginaLogin.usuario, PaginaLogin.documento,
                         PaginaLogin.rol, PaginaLogin.idSesionAdmin);
+                miAjustes.mostrarComoModal(miAjustes, "Mi Ajustes");
             }
         });
         add(lblUser);
