@@ -14,7 +14,7 @@ import modelo.Conexion;
 public class DaoPedido implements CrudPedido {
 
     @Override
-    public List<Pedido> obtenerPedidos(int idUsuario) {
+    public List<Pedido> obtenerPedidos(String idUsuario) {
         List<Pedido> lista = new ArrayList<>();
 
         String sql = "SELECT p.id AS id_pedido, " +
@@ -31,7 +31,7 @@ public class DaoPedido implements CrudPedido {
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, idUsuario);
+            ps.setString(1, idUsuario);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {

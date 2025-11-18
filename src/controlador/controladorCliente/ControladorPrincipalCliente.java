@@ -25,7 +25,7 @@ public class ControladorPrincipalCliente {
         controladorModuloActividad = new ControladorActividad(panelPrincipal, id);
         controladorModuloCatalogo = new ControladorCatalogo(panelPrincipal, idUsuario);
         controladorModuloHistorialDeCompras = new ControladorHistorial(panelPrincipal, id);
-        controladorSeguimiento = new ControladorSeguimiento(panelPrincipal, idUsuario);
+        controladorSeguimiento = new ControladorSeguimiento(panelPrincipal, id);
         controladorOpcionPQRS = new ControladorPQRS(panelPrincipal, id);
 
         ajustes = new MiAjustes();

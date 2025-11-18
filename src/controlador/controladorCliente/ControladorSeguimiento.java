@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -17,18 +16,15 @@ import modelo.crudPedidos.Pedido;
 import modelo.crudPedidos.ProductoDetalle;
 import vista.componentes.ScrollPersonalizado;
 import vista.vistaCliente.PanelPrincipal;
-import vista.vistaCliente.tarjetas.FiltroTarjeta;
 import vista.vistaCliente.tarjetas.TarjetaSegumientoPedido;
 
 public class ControladorSeguimiento implements ActionListener {
     private PanelPrincipal panelPrincipal;
-    private int idUsuario;
-    private FiltroTarjeta panelFiltroActividad;
+    private String idUsuario;
     private DaoPedido daoPedido = new DaoPedido();
-    private Pedido pedido;
     private ScrollPersonalizado scrollSeguimiento;
 
-    public ControladorSeguimiento(PanelPrincipal panelPrincipal, int idUsuario) {
+    public ControladorSeguimiento(PanelPrincipal panelPrincipal, String idUsuario) {
         this.panelPrincipal = panelPrincipal;
         this.idUsuario = idUsuario;
         // Solo escuchamos el evento de seguimiento, pedidos lo maneja
@@ -44,7 +40,6 @@ public class ControladorSeguimiento implements ActionListener {
             panelPrincipal.panelMenu.setVisible(false);
             panelPrincipal.panelCentroContenido.setVisible(true);
             panelPrincipal.panelCentroContenido.removeAll();
-            panelPrincipal.panelCentroContenido.setBackground(new Color(180, 230, 255, 133));
             panelPrincipal.panelCentroContenido.revalidate();
             panelPrincipal.panelCentroContenido.repaint();
 
@@ -110,13 +105,13 @@ public class ControladorSeguimiento implements ActionListener {
                     JOptionPane.showMessageDialog(null, "Pedido No Entregado");
                 });
             }
-            yTarjeta += 70;
+            yTarjeta += alturaExtra;
             int numeroTarjetas = listaPedido.size();
             panelPrincipal.panelSeguimientoCentrado.setPreferredSize(new Dimension(680, yTarjeta));
             panelPrincipal.panelSeguimientoCentrado.setBounds(0, 0, 680, yTarjeta);
+
             if (numeroTarjetas > 0 && numeroTarjetas > 4) {
-                scrollSeguimiento = new ScrollPersonalizado(panelPrincipal.panelSeguimientoCentrado, "vertical", 680,
-                        700);
+                scrollSeguimiento = new ScrollPersonalizado(panelPrincipal.panelSeguimientoCentrado, "vertical", 680,700);
                 scrollSeguimiento.setBounds(170, 0, 680, 700);
                 panelPrincipal.panelCentroContenido.add(scrollSeguimiento);
             } else {
@@ -161,12 +156,10 @@ public class ControladorSeguimiento implements ActionListener {
         }
     }
     
-    public int getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
-
-    // Setter
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
 }

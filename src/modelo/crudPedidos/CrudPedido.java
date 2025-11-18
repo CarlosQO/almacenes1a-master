@@ -3,7 +3,7 @@ package modelo.crudPedidos;
 import java.util.List;
 
 public interface CrudPedido<P> {
-    public List<P> obtenerPedidos(int idUsuario);
+    public List<P> obtenerPedidos(String idUsuario);
 
     public List<P> obtenerDetallesProductos(int idFactura);
 
