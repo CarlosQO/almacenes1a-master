@@ -40,7 +40,7 @@ public class ControladorSeguimientoAdmin {
         int año = view.getCBAño().getItemAt(view.getCBAño().getSelectedIndex());
         int mesIndex = view.getCBMes().getSelectedIndex() + 1; // meses 1-12
 
-        List<SeguimientoAdmin> datos = dao.listarPorMesAno(mesIndex, año, null);
+        List<SeguimientoAdmin> datos = dao.listarPorMesAno(mesIndex, año);
 
         // mapear por dia
         Map<Integer, SeguimientoAdmin> mapa = new HashMap<>();
@@ -65,8 +65,6 @@ public class ControladorSeguimientoAdmin {
                 SeguimientoAdmin sd = mapa.get(d);
                 model.addRow(new Object[] { d, sd.getConexiones(), sd.getDuracion(), sd.getHoraIngreso(),
                         sd.getHoraSalida() });
-            } else {
-                model.addRow(new Object[] { d, 0, "00:00:00", "", "" });
             }
         }
     }
