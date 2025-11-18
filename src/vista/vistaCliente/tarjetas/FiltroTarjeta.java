@@ -3,7 +3,6 @@ package vista.vistaCliente.tarjetas;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -131,23 +130,6 @@ public class FiltroTarjeta extends JPanel {
 
     public void setNombreBoton(String nombreBoton) {
         this.nombreBoton = nombreBoton;
-    }
-
-    public static void main(String[] args) {
-        // Crear el JFrame
-        JFrame frame = new JFrame("Reportes de actividad");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1300, 700);
-        frame.setLayout(null); // Layout absoluto para poder usar setBounds
-
-        // Crear un filtro de ejemplo
-        FiltroTarjeta miFiltro = new FiltroTarjeta("Reportes de actividad", "Generar Reporte");
-
-        // Agregar al frame
-        frame.add(miFiltro.panelFiltroActividad);
-
-        // Mostrar
-        frame.setVisible(true);
     }
 
 }

@@ -279,42 +279,4 @@ public class Consignacion {
         this.total = total;
     }
 
-    public static void main(String[] args) {
-        // Crear un JFrame base (padre del diálogo)
-        JFrame frame = new JFrame("Prueba Consignación");
-        frame.setSize(500, 500);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
-        // Crear instancia de la ventana de consignación
-        double total = 150000; // ejemplo de monto total
-        List<Map<Integer, String>> tiposDoc = new ArrayList<>();
-
-        Map<Integer, String> tipo1 = new HashMap<>();
-        tipo1.put(1, "Cédula de ciudadanía");
-
-        Map<Integer, String> tipo2 = new HashMap<>();
-        tipo2.put(2, "Tarjeta de identidad");
-
-        Map<Integer, String> tipo3 = new HashMap<>();
-        tipo3.put(3, "Pasaporte");
-
-        tiposDoc.add(tipo1);
-        tiposDoc.add(tipo2);
-        tiposDoc.add(tipo3);
-        Consignacion consignacion = new Consignacion(frame, total, tiposDoc, tiposDoc);
-
-        // Mostrar el diálogo
-        consignacion.dialogoConsignacion.setVisible(true);
-
-        // Ejemplo: Validar los campos al cerrar o presionar botón
-        consignacion.btnConsignar.addActionListener(e -> {
-            if (consignacion.validarCamposConsignacion()) {
-                System.out.println("✅ Validaciones correctas. Se puede procesar la consignación.");
-                consignacion.dialogoConsignacion.dispose();
-            } else {
-                System.out.println("❌ Hay errores en los campos de consignación.");
-            }
-        });
-    }
 }

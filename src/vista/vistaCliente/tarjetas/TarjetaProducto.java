@@ -1,11 +1,9 @@
 package vista.vistaCliente.tarjetas;
 
 import static vista.componentes.RoundedPanel.*;
-
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Insets;
@@ -13,17 +11,12 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-
 import vista.componentes.RoundedButton;
 import vista.componentes.RoundedPanel;
 import vista.componentes.ImagenRoundedPanel;
@@ -180,33 +173,6 @@ public class TarjetaProducto extends JPanel {
 
     public void setAgregarCarritoListener(ActionListener listener) {
         agregarAlCarrito.addActionListener(listener);
-    }
-
-    public static void main(String[] args) throws IOException {
-        JFrame frame = new JFrame("Prueba TarjetaProducto");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setBackground(Color.yellow);
-        frame.setSize(1300, 800);
-        JPanel contenedor = new JPanel();
-        contenedor.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 15)); // separación entre tarjetas
-        contenedor.setBackground(Color.yellow);
-        HashMap<Integer, JPanel> tarjetas = new HashMap<>();
-
-        for (int i = 0; i < 2; i++) {
-            TarjetaProducto tarjeta = new TarjetaProducto(
-                    i,
-                    "src/productos/CamisasFormalesHombre/camisa MangaLarga Blanca.jpg", // ruta imagen válida
-                    "Producto " + (i + 1),
-                    "M",
-                    "Descripción corta llllljjkihboooooooooooooooooooooooooooooooooooooogvtfcf vb goooooooooooooooooooooooooooooooooooooooooooofcrdrcfgvbhhgfrdfghjiuygfcy jn"
-                            + (i + 1),
-                    500.0);
-            tarjetas.put(i, tarjeta);
-            contenedor.add(tarjeta);
-        }
-
-        frame.add(new JScrollPane(contenedor)); // con scroll si hay muchas
-        frame.setVisible(true);
     }
 
 }

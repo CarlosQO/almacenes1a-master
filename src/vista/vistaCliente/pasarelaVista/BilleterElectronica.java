@@ -2,11 +2,8 @@ package vista.vistaCliente.pasarelaVista;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -198,42 +195,4 @@ public class BilleterElectronica {
     public void setTiposDoc(List<Map<Integer, String>> tiposDoc) {
         this.tiposDoc = tiposDoc;
     }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Prueba Pasarela de Pagos");
-        frame.setSize(600, 400);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(null); // Para posicionamiento manual
-
-        // Botón para abrir el diálogo de Tarjetas
-        JButton btnAbrirTarjeta = new JButton("Pagar con Tarjeta");
-        btnAbrirTarjeta.setBounds(200, 150, 200, 50);
-        frame.add(btnAbrirTarjeta);
-
-        List<Map<Integer, String>> tiposDoc = new ArrayList<>();
-
-        Map<Integer, String> tipo1 = new HashMap<>();
-        tipo1.put(1, "Cédula de ciudadanía");
-
-        Map<Integer, String> tipo2 = new HashMap<>();
-        tipo2.put(2, "Tarjeta de identidad");
-
-        Map<Integer, String> tipo3 = new HashMap<>();
-        tipo3.put(3, "Pasaporte");
-
-        tiposDoc.add(tipo1);
-        tiposDoc.add(tipo2);
-        tiposDoc.add(tipo3);
-
-        // Acción del botón
-        btnAbrirTarjeta.addActionListener(e -> {
-            BilleterElectronica tarjeta = new BilleterElectronica(frame, tiposDoc, tiposDoc);
-            tarjeta.dialogoBilleteraElectronica.setVisible(true);
-        });
-
-        // Mostrar el frame
-        frame.setLocationRelativeTo(null); // Centrar en pantalla
-        frame.setVisible(true);
-    }
-
 }

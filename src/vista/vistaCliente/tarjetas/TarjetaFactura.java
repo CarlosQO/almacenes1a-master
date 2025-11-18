@@ -4,9 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import vista.componentes.RoundedButton;
 import vista.componentes.RoundedPanel;
@@ -133,59 +131,4 @@ public class TarjetaFactura {
         this.totalCompra = totalCompra;
     }
 
-    public static void main(String[] args) {
-
-        // Datos de ejemplo
-        String fecha = "2025-10-13";
-        int tamañoPanelProductos = 90; // Ej: 3 productos * 30px cada uno
-        double totalCompra = 150.00;
-
-        // Crear tarjeta factura
-        TarjetaFactura factura = new TarjetaFactura(fecha, tamañoPanelProductos, totalCompra);
-
-        // EJEMPLO de productos (nombre, precio unitario, cantidad, subtotal)
-        String[] nombres = { "Zapatos", "Camisa", "Pantalón" };
-        double[] precios = { 50.00, 30.00, 20.00 };
-        int[] cantidades = { 1, 2, 3 };
-
-        int y = 0;
-        for (int i = 0; i < nombres.length; i++) {
-            JLabel lblNombre = new JLabel(nombres[i]);
-            lblNombre.setBounds(10, y, 150, 25);
-            factura.getPanelProductos().add(lblNombre);
-
-            JLabel lblPrecio = new JLabel("$" + precios[i]);
-            lblPrecio.setBounds(190, y, 80, 25);
-            factura.getPanelProductos().add(lblPrecio);
-
-            JLabel lblCantidad = new JLabel("x" + cantidades[i]);
-            lblCantidad.setBounds(290, y, 50, 25);
-            factura.getPanelProductos().add(lblCantidad);
-
-            double subtotal = precios[i] * cantidades[i];
-            JLabel lblSubtotal = new JLabel("$" + subtotal);
-            lblSubtotal.setBounds(400, y, 100, 25);
-            factura.getPanelProductos().add(lblSubtotal);
-
-            y += 30; // espacio entre filas
-        }
-
-        // Crear ventana
-        JFrame frame = new JFrame("Factura");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(650, tamañoPanelProductos + 550);
-        frame.setLayout(null);
-
-        // Agregar la tarjeta al frame
-        factura.getTarjetafactura().setBounds(20, 20, 550, tamañoPanelProductos + 150);
-        frame.add(factura.getTarjetafactura());
-
-        // Mostrar ventana
-        frame.setVisible(true);
-
-        // Acción ejemplo para el botón
-        factura.getBtnDescargarFactura().addActionListener(e -> {
-            JOptionPane.showMessageDialog(frame, "Factura descargada correctamente!");
-        });
-    }
 }

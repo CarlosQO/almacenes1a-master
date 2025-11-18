@@ -2,17 +2,15 @@ package vista.vistaVendedor;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import vista.componentes.*;
 
 public class ModuloActualizarDatosProductos extends JPanel {
-    private JFrame ventana;
+    private JFrame ventana = new JFrame();
     private Header header;
     public String titulo;
     public Formulario formularioActualizar;
@@ -73,29 +71,5 @@ public class ModuloActualizarDatosProductos extends JPanel {
 
     public void setIdProducto(int idProducto) {
         this.idProducto = idProducto;
-    }
-
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            // Crear frame principal
-            JFrame ventana = new JFrame("Registro de Productos");
-            ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            ventana.setSize(1300, 700);
-            ventana.setLocationRelativeTo(null);
-            ventana.setLayout(null);
-
-            // Crear mapa de categorías
-            Map<Integer, String> categorias = new HashMap<>();
-            categorias.put(1, "Flores");
-            categorias.put(2, "Plantas de interior");
-            categorias.put(3, "Cactus");
-
-            // Crear módulo de registro
-            ModuloActualizarDatosProductos moduloRegistro = new ModuloActualizarDatosProductos(ventana, categorias, categorias);
-            ventana.add(moduloRegistro);
-
-            ventana.setVisible(true);
-        });
     }
 }

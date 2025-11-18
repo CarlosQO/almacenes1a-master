@@ -1,13 +1,9 @@
 package vista.vistaCliente.tarjetas;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import vista.componentes.RoundedButton;
 import vista.componentes.RoundedPanel;
 
@@ -18,7 +14,7 @@ public class TarjetaSegumientoPedido {
 
     private RoundedPanel panelTarjetaSeguimientoPedidos;
     private JPanel panelProductos;
-    private JLabel lblFecha, lblTotal, lblEstado, lblnombreProducto, lblCantidad, lblPrecio, lblSubtotal;
+    private JLabel lblFecha, lblTotal, lblnombreProducto, lblCantidad, lblPrecio, lblSubtotal;
     public RoundedButton btnEntregado, btnNoEntregado;
 
     public TarjetaSegumientoPedido(String fecha, int tamañoPanelProductos, double totalCompra) {
@@ -141,53 +137,4 @@ public class TarjetaSegumientoPedido {
         return panelTarjetaSeguimientoPedidos;
     }
 
-    public static void main(String[] args) {
-
-        // Datos de ejemplo
-        String fecha = "2025-10-14";
-        int tamañoPanelProductos = 90; // Ej: 3 productos * 30px cada uno
-        double totalCompra = 150.00;
-
-        // Crear tarjeta seguimiento pedido
-        TarjetaSegumientoPedido tarjeta = new TarjetaSegumientoPedido(fecha, tamañoPanelProductos, totalCompra);
-
-        // EJEMPLO de productos (nombre, precio unitario, cantidad, subtotal)
-        String[] nombres = { "Zapatos", "Camisa", "Pantalón" };
-        double[] precios = { 50.00, 30.00, 20.00 };
-        int[] cantidades = { 1, 2, 3 };
-
-        int y = 0;
-        for (int i = 0; i < nombres.length; i++) {
-            JLabel lblNombre = new JLabel(nombres[i]);
-            lblNombre.setBounds(10, y, 150, 25);
-            tarjeta.panelProductos.add(lblNombre);
-
-            JLabel lblPrecio = new JLabel("$" + precios[i]);
-            lblPrecio.setBounds(190, y, 80, 25);
-            tarjeta.panelProductos.add(lblPrecio);
-
-            JLabel lblCantidad = new JLabel("x" + cantidades[i]);
-            lblCantidad.setBounds(290, y, 80, 25);
-            tarjeta.panelProductos.add(lblCantidad);
-
-            double subtotal = precios[i] * cantidades[i];
-            JLabel lblSubtotal = new JLabel("$" + subtotal);
-            lblSubtotal.setBounds(400, y, 100, 25);
-            tarjeta.panelProductos.add(lblSubtotal);
-
-            y += 30; // espacio entre filas
-        }
-
-        // Crear ventana
-        JFrame frame = new JFrame("Seguimiento de Pedido");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, tamañoPanelProductos + 250);
-        frame.setLayout(null);
-
-        // Agregar la tarjeta al frame
-        tarjeta.panelTarjetaSeguimientoPedidos.setBounds(20, 20, 550, tamañoPanelProductos + 150);
-        frame.add(tarjeta.panelTarjetaSeguimientoPedidos);
-
-        frame.setVisible(true);
-    }
 }

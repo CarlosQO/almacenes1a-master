@@ -83,7 +83,6 @@ public class TarjetaPQRS {
     public boolean validarCampos() {
         String asunto = getTxtAsunto().getText().trim();
         String cuerpo = getTxtPQRS().getText().trim();
-        boolean resultado = true;
         if (asunto.isEmpty() || cuerpo.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios");
             return false;
@@ -109,16 +108,5 @@ public class TarjetaPQRS {
 
     public void setTxtPQRS(JTextArea txtPQRS) {
         this.txtPQRS = txtPQRS;
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Ejemplo Tarjeta PQRS");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 500);
-        frame.setLocationRelativeTo(null);
-        frame.setLayout(null);
-
-        TarjetaPQRS tarjetaDialog = new TarjetaPQRS(frame);
-        tarjetaDialog.mostrar();
     }
 }
