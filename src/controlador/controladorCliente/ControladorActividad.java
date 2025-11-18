@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +22,14 @@ import vista.vistaCliente.tarjetas.TarjetasHistorial;
 
 public class ControladorActividad implements ActionListener {
     private PanelPrincipal panelPrincipal;
-    private int idUsuario;
+    private String idUsuario;
     private FiltroTarjeta panelFiltroActividad;
     private DaoHistoria daoHistoria = new DaoHistoria();
     private ScrollPersonalizado scroll;
 
-    public ControladorActividad(PanelPrincipal panelPrincipal, int idUsuario) {
+    public ControladorActividad(PanelPrincipal panelPrincipal, String idUsuario) {
         this.panelPrincipal = panelPrincipal;
+        this.idUsuario = idUsuario;
         panelPrincipal.actividad.addActionListener(this);
     }
 
@@ -76,10 +76,7 @@ public class ControladorActividad implements ActionListener {
 
         int yTarjeta = 10, alturaExtra = 0;
         // Obtener pedidos
-        // List<Pedido> listaPedido = daoHistoria.obtenerHistorialCompras(idUsuario,
-        // fechaInicio, fechaFin);
-        List<modelo.crudActividad.Pedido> listaPedido = daoHistoria.obtenerHistorialCompras(idUsuario, fechaInicio,
-                fechaFin);
+        List<modelo.crudActividad.Pedido> listaPedido = daoHistoria.obtenerHistorialCompras(idUsuario, fechaInicio,fechaFin);
 
         for (modelo.crudActividad.Pedido p : listaPedido) {
             List<ProductoDetalleFactura> productos = daoHistoria.obtenerDetallesCompra(p.getIdFactura());
@@ -142,10 +139,7 @@ public class ControladorActividad implements ActionListener {
     }
 
     public void generarReporte(String fechaInicio, String fechaFin) {
-        // List<Pedido> listaPedidos = daoHistoria.obtenerHistorialCompras(idUsuario,
-        // fechaInicio, fechaFin);
-        List<modelo.crudActividad.Pedido> listaPedidos = daoHistoria.obtenerHistorialCompras(idUsuario, fechaInicio,
-                fechaFin);
+        List<modelo.crudActividad.Pedido> listaPedidos = daoHistoria.obtenerHistorialCompras(idUsuario, fechaInicio,fechaFin);
 
         // 0btener productos de cada pedido en un Map
         Map<Integer, List<ProductoDetalleFactura>> mapaProductos = new HashMap<>();
@@ -154,6 +148,13 @@ public class ControladorActividad implements ActionListener {
             mapaProductos.put(p.getIdPedido(), detalles);
         }
         ReportePedidos.generar(fechaInicio, fechaFin, listaPedidos, mapaProductos);
+    }
+
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    public String getIdUsuario() {
+        return idUsuario;
     }
 
 }

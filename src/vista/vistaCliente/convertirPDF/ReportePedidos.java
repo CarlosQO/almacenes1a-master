@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -28,9 +30,9 @@ public class ReportePedidos {
             Map<Integer, List<ProductoDetalleFactura>> productosPorPedido) {
         try {
             // Ruta en Descargas con nombre dinámico
-            String ruta = System.getProperty("user.home")
-                    + "/Downloads/Reporte_Pedidos_" + fechaInicio + "_a_" + fechaFin
-                    + "_" + System.currentTimeMillis() + ".pdf";
+            // Ruta en Descargas con nombre dinámico
+            String nombreArchivo = "Reporte_Pedidos_" + fechaInicio + "_a_" + fechaFin + "_" + System.currentTimeMillis() + ".pdf";
+            String ruta = System.getProperty("user.home") + "/Downloads/" + nombreArchivo;
 
             Document doc = new Document(PageSize.A4, 36, 36, 54, 36);
             PdfWriter.getInstance(doc, new FileOutputStream(ruta));
@@ -110,10 +112,15 @@ public class ReportePedidos {
             doc.add(new Paragraph("Fecha de generación: " + new Date(), subFont));
 
             doc.close();
+            JOptionPane.showMessageDialog(null,"Archivo: " + nombreArchivo + "\nUbicación: Carpeta Descargas",
+                 "Reporte", JOptionPane.INFORMATION_MESSAGE
+            );
+
             System.out.println("Reporte generado en: " + ruta);
 
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al generar el PDF: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             System.out.println("Error al generar el PDF: " + e.getMessage());
         }
     }

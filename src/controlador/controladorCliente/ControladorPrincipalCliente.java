@@ -22,9 +22,9 @@ public class ControladorPrincipalCliente {
         this.panelPrincipal = p;
         int idUsuario = Integer.parseInt(id);
         controladorManejarMenu = new CrontoladorManejarMenu(panelPrincipal);
-        controladorModuloActividad = new ControladorActividad(panelPrincipal, idUsuario);
+        controladorModuloActividad = new ControladorActividad(panelPrincipal, id);
         controladorModuloCatalogo = new ControladorCatalogo(panelPrincipal, idUsuario);
-        controladorModuloHistorialDeCompras = new ControladorHistorial(panelPrincipal, idUsuario);
+        controladorModuloHistorialDeCompras = new ControladorHistorial(panelPrincipal, id);
         controladorSeguimiento = new ControladorSeguimiento(panelPrincipal, idUsuario);
         controladorOpcionPQRS = new ControladorPQRS(panelPrincipal, id);
 

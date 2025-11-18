@@ -24,9 +24,8 @@ public class FacturaPDF {
             List<ProductoDetalleFactura> productos, double total) {
         try {
             // Ruta en Descargas con nombre dinámico
-            String ruta = System.getProperty("user.home")
-                    + "/Downloads/Factura_" + fechaInicio + "_a_" + fechaFin
-                    + "_" + System.currentTimeMillis() + ".pdf";
+            String nombreArchivo = "Factura_" + fechaInicio + "_a_" + fechaFin  + "_" + System.currentTimeMillis() + ".pdf";
+            String ruta = System.getProperty("user.home") + "/Downloads/" + nombreArchivo;
 
             Document doc = new Document(PageSize.A4, 36, 36, 54, 36);
             PdfWriter.getInstance(doc, new FileOutputStream(ruta));
@@ -79,7 +78,12 @@ public class FacturaPDF {
             doc.add(new Paragraph("\nFactura generado automáticamente.", subFont));
             doc.add(new Paragraph("Fecha de generación: " + new Date(), subFont));
             doc.close();
-            JOptionPane.showMessageDialog(null, "Factura generado en: " + ruta);
+           JOptionPane.showMessageDialog(
+                    null,
+                    "Factura generada en la carpeta Descargas.\nArchivo: " + nombreArchivo,
+                    "Factura Generada",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
 
         } catch (Exception e) {
             e.printStackTrace();

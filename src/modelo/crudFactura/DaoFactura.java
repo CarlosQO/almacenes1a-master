@@ -13,7 +13,7 @@ import modelo.Conexion;
 public class DaoFactura implements CrudFactura {
 
     @Override
-    public List<Pedido> obtenerHistorialComprasFacturas(int idUsuario, String fechaInicio, String fechaFin) {
+    public List<Pedido> obtenerHistorialComprasFacturas(String idUsuario, String fechaInicio, String fechaFin) {
         List<Pedido> lista = new ArrayList<>();
 
         String sql = "SELECT p.id AS id_pedido, " +
@@ -30,9 +30,9 @@ public class DaoFactura implements CrudFactura {
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, idUsuario);
-            ps.setString(2, fechaInicio);
-            ps.setString(3, fechaFin);
+            ps.setString(1, idUsuario);
+            ps.setString(2, fechaInicio + " 00:00:00");
+            ps.setString(3, fechaFin + " 23:59:59");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -126,7 +126,7 @@ public class DaoFactura implements CrudFactura {
     }
 
     @Override
-    public boolean existeFacturaEntreFechas(int idCliente, String fechaInicio, String fechaFin) {
+    public boolean existeFacturaEntreFechas(String idCliente, String fechaInicio, String fechaFin) {
         String sql = "SELECT COUNT(*) AS total " +
                 "FROM pedido p " +
                 "JOIN factura f ON p.id_factura = f.id " +
@@ -136,9 +136,9 @@ public class DaoFactura implements CrudFactura {
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, fechaInicio);
-            ps.setString(2, fechaFin);
-            ps.setInt(3, idCliente);
+            ps.setString(1, fechaInicio + " 00:00:00");
+            ps.setString(2, fechaFin + " 23:59:59");
+            ps.setString(3, idCliente);
 
             ResultSet rs = ps.executeQuery();
 

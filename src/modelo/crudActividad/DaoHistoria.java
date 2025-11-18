@@ -11,9 +11,8 @@ import javax.swing.JOptionPane;
 import modelo.Conexion;
 
 public class DaoHistoria implements CrudHistoria {
-
     @Override
-    public List<Pedido> obtenerHistorialCompras(int idUsuario, String fechaInicio, String fechaFin) {
+    public List<Pedido> obtenerHistorialCompras(String idUsuario, String fechaInicio, String fechaFin) {
         List<Pedido> lista = new ArrayList<>();
 
         String sql = "SELECT p.id AS id_pedido, " +
@@ -28,17 +27,17 @@ public class DaoHistoria implements CrudHistoria {
                 "AND p.fecha_ultima_actualizacion BETWEEN ? AND ?";
 
         try (Connection con = Conexion.getInstance().getConnection();
-                PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, idUsuario);
-            ps.setString(2, fechaInicio);
-            ps.setString(3, fechaFin);
+                PreparedStatement ps = con.prepareStatement(sql)) 
+        {
+            ps.setString(1, idUsuario);
+            ps.setString(2, fechaInicio + " 00:00:00");
+            ps.setString(3, fechaFin + " 23:59:59");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Pedido p = new Pedido();
                 p.setIdPedido(rs.getInt("id_pedido"));
-                p.setFecha(rs.getString("fecha")); // fecha_ultima_actualizacion
+                p.setFecha(rs.getString("fecha")); 
                 p.setEstado(rs.getString("estado"));
                 p.setTotal(rs.getDouble("total"));
                 p.setIdFactura(rs.getInt("id_factura"));
@@ -124,19 +123,18 @@ public class DaoHistoria implements CrudHistoria {
     }
 
     @Override
-    public boolean existePedidoEntreFechas(int idCliente, String fechaInicio, String fechaFin) {
+    public boolean existePedidoEntreFechas(String idCliente, String fechaInicio, String fechaFin) {
         String sql = "SELECT COUNT(*) AS total " +
-                "FROM pedido p " +
-                "JOIN factura f ON p.id_factura = f.id " +
-                "WHERE p.fecha_ultima_actualizacion BETWEEN ? AND ? " +
-                "AND f.id_usuario = ?";
-
+            "FROM pedido p " +
+            "JOIN factura f ON p.id_factura = f.id " +
+            "WHERE p.fecha_ultima_actualizacion BETWEEN ? AND ? " +
+            "AND f.id_usuario = ?";
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, fechaInicio);
-            ps.setString(2, fechaFin);
-            ps.setInt(3, idCliente);
+            ps.setString(1, fechaInicio + " 00:00:00");
+            ps.setString(2, fechaFin + " 23:59:59");
+            ps.setString(3, idCliente);
 
             ResultSet rs = ps.executeQuery();
 

@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 import modelo.crudFactura.DaoFactura;
 import modelo.crudFactura.ProductoDetalleFactura;
-import modelo.crudPedidos.Pedido;
+import modelo.crudFactura.Pedido;
 import vista.componentes.ScrollPersonalizado;
 import vista.vistaCliente.PanelPrincipal;
 import vista.vistaCliente.convertirPDF.FacturaPDF;
@@ -21,14 +21,12 @@ import vista.vistaCliente.tarjetas.TarjetaFactura;
 
 public class ControladorHistorial implements ActionListener {
     private PanelPrincipal panelPrincipal;
-    private int idUsuario;
+    private String idUsuario;
     private FiltroTarjeta panelFiltroHistorial;
     private DaoFactura daoFactura = new DaoFactura();
-    private Pedido pedido;
-    private ProductoDetalleFactura produto;
     private ScrollPersonalizado scrollHistorial;
 
-    public ControladorHistorial(PanelPrincipal panelPrincipal, int idUsuario) {
+    public ControladorHistorial(PanelPrincipal panelPrincipal, String idUsuario) {
         this.panelPrincipal = panelPrincipal;
         this.idUsuario = idUsuario;
         panelPrincipal.historialDeComprasOpcion.addActionListener(this);
@@ -76,10 +74,9 @@ public class ControladorHistorial implements ActionListener {
 
         int yTarjeta = 10, alturaExtra = 0;
         // Obtener pedidos
-        List<modelo.crudFactura.Pedido> listaPedido = daoFactura.obtenerHistorialComprasFacturas(idUsuario, fechaInicio,
-                fechaFin);
+        List<Pedido> listaPedido = daoFactura.obtenerHistorialComprasFacturas(idUsuario, fechaInicio, fechaFin);
 
-        for (modelo.crudFactura.Pedido p : listaPedido) {
+        for (Pedido p : listaPedido) {
             List<ProductoDetalleFactura> productos = daoFactura.obtenerDetallesCompra(p.getIdFactura());
             int tamañoPanelProductos = productos.size() * 30;
             TarjetaFactura tarjeta = new TarjetaFactura(p.getFecha(), tamañoPanelProductos, p.getTotal());
@@ -137,11 +134,11 @@ public class ControladorHistorial implements ActionListener {
         FacturaPDF.generar(fechaInicio, fechaFin, idFactura, productosDeFactura, totalFactura);
     }
 
-    public int getIdUsuario() {
+    public String getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
 }
