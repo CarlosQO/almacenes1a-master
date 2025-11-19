@@ -23,7 +23,7 @@ public class DaoPedido implements CrudPedido {
                 "INNER JOIN pedido_estado pe ON p.id_estado_pedido = pe.id " +
                 "INNER JOIN factura f ON p.id_factura = f.id " +
                 "WHERE f.id_usuario = ? " +
-                "AND p.id_estado_pedido = 1";
+                "AND p.id_estado_pedido = 4"; // pedidos despachados 
 
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
