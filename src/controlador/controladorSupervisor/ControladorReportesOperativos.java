@@ -1,9 +1,8 @@
 package controladorSupervisor;
 
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -22,19 +21,19 @@ public class ControladorReportesOperativos {
         this.reportesDao = new ReportesDao();
         this.modelo = (DefaultTableModel) vista.getTablaRO().getModel();
         vista.getBtnBR().addActionListener(e -> cargarTabla());
+        vista.getTablaRO().setDefaultEditor(Object.class, null);
     }
 
     private void cargarTabla() {
         // Limpiar tabla
         modelo.setRowCount(0);
+        modelo.addRow(new Object[4]);
 
         // Obtener mes y año seleccionados en la vista
         Integer añoSeleccionado = (Integer) vista.getCBAño().getSelectedItem();
         int mesSeleccionado = vista.getCBMes().getSelectedIndex(); // 0-based (enero=0)
 
-        // Formateador de moneda
-        NumberFormat formatoMoneda = NumberFormat
-                .getCurrencyInstance(new Locale.Builder().setLanguage("es").setRegion("CO").build());
+        DecimalFormat df = new DecimalFormat("$ ###,###,###.00");
 
         // Obtener datos
         List<ReportesOpe> lista = reportesDao.listar();
@@ -53,10 +52,11 @@ public class ControladorReportesOperativos {
             if (añoRow == (añoSeleccionado != null ? añoSeleccionado : añoRow)
                     && mesRow == mesSeleccionado) {
 
+                System.out.println(df.format(reporte.getMonto()));
                 Object[] fila = new Object[] {
                         "", // ID (oculto)
                         reporte.getConcepto(),
-                        formatoMoneda.format(reporte.getMonto()),
+                        df.format(reporte.getMonto()),
                         reporte.getFecha(),
                         reporte.getMedioPago()
                 };
