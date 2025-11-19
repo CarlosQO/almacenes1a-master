@@ -130,11 +130,4 @@ public class PaginaDeshabilitarProveedor extends JFrame {
         contenedor.add(containInfo);
 
     }
-
-    public static void main(String[] args) {
-        PaginaDeshabilitarProveedor p = new PaginaDeshabilitarProveedor();
-        controladorAdministrador.PaginaDeshabilitarProveedor cdp = new controladorAdministrador.PaginaDeshabilitarProveedor(
-                p);
-    }
-
 }
