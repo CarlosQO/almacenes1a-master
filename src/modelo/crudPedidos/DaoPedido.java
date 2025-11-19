@@ -213,7 +213,7 @@ public class DaoPedido implements CrudPedido {
     @Override
     public List<PedidoSupervisor> listarPE() {
         List<PedidoSupervisor> datos = new ArrayList<>();
-        String sql = "SELECT * FROM pedido where id_estado_pedido = 1";
+        String sql = "SELECT * FROM pedido where id_estado_pedido = 2";
 
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql);
