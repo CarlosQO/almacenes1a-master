@@ -52,6 +52,7 @@ public class VistaSupervisor extends JFrame {
         panelVS.add(lTitulo);
 
         header = new Header();
+        header.setBackground(Color.red);
         panelHeader = new RoundedPanel(16, Color.lightGray);
         panelHeader.setBackground(Color.white);
         panelHeader.setLayout(null);
@@ -67,7 +68,6 @@ public class VistaSupervisor extends JFrame {
         }
 
         header.setBounds(20, 20, 1110, header.getHeight() - 5);
-        header.setBackground(Color.white);
         header.modificarUbicacionUser(1020);
         panelHeader.add(header);
         panelHeader.setBounds(0, 0, 1150, 115);
@@ -291,5 +291,4 @@ public class VistaSupervisor extends JFrame {
 
         panelBtns.add(panelRepor);
     }
-
 }
