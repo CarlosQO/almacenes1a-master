@@ -44,13 +44,23 @@ public class Header extends JPanel {
         lblUser.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
+                java.awt.Point p = lblUser.getLocationOnScreen();
+
                 miAjustes = new MiAjustes();
-                miAjustes.setBounds(lblUser.getX(), lblUser.getY() + 190, 200, 250);
-                miAjustesControlador = new MiAjustesControlador(miAjustes, PaginaLogin.usuario, PaginaLogin.documento,
-                        PaginaLogin.rol, PaginaLogin.idSesionAdmin);
+                miAjustes.setLocation(p.x - (miAjustes.getWidth() - lblUser.getWidth()),
+                        p.y + lblUser.getHeight() + 10);
+
+                miAjustesControlador = new MiAjustesControlador(
+                        miAjustes,
+                        PaginaLogin.usuario,
+                        PaginaLogin.documento,
+                        PaginaLogin.rol,
+                        PaginaLogin.idSesionAdmin);
+
                 miAjustes.mostrarComoModal(miAjustes, "Mi Ajustes");
             }
         });
+
         add(lblUser);
     }
 
