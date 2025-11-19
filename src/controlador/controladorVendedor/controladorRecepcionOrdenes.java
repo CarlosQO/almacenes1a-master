@@ -75,7 +75,7 @@ public class controladorRecepcionOrdenes {
                                 });
 
                                 btnEntregar.addActionListener(evt -> {
-                                    clickedButton = "Entregar";
+                                    clickedButton = "Despachar";
                                     fireEditingStopped();
                                 });
                             }
@@ -102,9 +102,9 @@ public class controladorRecepcionOrdenes {
                                         int idPedido = (Integer) vista.getTablaOrdenes().getValueAt(row, 0);
                                         int idEstado;
                                         if (clickedButton.equals("Cancelar")) {
-                                            idEstado = 3; // ID para estado Cancelado
+                                            idEstado = 5; // ID para estado Cancelado
                                         } else {
-                                            idEstado = 2; // ID para estado Entregado
+                                            idEstado = 4; // ID para estado Despachado
                                         }
                                         if (controladorRecepcionOrdenes.this.modelo.cambiarEstadoPedido(idPedido,
                                                 idEstado)) {
