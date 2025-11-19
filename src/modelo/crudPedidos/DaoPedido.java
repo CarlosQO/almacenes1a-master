@@ -26,7 +26,7 @@ public class DaoPedido implements CrudPedido {
                 "INNER JOIN pedido_estado pe ON p.id_estado_pedido = pe.id " +
                 "INNER JOIN factura f ON p.id_factura = f.id " +
                 "WHERE f.id_usuario = ? " +
-                "AND p.id_estado_pedido = 1";
+                "AND p.id_estado_pedido = 4"; // pedidos despachados
 
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -175,7 +175,7 @@ public class DaoPedido implements CrudPedido {
     @Override
     public List<Pedido> getPedidosPorEstado(String estado) {
         List<Pedido> datos = new ArrayList<>();
-        String sql = "SELECT p.id, u.nombre, u.apellido, prod.nombre AS producto, ep.nombre as estado FROM pedido p JOIN factura f ON p.id_factura = f.id JOIN usuarios u ON f.id_usuario = u.documento JOIN det_factura df ON p.id_factura = df.id JOIN producto prod ON df.id_prd = prod.id JOIN pedido_estado ep ON p.id_estado_pedido = ep.id WHERE ep.nombre = ?";
+        String sql = "SELECT p.id, u.nombre, u.apellido, ep.nombre as estado FROM pedido p JOIN factura f ON p.id_factura = f.id JOIN usuarios u ON f.id_usuario = u.documento JOIN det_factura df ON p.id_factura = df.id JOIN producto prod ON df.id_prd = prod.id JOIN pedido_estado ep ON p.id_estado_pedido = ep.id WHERE ep.nombre = ?";
 
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
@@ -186,7 +186,6 @@ public class DaoPedido implements CrudPedido {
                 Pedido pd = new Pedido();
                 pd.setIdPedido(rs.getInt("id"));
                 pd.setCliente(rs.getString("u.nombre") + " " + rs.getString("u.apellido"));
-                pd.setProductos(rs.getString("producto"));
                 pd.setEstado(rs.getString("estado"));
                 datos.add(pd);
             }
