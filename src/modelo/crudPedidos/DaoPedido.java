@@ -175,7 +175,7 @@ public class DaoPedido implements CrudPedido {
     @Override
     public List<Pedido> getPedidosPorEstado(String estado) {
         List<Pedido> datos = new ArrayList<>();
-        String sql = "SELECT p.id, u.nombre, u.apellido, ep.nombre as estado FROM pedido p JOIN factura f ON p.id_factura = f.id JOIN usuarios u ON f.id_usuario = u.documento JOIN det_factura df ON p.id_factura = df.id JOIN producto prod ON df.id_prd = prod.id JOIN pedido_estado ep ON p.id_estado_pedido = ep.id WHERE ep.nombre = ?";
+        String sql = "SELECT p.id, u.nombre, u.apellido, ep.nombre AS estado FROM pedido p JOIN factura f ON p.id_factura = f.id JOIN usuarios u ON f.id_usuario = u.documento JOIN pedido_estado ep ON p.id_estado_pedido = ep.id WHERE ep.nombre =  ?";
 
         try (Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
