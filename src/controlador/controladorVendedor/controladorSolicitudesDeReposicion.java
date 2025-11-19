@@ -111,9 +111,4 @@ public class controladorSolicitudesDeReposicion implements ActionListener {
         panelSolicitudes.revalidate();
         panelSolicitudes.repaint();
     }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Módulo Solicitudes de Reposición");
-        controladorSolicitudesDeReposicion controlador = new controladorSolicitudesDeReposicion(frame, 1002);
-    }
 }

@@ -19,7 +19,7 @@ public class Formulario extends JPanel {
     private RoundedPanel panelFormulario;
     public JTextField txtIdProducto;
     public JTextField txtNombre;
-    public JComboBox<String> comboCategoria, comboEstado;
+    public JComboBox<String> comboCategoria, comboEstado, comboTalla;
     public JTextField txtDescripcion;
     public JTextField txtCantidad;
     public JTextField txtPrecioVenta;
@@ -49,23 +49,45 @@ public class Formulario extends JPanel {
         lblTitulo.setBounds(0, 20, 520, 30);
         panelFormulario.add(lblTitulo);
 
-        JLabel lblId = new JLabel("id de producto* :");
+        JLabel lblId = new JLabel("Id de producto* :");
         aplicarFuenteLabels(lblId);
         lblId.setBounds(60, 70, 230, 25);
         panelFormulario.add(lblId);
 
+        JLabel lblTalla = new JLabel("Talla* :");
+        aplicarFuenteLabels(lblTalla);
+        panelFormulario.add(lblTalla);
+
+        comboTalla = new JComboBox<>();
+
+        comboTalla.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+        comboTalla.setBackground(Color.WHITE);
+        comboTalla.addItem("-- seleccione --");
+        comboTalla.addItem("XS");
+        comboTalla.addItem("S");
+        comboTalla.addItem("M");
+        comboTalla.addItem("L");
+        comboTalla.addItem("XL");
+        comboTalla.addItem("XXL");
+        panelFormulario.add(comboTalla);
+
         if (titulo.equals("Registro")) {
+            lblTalla.setBounds(350, 70, 100, 25);
+            comboTalla.setBounds(350, 100, 110, 25);
+
             txtIdProducto = crearCampoTexto(60, 100, 250, 25);
             panelFormulario.add(txtIdProducto);
 
-            JLabel lblCantidad = new JLabel("cantidad* :");
+            JLabel lblCantidad = new JLabel("Cantidad* :");
             aplicarFuenteLabels(lblCantidad);
-            lblCantidad.setBounds(305, 370, 110, 25);
+            lblCantidad.setBounds(300, 370, 110, 25);
             panelFormulario.add(lblCantidad);
 
-            txtCantidad = crearCampoTexto(305, 400, 165, 25);
+            txtCantidad = crearCampoTexto(300, 400, 165, 25);
             panelFormulario.add(txtCantidad);
         } else {
+            lblTalla.setBounds(300, 370, 200, 25);
+            comboTalla.setBounds(300, 400, 110, 25);
             JLabel lblIdProducto = new JLabel("" + idProducto);
             lblIdProducto.setFont(new Font("Times New Roman", Font.PLAIN, 16));
             lblIdProducto.setBounds(60, 100, 230, 25);
@@ -87,7 +109,7 @@ public class Formulario extends JPanel {
             panelFormulario.add(comboEstado);
         }
 
-        JLabel lblNombre = new JLabel("nombre* :");
+        JLabel lblNombre = new JLabel("Nombre* :");
         aplicarFuenteLabels(lblNombre);
         lblNombre.setBounds(60, 140, 200, 25);
         panelFormulario.add(lblNombre);
@@ -95,7 +117,7 @@ public class Formulario extends JPanel {
         txtNombre = crearCampoTexto(60, 170, 230, 25);
         panelFormulario.add(txtNombre);
 
-        JLabel lblCategoria = new JLabel("categoria* :");
+        JLabel lblCategoria = new JLabel("Categoria* :");
         aplicarFuenteLabels(lblCategoria);
         lblCategoria.setBounds(305, 140, 100, 25);
         panelFormulario.add(lblCategoria);
@@ -111,7 +133,7 @@ public class Formulario extends JPanel {
         }
         panelFormulario.add(comboCategoria);
 
-        JLabel lblImagen = new JLabel("imagen* :");
+        JLabel lblImagen = new JLabel("Imagen* :");
         aplicarFuenteLabels(lblImagen);
         lblImagen.setBounds(60, 210, 100, 25);
         panelFormulario.add(lblImagen);
@@ -135,15 +157,15 @@ public class Formulario extends JPanel {
         lblImagenSeleccionada.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         panelFormulario.add(lblImagenSeleccionada);
 
-        JLabel lblDescripcion = new JLabel("descripcion* :");
+        JLabel lblDescripcion = new JLabel("Descripcion* :");
         aplicarFuenteLabels(lblDescripcion);
-        lblDescripcion.setBounds(60, 300, 100, 25);
+        lblDescripcion.setBounds(60, 300, 130, 25);
         panelFormulario.add(lblDescripcion);
 
         txtDescripcion = crearCampoTexto(60, 330, 410, 25);
         panelFormulario.add(txtDescripcion);
 
-        JLabel lblPrecio = new JLabel("precio de venta* :");
+        JLabel lblPrecio = new JLabel("Precio de venta* :");
         aplicarFuenteLabels(lblPrecio);
         lblPrecio.setBounds(60, 370, 140, 25);
         panelFormulario.add(lblPrecio);
@@ -171,7 +193,7 @@ public class Formulario extends JPanel {
         if (result == JFileChooser.APPROVE_OPTION) {
             File archivoSeleccionado = fileChooser.getSelectedFile();
 
-            // 📁 Carpeta destino dentro del proyecto
+            // Carpeta destino dentro del proyecto
             String carpetaDestino = "src/productos/"
                     + comboCategoria.getSelectedItem().toString().replaceAll("\\s+", "");
 
@@ -201,7 +223,7 @@ public class Formulario extends JPanel {
         }
     }
 
-    // 🔧 Método para copiar archivos
+    // Método para copiar archivos
     private static void copiarArchivo(File origen, File destino) throws IOException {
         try (InputStream in = new FileInputStream(origen);
                 OutputStream out = new FileOutputStream(destino)) {
@@ -257,6 +279,11 @@ public class Formulario extends JPanel {
             }
         }
 
+        String talla = (String) comboTalla.getSelectedItem();
+        if (talla.equals("-- seleccione --")) {
+            errores += "- debe seleccionar una talla.\n";
+        }
+
         if (nombre.isEmpty()) {
             errores += "- el nombre no puede estar vacio.\n";
         } else if (!Validaciones.validarNombreProducto(nombre)) {
@@ -293,7 +320,7 @@ public class Formulario extends JPanel {
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.WARNING_MESSAGE);
 
-                // Si el usuario elige "No", se puede manejar el caso según lo necesites
+                // Si el usuario elige "No, se puede manejar el caso según lo necesites
                 if (opcion != JOptionPane.YES_OPTION) {
                     errores += "- Se canceló la confirmación del precio.\n";
                 }
@@ -301,8 +328,7 @@ public class Formulario extends JPanel {
         }
 
         if (!errores.isEmpty()) {
-            JOptionPane.showMessageDialog(null, errores, "errores de validacion de campos",
-                    JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, errores, "errores de validacion de campos", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
@@ -397,6 +423,10 @@ public class Formulario extends JPanel {
         this.urlImagen = urlImagen;
     }
 
+    public JComboBox<String> getComboTalla() {
+        return comboTalla;
+    }
+
     public void limpiarFormulario() {
         // Limpiar campos de texto
         if (txtIdProducto != null) {
@@ -414,39 +444,15 @@ public class Formulario extends JPanel {
         if (comboCategoria != null && comboCategoria.getItemCount() > 0) {
             comboCategoria.setSelectedIndex(0); // "-- seleccione --"
         }
-
         if (comboEstado != null && comboEstado.getItemCount() > 0) {
             comboEstado.setSelectedIndex(0); // "-- seleccione --"
+        }
+        if (comboTalla != null && comboTalla.getItemCount() > 0) {
+            comboTalla.setSelectedIndex(0); // "-- seleccione --"
         }
 
         // Limpiar imagen seleccionada
         lblImagenSeleccionada.setText("");
         lblImagenSeleccionada.setIcon(null);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            // Crear ventana principal
-            JFrame ventana = new JFrame("Registro de Productos");
-            ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            ventana.setSize(1300, 700);
-            ventana.setLocationRelativeTo(null);
-            ventana.setLayout(null);
-
-            // Crear mapa de categorías de ejemplo
-            Map<Integer, String> categorias = new HashMap<>();
-            categorias.put(1, "Flores");
-            categorias.put(2, "Plantas de Interior");
-            categorias.put(3, "Cactus");
-
-            // Crear instancia del formulario, con posición x=380, y=100
-            Formulario formulario = new Formulario("Actualizar", 0, categorias, categorias, 380, 100);
-
-            // Agregar el panelFormulario al JFrame
-            ventana.add(formulario.getPanelFormulario());
-
-            // Mostrar ventana
-            ventana.setVisible(true);
-        });
     }
 }
