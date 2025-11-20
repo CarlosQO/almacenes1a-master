@@ -101,7 +101,7 @@ public class ControladorVendedor implements MouseListener {
 
         ModuloReposicionArticulos moduloReposicionArticulos = new ModuloReposicionArticulos(sr);
         controladorSolicitudesDeReposicion controladorSolicitudesDeReposicion = new controladorSolicitudesDeReposicion(
-                sr, 1);
+                sr, "1087790416");
         configurarCierreVentana(sr);
 
     }
