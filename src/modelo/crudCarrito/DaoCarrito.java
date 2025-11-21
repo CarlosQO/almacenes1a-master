@@ -14,7 +14,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
 
     // herramientas
     @Override
-    public String limpiarCarrito(int idUsuario) {
+    public String limpiarCarrito(String idUsuario) {
         int idCarrito = encontrarCarritoActivo(idUsuario);
 
         if (idCarrito == -1) {
@@ -34,13 +34,13 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public int facturaInsert(int idUsuario, int idMetodoPago, double total) {
+    public int facturaInsert(String idUsuario, int idMetodoPago, double total) {
         String sql = "INSERT INTO factura (id_usuario, id_metodo_pago, fecha, total) VALUES (?, ?, NOW(), ?)";
 
         try (
                 Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
-            ps.setInt(1, idUsuario);
+            ps.setString(1, idUsuario);
             ps.setInt(2, idMetodoPago);
             ps.setDouble(3, total);
             ps.executeUpdate();
@@ -100,7 +100,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public void guardarFacturaConDetallesProductos(int idUsuario, int idMetodoPago, double total,
+    public void guardarFacturaConDetallesProductos(String idUsuario, int idMetodoPago, double total,
             List<ProductosCarrito> productos) {
         int idFactura = facturaInsert(idUsuario, idMetodoPago, total);
         if (idFactura != -1) {
@@ -127,13 +127,13 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public int encontrarCarritoActivo(int idCliente) {
+    public int encontrarCarritoActivo(String idCliente) {
         String sql = "SELECT id FROM carrito WHERE id_usuario = ?";
 
         try (
                 Connection conexion = Conexion.getInstance().getConnection();
                 PreparedStatement ps = conexion.prepareStatement(sql);) {
-            ps.setInt(1, idCliente);
+            ps.setString(1, idCliente);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -171,7 +171,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override // por si no hay un item(produc promocion) sin stock, se elimine del carrito
-    public void validarStockItemsCarrito(int idUsuario) {
+    public void validarStockItemsCarrito(String idUsuario) {
         String sqlProductos = "SELECT d.id_producto, p.cantidad, p.id_estado FROM det_carrito d " +
                 "INNER JOIN carrito c ON d.id_carrito = c.id " +
                 "INNER JOIN producto p ON d.id_producto = p.id " +
@@ -187,7 +187,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
 
             // VALIDAR PRODUCTOS +
             try (PreparedStatement psProd = conexion.prepareStatement(sqlProductos)) {
-                psProd.setInt(1, idUsuario);
+                psProd.setString(1, idUsuario);
                 ResultSet rsProd = psProd.executeQuery();
 
                 while (rsProd.next()) {
@@ -203,7 +203,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
 
             // VALIDAR PROMOCIONES
             try (PreparedStatement psPromo = conexion.prepareStatement(sqlPromociones)) {
-                psPromo.setInt(1, idUsuario);
+                psPromo.setString(1, idUsuario);
                 ResultSet rsPromo = psPromo.executeQuery();
 
                 while (rsPromo.next()) {
@@ -224,7 +224,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
 
     // productos
     @Override
-    public List<ProductosCarrito> mostrarProductosCarrito(int idUsuario) {
+    public List<ProductosCarrito> mostrarProductosCarrito(String idUsuario) {
         List<ProductosCarrito> info = new ArrayList<>();
         String sql = "SELECT c.id_usuario, d.id_producto, d.cantidad, d.imagen, d.id_carrito, d.subtotal, " +
                 "p.nombre AS nombre_producto, p.precio AS precio_producto FROM carrito c " +
@@ -235,11 +235,11 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
         try (
                 Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql);) {
-            ps.setInt(1, idUsuario);
+            ps.setString(1, idUsuario);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 ProductosCarrito carrito = new ProductosCarrito();
-                carrito.setIdCliente(rs.getInt("id_usuario"));
+                carrito.setIdCliente(rs.getString("id_usuario"));
                 carrito.setIdProducto(rs.getInt("id_producto"));
                 carrito.setNombreProducto(rs.getString("nombre_producto"));
                 carrito.setCantidadProducto(rs.getInt("cantidad"));
@@ -257,7 +257,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public int agregarProductosAlCarrito(int idProducto, int idUsuario, String imagen, int cantidad,
+    public int agregarProductosAlCarrito(int idProducto, String idUsuario, String imagen, int cantidad,
             double precioUnitario) {
         int validarExistencia = productoExisteEnCarrito(idUsuario, idProducto);
 
@@ -277,7 +277,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
                     Connection conexion = Conexion.getInstance().getConnection();
                     PreparedStatement ps = conexion.prepareStatement(sqlNuevoCarrito,
                             PreparedStatement.RETURN_GENERATED_KEYS);) {
-                ps.setInt(1, idUsuario);
+                ps.setString(1, idUsuario);
                 int respuesta = ps.executeUpdate();
 
                 if (respuesta > 0) {
@@ -321,7 +321,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public int productoExisteEnCarrito(int idUsuario, int idProducto) {
+    public int productoExisteEnCarrito(String idUsuario, int idProducto) {
         String sql = "SELECT COUNT(*) FROM det_carrito d " +
                 "INNER JOIN carrito c ON d.id_carrito = c.id " +
                 "WHERE c.id_usuario = ? AND d.id_producto = ?";
@@ -329,7 +329,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
         try (
                 Connection conexion = Conexion.getInstance().getConnection();
                 PreparedStatement ps = conexion.prepareStatement(sql)) {
-            ps.setInt(1, idUsuario);
+            ps.setString(1, idUsuario);
             ps.setInt(2, idProducto);
 
             ResultSet rs = ps.executeQuery();
@@ -350,7 +350,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public void dismunirCantidadProductoDelCarrito(int idProducto, int idUsuario, double precioUnitario) {
+    public void dismunirCantidadProductoDelCarrito(int idProducto, String idUsuario, double precioUnitario) {
         int idCarrito = encontrarCarritoActivo(idUsuario); // Obtiene el id del carrito
         if (idCarrito == -1) {
             JOptionPane.showMessageDialog(null, "No se encontró carrito activo para el usuario." + idUsuario, "Error",
@@ -395,7 +395,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public void eliminarProductoDelCarrito(int idProducto, int idUsuario) {
+    public void eliminarProductoDelCarrito(int idProducto, String idUsuario) {
         String sqlDelete = "DELETE d FROM det_carrito d " +
                 "INNER JOIN carrito c ON d.id_carrito = c.id " +
                 "WHERE c.id_usuario = ? AND d.id_producto = ?";
@@ -403,7 +403,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
         try (
                 Connection conexion = Conexion.getInstance().getConnection();
                 PreparedStatement ps = conexion.prepareStatement(sqlDelete);) {
-            ps.setInt(1, idUsuario);
+            ps.setString(1, idUsuario);
             ps.setInt(2, idProducto);
             ps.executeUpdate();
         } catch (Exception e) {
@@ -413,7 +413,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public void aumentarCantidadProductoDelCarrito(int idProducto, int idUsuario, double precioUnitario) {
+    public void aumentarCantidadProductoDelCarrito(int idProducto, String idUsuario, double precioUnitario) {
         String sqlUpdate = "UPDATE det_carrito d " +
                 "INNER JOIN carrito c ON d.id_carrito = c.id " +
                 "SET d.cantidad = d.cantidad + 1, d.subtotal = d.subtotal + ? " +
@@ -422,7 +422,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
                 Connection conexion = Conexion.getInstance().getConnection();
                 PreparedStatement ps = conexion.prepareStatement(sqlUpdate);) {
             ps.setDouble(1, precioUnitario);
-            ps.setInt(2, idUsuario);
+            ps.setString(2, idUsuario);
             ps.setInt(3, idProducto);
 
             ps.executeUpdate();
@@ -433,7 +433,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public void actualizarCantidadProducto(int idCliente, int idProducto, int cantidad) {
+    public void actualizarCantidadProducto(String idCliente, int idProducto, int cantidad) {
         // SQL para actualizar la cantidad y el subtotal según la cantidad nueva
         String sqlUpdate = "UPDATE det_carrito d " +
                 "INNER JOIN carrito c ON d.id_carrito = c.id " +
@@ -445,7 +445,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
                 PreparedStatement ps = conexion.prepareStatement(sqlUpdate);) {
             ps.setInt(1, cantidad); // Cantidad nueva
             ps.setInt(2, cantidad); // Multiplicamos cantidad * precio_unitario
-            ps.setInt(3, idCliente); // ID del usuario
+            ps.setString(3, idCliente); // ID del usuario
             ps.setInt(4, idProducto); // ID del producto
 
             ps.executeUpdate();
@@ -457,7 +457,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
 
     // promociones
     @Override
-    public List<PromocionCarrito> mostarPromociones(int idUsuario) {
+    public List<PromocionCarrito> mostarPromociones(String idUsuario) {
         List<PromocionCarrito> infoPromo = new ArrayList<>();
         String sql = "SELECT c.id_usuario, d.idPromocion, d.cantidad, d.imagen, d.id_carrito, d.subtotal, " +
                 "p.nombrePromocion AS nombre_producto, p.precio AS precio_producto " +
@@ -469,11 +469,11 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
         try (
                 Connection con = Conexion.getInstance().getConnection();
                 PreparedStatement ps = con.prepareStatement(sql);) {
-            ps.setInt(1, idUsuario);
+            ps.setString(1, idUsuario);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 PromocionCarrito promocion = new PromocionCarrito();
-                promocion.setIdCliente(rs.getInt("id_usuario"));
+                promocion.setIdCliente(rs.getString("id_usuario"));
                 promocion.setIdPromocion(rs.getInt("idPromocion"));
                 promocion.setNombreProducto(rs.getString("nombre_producto"));
                 promocion.setCantidadPromocion(rs.getInt("cantidad"));
@@ -492,8 +492,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public int agregarPromocionAlCarrito(int idPromocion, int idUsuario, String imagen, int cantidad,
-            double precioUnitario) {
+    public int agregarPromocionAlCarrito(int idPromocion, String idUsuario, String imagen, int cantidad, double precioUnitario) {
         int validarExistencia = promocionExisteEnCarrito(idUsuario, idPromocion);
 
         // Si la promoción ya está en el carrito, solo actualizamos cantidad y subtotal
@@ -512,7 +511,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
                     Connection conexion = Conexion.getInstance().getConnection();
                     PreparedStatement ps = conexion.prepareStatement(sqlNuevoCarrito,
                             PreparedStatement.RETURN_GENERATED_KEYS);) {
-                ps.setInt(1, idUsuario);
+                ps.setString(1, idUsuario);
                 int respuesta = ps.executeUpdate();
 
                 if (respuesta > 0) {
@@ -557,7 +556,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public int promocionExisteEnCarrito(int idUsuario, int idPromocion) {
+    public int promocionExisteEnCarrito(String idUsuario, int idPromocion) {
         String sql = "SELECT COUNT(*) FROM det_carrito d " +
                 "INNER JOIN carrito c ON d.id_carrito = c.id " +
                 "WHERE c.id_usuario = ? AND d.idPromocion = ?";
@@ -565,7 +564,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
         try (
                 Connection conexion = Conexion.getInstance().getConnection();
                 PreparedStatement ps = conexion.prepareStatement(sql)) {
-            ps.setInt(1, idUsuario);
+            ps.setString(1, idUsuario);
             ps.setInt(2, idPromocion);
 
             ResultSet rs = ps.executeQuery();
@@ -586,7 +585,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public void aumentarCantidadPromocionDelCarrito(int idPromocion, int idUsuario, double precioUnitario) {
+    public void aumentarCantidadPromocionDelCarrito(int idPromocion, String idUsuario, double precioUnitario) {
         String sqlUpdate = "UPDATE det_carrito d " +
                 "INNER JOIN carrito c ON d.id_carrito = c.id " +
                 "SET d.cantidad = d.cantidad + 1, d.subtotal = d.subtotal + ? " +
@@ -595,7 +594,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
                 Connection conexion = Conexion.getInstance().getConnection();
                 PreparedStatement ps = conexion.prepareStatement(sqlUpdate);) {
             ps.setDouble(1, precioUnitario);
-            ps.setInt(2, idUsuario);
+            ps.setString(2, idUsuario);
             ps.setInt(3, idPromocion);
 
             ps.executeUpdate();
@@ -606,7 +605,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public void disminuirCantidadPromocionDelCarrito(int idPromocion, int idUsuario, double precioUnitario) {
+    public void disminuirCantidadPromocionDelCarrito(int idPromocion, String idUsuario, double precioUnitario) {
         int idCarrito = encontrarCarritoActivo(idUsuario); // Obtiene el id del carrito
         if (idCarrito == -1) {
             JOptionPane.showMessageDialog(null, "No se encontró carrito activo para el usuario." + idUsuario, "Error",
@@ -652,7 +651,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public void eliminarPromocionDelCarrito(int idPromocion, int idUsuario) {
+    public void eliminarPromocionDelCarrito(int idPromocion, String idUsuario) {
         String sqlDelete = "DELETE d FROM det_carrito d " +
                 "INNER JOIN carrito c ON d.id_carrito = c.id " +
                 "WHERE c.id_usuario = ? AND d.idPromocion = ?";
@@ -660,7 +659,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
         try (
                 Connection conexion = Conexion.getInstance().getConnection();
                 PreparedStatement ps = conexion.prepareStatement(sqlDelete);) {
-            ps.setInt(1, idUsuario);
+            ps.setString(1, idUsuario);
             ps.setInt(2, idPromocion);
             ps.executeUpdate();
         } catch (Exception e) {
@@ -670,7 +669,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
     }
 
     @Override
-    public void actualizarCantidadPromocion(int idUsuario, int idPromocion, int cantidad) {
+    public void actualizarCantidadPromocion(String idUsuario, int idPromocion, int cantidad) {
         String sql = "UPDATE det_carrito d " +
                 "INNER JOIN carrito c ON d.id_carrito = c.id " +
                 "SET d.cantidad = ?, d.subtotal = ? * d.precioUnitario " +
@@ -681,7 +680,7 @@ public class DaoCarrito implements CrudCarrito<ProductosCarrito> {
 
             ps.setInt(1, cantidad);
             ps.setInt(2, cantidad); // recalcula subtotal
-            ps.setInt(3, idUsuario);
+            ps.setString(3, idUsuario);
             ps.setInt(4, idPromocion);
 
             ps.executeUpdate();

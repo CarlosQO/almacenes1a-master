@@ -1,14 +1,14 @@
 package modelo.crudCarrito;
 
 public class PromocionCarrito {
-    public String nombreProducto, imagen;
-    public int idCarrito, idCliente, idPromocion, cantidadPromociones;
+    public String nombreProducto, imagen, idCliente;
+    public int idCarrito, idPromocion, cantidadPromociones;
     public Double precioUnitarioPromocion, subtotalPorProducto, total;
 
     public PromocionCarrito() {
     }
 
-    public PromocionCarrito(String nombreProducto, String imagen, int idCarrito, int idCliente, int idPromocion,
+    public PromocionCarrito(String nombreProducto, String imagen, int idCarrito, String idCliente, int idPromocion,
             int cantidadPromociones, Double precioUnitarioPromocion, Double subtotalPorProducto, Double total) {
         this.nombreProducto = nombreProducto;
         this.imagen = imagen;
@@ -45,11 +45,11 @@ public class PromocionCarrito {
         this.idCarrito = idCarrito;
     }
 
-    public int getIdCliente() {
+    public String getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(int idCliente) {
+    public void setIdCliente(String idCliente) {
         this.idCliente = idCliente;
     }
 

@@ -42,7 +42,7 @@ import vista.vistaCliente.tarjetas.*;
 public class ControladorCatalogo implements ActionListener {
     private JFrame frame;
     private PanelPrincipal panelPrincipal;
-    private int idUsuario;
+    private String idUsuario;
     private DaoCarrito daoCarrito;
     private ProductoDao daoProducto;
     private ScrollPersonalizado scrollPersonalizado;
@@ -55,7 +55,7 @@ public class ControladorCatalogo implements ActionListener {
     private MetodoPagoDao daoMetodoPago;
     private DaoHistoVenta daoHistoVenta;
 
-    public ControladorCatalogo(PanelPrincipal panelPrincipal, int idUsuario) {
+    public ControladorCatalogo(PanelPrincipal panelPrincipal, String idUsuario) {
         this.panelPrincipal = panelPrincipal;
         this.idUsuario = idUsuario;
         panelPrincipal.catalogo.addActionListener(this);
@@ -155,7 +155,7 @@ public class ControladorCatalogo implements ActionListener {
         }
     }
 
-    public int obtenerCantidadCarrito(int idUsuario) {
+    public int obtenerCantidadCarrito(String idUsuario) {
         try {
             // Obtener lista de productos del carrito
             List<ProductosCarrito> listaProductos = daoCarrito.mostrarProductosCarrito(idUsuario);
@@ -605,14 +605,14 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     // carrito acciones
-    public void agregarACarritoProductosDeCompras(int idProducto, int idUsuario, String imagen, int cantidad, double precioUnitario) {
+    public void agregarACarritoProductosDeCompras(int idProducto, String idUsuario, String imagen, int cantidad, double precioUnitario) {
         daoCarrito.agregarProductosAlCarrito(idProducto, idUsuario, imagen, cantidad, precioUnitario);
         if (panelPrincipal.carritoContenedor.isVisible()) {
             cargarProductosACarrito();
         }
     }
 
-    public void agregarACarritoPromociones(int idPromocion, int idUsuario, String imagen, int cantidad, double precioUnitario) {
+    public void agregarACarritoPromociones(int idPromocion, String idUsuario, String imagen, int cantidad, double precioUnitario) {
         daoCarrito.agregarPromocionAlCarrito(idPromocion, idUsuario, imagen, cantidad, precioUnitario);
         if (panelPrincipal.carritoContenedor.isVisible()) {
             cargarProductosACarrito();
@@ -634,7 +634,7 @@ public class ControladorCatalogo implements ActionListener {
         return valorTotal;
     }
 
-    public String limpiarCarrito(int idUsuario) {
+    public String limpiarCarrito(String idUsuario) {
         String limpiarCarrito = daoCarrito.limpiarCarrito(idUsuario);
         cargarProductosACarrito();
         return limpiarCarrito;
@@ -661,7 +661,7 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     // validaciones para permitir hacer la compra y disminucion de stock
-    private boolean validarStockProductos(List<ProductosCarrito> listaCarrito, int idUsuario) {
+    private boolean validarStockProductos(List<ProductosCarrito> listaCarrito, String idUsuario) {
         boolean stockSuficiente = true;
 
         for (ProductosCarrito c : listaCarrito) {
@@ -686,7 +686,7 @@ public class ControladorCatalogo implements ActionListener {
         return stockSuficiente;
     }
 
-    private boolean validarStockPromociones(List<PromocionCarrito> listaPromocion, int idUsuario) {
+    private boolean validarStockPromociones(List<PromocionCarrito> listaPromocion, String idUsuario) {
         boolean stockSuficiente = true;
 
         for (PromocionCarrito promo : listaPromocion) {
@@ -734,11 +734,11 @@ public class ControladorCatalogo implements ActionListener {
         return daoPromociones.obtenerIdsProductosPromocion(idPromocion);
     }
 
-    public void actualizarProductoConBajoStock(int idUsuario, int idProducto, int cantidad) {
+    public void actualizarProductoConBajoStock(String idUsuario, int idProducto, int cantidad) {
         daoCarrito.actualizarCantidadProducto(idUsuario, idProducto, cantidad);
     }
 
-    public void actualizarPromocionConBajoStock(int idUsuario, int idPromocion, int cantidadDisponible) {
+    public void actualizarPromocionConBajoStock(String idUsuario, int idPromocion, int cantidadDisponible) {
         daoCarrito.actualizarCantidadPromocion(idUsuario, idPromocion, cantidadDisponible);
     }
 
@@ -961,7 +961,7 @@ public class ControladorCatalogo implements ActionListener {
     }
 
     // procesos para la venta
-    public void procesarFactura(int idUsuario, int idMetodoPago, double total, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
+    public void procesarFactura(String idUsuario, int idMetodoPago, double total, List<ProductosCarrito> productos, List<PromocionCarrito> promociones) {
         int idFactura = daoCarrito.facturaInsert(idUsuario, idMetodoPago, total);
         if (idFactura != -1) {
             for (ProductosCarrito p : productos) {
@@ -996,12 +996,12 @@ public class ControladorCatalogo implements ActionListener {
         return 10000000.00;
     }
 
-    public int getIdUsuario() { 
+    public String getIdUsuario() { 
         return idUsuario; 
     }
 
     // Setter
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
 
@@ -1011,7 +1011,7 @@ public class ControladorCatalogo implements ActionListener {
         PanelPrincipal menu = new PanelPrincipal();
         menu.setVisible(true);
         menu.setSize(1300, 700);
-        ControladorCatalogo c = new ControladorCatalogo(menu, idConvertido);
+        ControladorCatalogo c = new ControladorCatalogo(menu, id);
         ControladorActividad ca = new ControladorActividad(menu, id);
         ControladorSeguimiento cs = new ControladorSeguimiento(menu, id);
         ControladorHistorial ch = new ControladorHistorial(menu, id);

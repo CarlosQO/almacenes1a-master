@@ -20,10 +20,9 @@ public class ControladorPrincipalCliente {
 
     public ControladorPrincipalCliente(PanelPrincipal p, String id) throws IOException {
         this.panelPrincipal = p;
-        int idUsuario = Integer.parseInt(id);
         controladorManejarMenu = new CrontoladorManejarMenu(panelPrincipal);
         controladorModuloActividad = new ControladorActividad(panelPrincipal, id);
-        controladorModuloCatalogo = new ControladorCatalogo(panelPrincipal, idUsuario);
+        controladorModuloCatalogo = new ControladorCatalogo(panelPrincipal, id);
         controladorModuloHistorialDeCompras = new ControladorHistorial(panelPrincipal, id);
         controladorSeguimiento = new ControladorSeguimiento(panelPrincipal, id);
         controladorOpcionPQRS = new ControladorPQRS(panelPrincipal, id);

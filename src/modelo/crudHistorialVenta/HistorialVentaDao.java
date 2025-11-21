@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
 import modelo.Conexion;
 
 public class HistorialVentaDao implements CrudHistorialVenta {
@@ -17,7 +16,7 @@ public class HistorialVentaDao implements CrudHistorialVenta {
     @Override
     public List<Object[]> lista(String fechaInicio, String FechaFin) {
         List<Object[]> datos = new ArrayList<>();
-        try {
+       try {
             String sql = "SELECT "
                     + "h.idHistoVenta, "
                     + "p.nombre AS producto, "
@@ -31,8 +30,9 @@ public class HistorialVentaDao implements CrudHistorialVenta {
                     + "ORDER BY h.fecha DESC;";
             con = Conexion.getInstance().getConnection();
             ps = con.prepareStatement(sql);
-            ps.setString(1, fechaInicio);
-            ps.setString(2, FechaFin);
+            ps.setString(1, fechaInicio + " 00:00:00");
+            ps.setString(2, FechaFin + " 23:59:59");
+
             rs = ps.executeQuery();
             while (rs.next()) {
                 Object[] fila = new Object[6];
