@@ -29,6 +29,8 @@ import modelo.crudProducto.*;
 import modelo.crudPromociones.*;
 import modelo.pasarelaDePagosModelo.*;
 import modelo.crudCategoriasProductos.*;
+import modelo.crudHistoVenta.*;
+
 import vista.componentes.*;
 import vista.vistaCliente.PanelPrincipal;
 import vista.vistaCliente.pasarelaVista.BilleterElectronica;
@@ -51,6 +53,7 @@ public class ControladorCatalogo implements ActionListener {
     private Factory factory;
     private PromocionDao daoPromociones;
     private MetodoPagoDao daoMetodoPago;
+    private DaoHistoVenta daoHistoVenta;
 
     public ControladorCatalogo(PanelPrincipal panelPrincipal, int idUsuario) {
         this.panelPrincipal = panelPrincipal;
@@ -66,6 +69,7 @@ public class ControladorCatalogo implements ActionListener {
         daoCarrito = new DaoCarrito();
         daoPromociones = new PromocionDao();
         daoMetodoPago = new MetodoPagoDao();
+        daoHistoVenta = new DaoHistoVenta();
         cargarProductos();
     }
 
@@ -982,7 +986,10 @@ public class ControladorCatalogo implements ActionListener {
         }
     }
 
-    public void guardarVenta(int idProducto, int cantidad) { daoProducto.guardarVenta(idProducto, cantidad);}
+    public void guardarVenta(int idProducto, int cantidad) { 
+        daoProducto.guardarVenta(idProducto, cantidad);
+        daoHistoVenta.registradorVenta(idProducto, cantidad);
+    }
 
     // Salgo
     public double getSaldo() {

@@ -120,7 +120,7 @@ public class ControladorSeguimiento implements ActionListener {
                 panelPrincipal.panelCentroContenido.add(panelPrincipal.panelSeguimientoCentrado);
             }
         } else {
-            JLabel mensaje = new JLabel("No tiene pedidos en estado Pendientes");
+            JLabel mensaje = new JLabel("No tiene pedidos despachados.");
             mensaje.setBounds(160, 200, 500, 40);
             mensaje.setFont(new Font("Arial", Font.BOLD, 20));
             panelPrincipal.panelSeguimientoCentrado.setBounds(170, 0, 680, 700);

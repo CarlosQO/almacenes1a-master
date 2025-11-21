@@ -3,6 +3,6 @@ import java.util.List;
 
 public interface CrudSolicitudesReposicion<S> {
     public List<S> mostrarProductosConBajostock();
-    public void enviarSolicitud(int idVendedor, int idProducto);
+    public void enviarSolicitud(String idVendedor, int idProducto);
     public boolean productoConSolicitud(int idProducto);
 }

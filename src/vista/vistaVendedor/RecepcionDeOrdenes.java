@@ -81,7 +81,6 @@ public class RecepcionDeOrdenes extends JFrame {
         camposOrdenes = new DefaultTableModel();
         camposOrdenes.addColumn("ID Orden");
         camposOrdenes.addColumn("Cliente");
-        camposOrdenes.addColumn("Productos");
         camposOrdenes.addColumn("Estado");
 
         tablaOrdenes = new JTable(camposOrdenes);
@@ -106,17 +105,17 @@ public class RecepcionDeOrdenes extends JFrame {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
                     boolean isSelected, boolean hasFocus, int row, int column) {
-                if (column == 4) { // Columna de acciones
+                if (column == 3) { // Columna de acciones
                     JPanel panel = new JPanel();
                     panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
                     panel.setBackground(isSelected ? new Color(184, 207, 229) : row == 0 ? Color.WHITE : Color.cyan);
 
                     if (row > 0) { // Solo mostrar botones después de la primera fila
                         javax.swing.JButton btnCancelar = new javax.swing.JButton("Cancelar");
-                        javax.swing.JButton btnEntregar = new javax.swing.JButton("Entregar");
+                        javax.swing.JButton btnEntregar = new javax.swing.JButton("Despachar");
 
                         btnCancelar.setPreferredSize(new Dimension(90, 30));
-                        btnEntregar.setPreferredSize(new Dimension(90, 30));
+                        btnEntregar.setPreferredSize(new Dimension(100, 30));
 
                         panel.add(btnCancelar);
                         panel.add(btnEntregar);
@@ -132,7 +131,7 @@ public class RecepcionDeOrdenes extends JFrame {
 
                 // Si es la columna de acciones (columna 4) y el valor está vacío, ocultar el
                 // contenido
-                if (column == 4 && (value == null || value.toString().isEmpty())) {
+                if (column == 3 && (value == null || value.toString().isEmpty())) {
                     c.setText("");
                     c.setBackground(table.getBackground());
                 } else if (isSelected) {
@@ -177,7 +176,7 @@ public class RecepcionDeOrdenes extends JFrame {
         } else {
             int columnIndex = camposOrdenes.findColumn("Acciones");
             if (columnIndex != -1) {
-                camposOrdenes.setColumnCount(4); // Elimina la última columna del modelo
+                camposOrdenes.setColumnCount(3); // Elimina la última columna del modelo
             }
         }
     }

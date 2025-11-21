@@ -59,17 +59,12 @@ public class ControladorRegistrarProductos implements ActionListener {
         String nombre = moduloRegistroProductos.formularioRegistro.getTxtNombre().getText().trim();
         String descripcion = moduloRegistroProductos.formularioRegistro.getTxtDescripcion().getText().trim();
         int cantidad = Integer.parseInt(moduloRegistroProductos.formularioRegistro.getTxtCantidad().getText().trim());
-        double precio = Double
-                .parseDouble(moduloRegistroProductos.formularioRegistro.getTxtPrecioVenta().getText().trim());
+        double precio = Double.parseDouble(moduloRegistroProductos.formularioRegistro.getTxtPrecioVenta().getText().trim());
+        String talla = (String) moduloRegistroProductos.formularioRegistro.getComboTalla().getSelectedItem();
 
-        // imagen pendiente
         String imagen = moduloRegistroProductos.formularioRegistro.getUrlImagen();
 
-        //
-
-        String talla = "M";
-        String categoriaSeleccionada = (String) moduloRegistroProductos.formularioRegistro.getComboCategoria()
-                .getSelectedItem();
+        String categoriaSeleccionada = (String) moduloRegistroProductos.formularioRegistro.getComboCategoria().getSelectedItem();
         int idCategoria = -1;
 
         for (Map.Entry<Integer, String> entry : getListarCatgorias().entrySet()) {
@@ -102,21 +97,7 @@ public class ControladorRegistrarProductos implements ActionListener {
         return categoriasMap;
     }
 
-    public static void main(String[] args) {
-        // Crear el frame principal
-        JFrame frame = new JFrame("Registro de Productos");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(1300, 700);
-        frame.setLocationRelativeTo(null);
-        frame.setLayout(null);
-
-        // ID del vendedor de prueba
-        int idVendedor = 1002;
-
-        // Crear el controlador (esto también carga el módulo de registro)
-        ControladorRegistrarProductos controlador = new ControladorRegistrarProductos(frame, idVendedor);
-
-        // Mostrar la ventana
-        frame.setVisible(true);
+    public int getIdVendedor() {
+        return idVendedor;
     }
 }

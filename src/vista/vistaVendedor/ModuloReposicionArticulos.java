@@ -39,15 +39,4 @@ public class ModuloReposicionArticulos extends JPanel {
         add(lblSubtitulo);
 
     }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Módulo de Reposición");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1300, 700);
-        frame.setLocationRelativeTo(null);
-
-        ModuloReposicionArticulos modulo = new ModuloReposicionArticulos(frame);
-        frame.add(modulo);
-        frame.setVisible(true);
-    }
 }

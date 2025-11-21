@@ -21,6 +21,7 @@ public class ControladorSeguimientoVendedor implements ActionListener {
         this.view = view;
         this.dao = new SeguimientoVenDao();
         view.getBtnBR().addActionListener(this);
+        view.getTablaSV().setDefaultEditor(Object.class, null);
     }
 
     private void cargar() {

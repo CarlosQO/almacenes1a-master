@@ -48,7 +48,7 @@ public class controladorRecepcionOrdenes {
 
             // Configurar columnas según el estado seleccionado
             boolean esPendiente = estadoSeleccionado.equalsIgnoreCase("Pendiente");
-            int columnasEsperadas = esPendiente ? 5 : 4;
+            int columnasEsperadas = esPendiente ? 4 : 3;
             // Ajustar columnas si es necesario
             while (modeloTabla.getColumnCount() > columnasEsperadas) {
                 modeloTabla.setColumnCount(modeloTabla.getColumnCount() - 1);
@@ -58,8 +58,8 @@ public class controladorRecepcionOrdenes {
             }
 
             // Configurar el editor de la columna de acciones si el estado es Pendiente
-            if (esPendiente && vista.getTablaOrdenes().getColumnCount() > 4) {
-                vista.getTablaOrdenes().getColumnModel().getColumn(4).setCellEditor(
+            if (esPendiente && vista.getTablaOrdenes().getColumnCount() > 3) {
+                vista.getTablaOrdenes().getColumnModel().getColumn(3).setCellEditor(
                         new javax.swing.DefaultCellEditor(new javax.swing.JComboBox<>()) {
                             private javax.swing.JButton btnCancelar;
                             private javax.swing.JButton btnEntregar;
@@ -67,7 +67,7 @@ public class controladorRecepcionOrdenes {
 
                             {
                                 btnCancelar = new javax.swing.JButton("Cancelar");
-                                btnEntregar = new javax.swing.JButton("Entregar");
+                                btnEntregar = new javax.swing.JButton("Despachar");
 
                                 btnCancelar.addActionListener(evt -> {
                                     clickedButton = "Cancelar";
@@ -75,7 +75,7 @@ public class controladorRecepcionOrdenes {
                                 });
 
                                 btnEntregar.addActionListener(evt -> {
-                                    clickedButton = "Entregar";
+                                    clickedButton = "Despachar";
                                     fireEditingStopped();
                                 });
                             }
@@ -98,17 +98,20 @@ public class controladorRecepcionOrdenes {
                             public Object getCellEditorValue() {
                                 if (clickedButton != null) {
                                     int row = vista.getTablaOrdenes().getSelectedRow();
-                                    if (row > 0) { // Ignorar la primera fila
+                                    // Verificar que la fila sea válida y exista en el modelo
+                                    if (row > 0 && row < vista.getTablaOrdenes().getRowCount()) {
                                         int idPedido = (Integer) vista.getTablaOrdenes().getValueAt(row, 0);
                                         int idEstado;
                                         if (clickedButton.equals("Cancelar")) {
-                                            idEstado = 3; // ID para estado Cancelado
+                                            idEstado = 5; // ID para estado Cancelado
                                         } else {
-                                            idEstado = 2; // ID para estado Entregado
+                                            idEstado = 4; // ID para estado Despachado
                                         }
                                         if (controladorRecepcionOrdenes.this.modelo.cambiarEstadoPedido(idPedido,
                                                 idEstado)) {
-                                            actualizarTablaPedidos();
+                                            javax.swing.SwingUtilities.invokeLater(() -> {
+                                                actualizarTablaPedidos();
+                                            });
                                         }
                                     }
                                 }
@@ -136,7 +139,6 @@ public class controladorRecepcionOrdenes {
                     fila = new Object[] {
                             pedido.getIdPedido(),
                             pedido.getCliente(),
-                            pedido.getProductos(),
                             pedido.getEstado(),
                             ""
                     };
@@ -144,7 +146,6 @@ public class controladorRecepcionOrdenes {
                     fila = new Object[] {
                             pedido.getIdPedido(),
                             pedido.getCliente(),
-                            pedido.getProductos(),
                             pedido.getEstado()
                     };
                 }
