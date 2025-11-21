@@ -15,7 +15,7 @@ import vista.componentes.RoundedJXButton;
 public class AccionesHabilitarProveedor extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
     private final JPanel panel;
     private final RoundedJXButton btnAprobar;
-    private int idProveedorActual;
+    private long idProveedorActual;
     private AccionProveedorListener listener;
     private String documentoSegundoProveedor;
     private String nombreSegundoProveedor;
@@ -44,7 +44,7 @@ public class AccionesHabilitarProveedor extends AbstractCellEditor implements Ta
                     "Confirmar Habilitación",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                String documentoProveedorActual = Integer.toString(idProveedorActual);
+                String documentoProveedorActual = Long.toString(idProveedorActual);
                 if (procesoParaHabilitarYdeshabilitarProveedor(documentoProveedorActual)) {
                     int opcion = JOptionPane.showConfirmDialog(null,
                             "Ya existe un proveedor asociado a este producto.\n"
@@ -106,9 +106,9 @@ public class AccionesHabilitarProveedor extends AbstractCellEditor implements Ta
     // Editor activo (cuando se hace clic)
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        if (value != null) {
+        if (value != null || value != "") {
             try {
-                idProveedorActual = Integer.parseInt(value.toString());
+                idProveedorActual = Long.parseLong(value.toString());
             } catch (NumberFormatException e) {
                 idProveedorActual = -1;
             }

@@ -23,7 +23,7 @@ public interface CrudProveedor<T> {
 
     public boolean existeProveedorPorNit(String nit);
 
-    public int CambiarEstado(int id, int estado);
+    public int CambiarEstado(long id, int estado);
 
     public Proveedor validarProductoAsociadoAProveedor(int documento);
 }

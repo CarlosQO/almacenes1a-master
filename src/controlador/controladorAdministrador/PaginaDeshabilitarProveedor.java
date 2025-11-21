@@ -94,6 +94,7 @@ public class PaginaDeshabilitarProveedor implements ActionListener {
         }
 
         for (Proveedor proveedor : proveedorInactivo) {
+            // System.out.println("Proveedor: " + proveedor.getDocumento());
             Object[] datos = {
                     proveedor.getNombre(),
                     proveedor.getDocumento(),
