@@ -12,7 +12,6 @@ public class OjoLabel extends JLabel {
 
     private ImageIcon iconoCerrado;
     private ImageIcon iconoAbierto;
-    private boolean mostrando = false;
 
     public OjoLabel(JPasswordField campoClave) {
 
@@ -40,11 +39,10 @@ public class OjoLabel extends JLabel {
 
     private void mostrarClave(JPasswordField pass) {
         pass.setEchoChar((char) 0); // Muestra el texto
-        mostrando = true;
+
     }
 
     private void ocultarClave(JPasswordField pass) {
         pass.setEchoChar('•');
-        mostrando = false;
     }
 }
