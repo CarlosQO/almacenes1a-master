@@ -124,7 +124,7 @@ public class ProveedorEmpresaDao implements CrudProveedor<ProveedorEmpresa> {
     }
 
     @Override
-    public int CambiarEstado(int id, int estado) {
+    public int CambiarEstado(long id, int estado) {
         return 0;
     }
 

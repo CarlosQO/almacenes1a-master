@@ -10,7 +10,7 @@ import vista.componentes.RoundedJXButton;
 public class AccionesDeshabilitarProveedor extends AbstractCellEditor implements TableCellRenderer, TableCellEditor {
     private final JPanel panel;
     private final RoundedJXButton btnDeshabilitar;
-    private int idProveedorActual;
+    private long idProveedorActual;
     private AccionProveedorListener listener;
 
     public AccionesDeshabilitarProveedor(AccionProveedorListener listener) {
@@ -36,7 +36,7 @@ public class AccionesDeshabilitarProveedor extends AbstractCellEditor implements
                     "Confirmar Deshabilitación",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                
+
                 int result = proveedorDao.CambiarEstado(idProveedorActual, 2);
                 if (result != 0) {
                     JOptionPane.showMessageDialog(null, "Se Deshabilito correctamente el proveedor");
@@ -69,7 +69,7 @@ public class AccionesDeshabilitarProveedor extends AbstractCellEditor implements
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         if (value != null) {
             try {
-                idProveedorActual = Integer.parseInt(value.toString());
+                idProveedorActual = Long.parseLong(value.toString());
             } catch (NumberFormatException e) {
                 idProveedorActual = -1;
             }

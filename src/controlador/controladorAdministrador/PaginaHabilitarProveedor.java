@@ -94,13 +94,14 @@ public class PaginaHabilitarProveedor implements ActionListener {
         }
 
         for (Proveedor proveedor : proveedorInactivo) {
+            //System.out.println("Proveedor: " + proveedor.getDocumento());
             Object[] datos = {
                     proveedor.getNombre(),
                     proveedor.getDocumento(),
                     proveedor.getProducto(),
                     proveedor.getMetodoPagoVarchar(),
                     proveedor.getTelefono(),
-                    proveedor.getDocumento() // Este será usado por los botones
+                    proveedor.getDocumento()
             };
             modelo.addRow(datos);
         }

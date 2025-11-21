@@ -20,6 +20,8 @@ public class InformeGlobalDao implements CrudInformesGlobal {
             String sql = "SELECT COUNT(*) AS total_pedidos FROM pedido WHERE fecha_ultima_actualizacion BETWEEN ? AND ?";
             con = Conexion.getInstance().getConnection();
             ps = con.prepareStatement(sql);
+            fechaInicio += " 00:00:00";
+            fechaFin += " 23:59:59";
             ps.setString(1, fechaInicio);
             ps.setString(2, fechaFin);
             rs = ps.executeQuery();
@@ -38,6 +40,8 @@ public class InformeGlobalDao implements CrudInformesGlobal {
             String sql = "SELECT mp.nombre AS metodo_pago FROM factura f INNER JOIN metodo_pago mp ON f.id_metodo_pago = mp.id WHERE f.fecha BETWEEN ? AND ? GROUP BY mp.nombre ORDER BY COUNT(*) DESC LIMIT 1;";
             con = Conexion.getInstance().getConnection();
             ps = con.prepareStatement(sql);
+            fechaInicio += " 00:00:00";
+            fechaFin += " 23:59:59";
             ps.setString(1, fechaInicio);
             ps.setString(2, fechaFin);
             rs = ps.executeQuery();
@@ -60,6 +64,8 @@ public class InformeGlobalDao implements CrudInformesGlobal {
                     + "FROM histoVentas h "
                     + "INNER JOIN producto p ON h.idProducto = p.id "
                     + "WHERE h.fecha BETWEEN ? AND ?";
+            fechaInicio += " 00:00:00";
+            fechaFin += " 23:59:59";
             con = Conexion.getInstance().getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, fechaInicio);
@@ -89,6 +95,8 @@ public class InformeGlobalDao implements CrudInformesGlobal {
                     + "GROUP BY c.id, c.nombre "
                     + "ORDER BY SUM(h.cantidadVenta) DESC "
                     + "LIMIT 1";
+            fechaInicio += " 00:00:00";
+            fechaFin += " 23:59:59";
             con = Conexion.getInstance().getConnection();
             ps = con.prepareStatement(sql);
             ps.setString(1, fechaInicio);

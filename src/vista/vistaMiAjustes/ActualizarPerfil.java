@@ -134,7 +134,7 @@ public class ActualizarPerfil extends JFrame {
                         pasaOno = false;
                 }
                 if (!Validaciones.validarTelefono(numeTelefono.getText())) {
-                        cadena += "El telefono no es valido, solo debe tener numeros\n";
+                        cadena += "El telefono no es valido, solo debe tener numeros y tener 10 o 11 digitos\n";
                         pasaOno = false;
                 }
                 if (!pasaOno) {

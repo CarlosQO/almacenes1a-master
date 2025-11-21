@@ -179,12 +179,12 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
     }
 
     @Override
-    public int CambiarEstado(int id, int estado) {
+    public int CambiarEstado(long id, int estado) {
         String sql = "UPDATE proveedor SET estado = ? WHERE documento = ?";
         try {
             Connection con = Conexion.getInstance().getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
-            String nit = Integer.toString(id);
+            String nit = Long.toString(id);
             ps.setInt(1, estado);
             ps.setString(2, nit);
             return ps.executeUpdate();
