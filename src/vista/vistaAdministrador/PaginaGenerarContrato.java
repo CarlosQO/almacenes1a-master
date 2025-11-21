@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,6 +31,8 @@ public class PaginaGenerarContrato extends JFrame {
     private Fuente fuente = new Fuente();
     private Header header;
     private RoundedPanel conteTitle;
+    private JTextArea contrato;
+    public JScrollPane scrollContrato;
 
     public PaginaGenerarContrato() {
         super("Generar Contrato");
@@ -103,6 +106,24 @@ public class PaginaGenerarContrato extends JFrame {
         JScrollPane scroll = new JScrollPane(tablaVentas);
         scroll.setBounds(conteTitle.getX(), conteTitle.getY() + conteTitle.getHeight() + 30, 978, 82);
         contenedor.add(scroll);
+
+        contrato = new JTextArea();
+        contrato.setEditable(false);
+        contrato.setLineWrap(true);
+        contrato.setWrapStyleWord(true);
+        contrato.setFont(fuente.fuente(4, false));
+        scrollContrato = new JScrollPane(contrato);
+        scrollContrato.setBounds(scroll.getX(), scroll.getY() + scroll.getHeight() + 30, 1100, 250);
+        scrollContrato.setVisible(false);
+        contenedor.add(scrollContrato);
+    }
+
+    public void cargarContrato(String contra) {
+        contrato.setText(contra);
+        contrato.setCaretPosition(0);
+        scrollContrato.setVisible(true);
+        repaint();
+        revalidate();
     }
 
     public boolean validarCampos() {

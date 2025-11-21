@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import controladorAdministrador.PDF_Administrador.ContratoProveedorPDF;
+import modelo.crudAdministradorSesion.AdministradorDao;
 import modelo.crudProveedor.Proveedor;
 import modelo.crudProveedor.ProveedorDao;
 import vista.componentes.RoundedJXButton;
@@ -20,6 +21,10 @@ public class AccionesContratoProveedor extends AbstractCellEditor implements Tab
     private final RoundedJXButton btnDescargar;
     private int idProveedorActual;
     ProveedorDao proveedorDao = new ProveedorDao();
+    AdministradorDao adminDao = new AdministradorDao();
+    List<Object> admin = new ArrayList<>();
+    private String textoReturnContrato;
+    private ContratoProveedorPDF contratoProveedorPDF = new ContratoProveedorPDF();
 
     public AccionesContratoProveedor() {
         panel = new JPanel();
@@ -45,40 +50,67 @@ public class AccionesContratoProveedor extends AbstractCellEditor implements Tab
 
         // Evento botón Aprobar
         btnVisualizar.addActionListener(e -> {
-            System.out.println("El id del proveedor actual es: " + proveedores.get(0).getNombre());
-        });
-
-        // Evento botón Rechazar
-        btnDescargar.addActionListener(e -> {
-            if (proveedores.isEmpty())
+            if (proveedores.isEmpty()) {
                 return;
 
+            }
             Proveedor p = proveedores.get(0);
 
             Map<String, String> datos = new HashMap<>();
-            datos.put("NOMBRE_ADMIN", "Carlos Quiñones");
-            datos.put("DOCU_ADMIN", "123456789");
+            datos.put("NOMBRE_ADMIN", admin.get(1).toString() + " " + admin.get(2).toString());
+            datos.put("DOCU_ADMIN", admin.get(0).toString());
             datos.put("NOMBRE_PROVEEDOR", p.getNombre());
             datos.put("NUMERO_DOC_PRO", p.getDocumento());
             datos.put("DIRECCION_PRO", p.getDireccion());
             datos.put("PRODUCTO_PRO", p.getProducto());
-            // datos.put("PRECIO_PRO", String.valueOf(p.getPrecio()));
-            // datos.put("METODO_PAGO_PRO", p.getMetodoPago());
+            datos.put("PRECIO_PRO", String.valueOf(p.getPrecioProducto()));
+            datos.put("METODO_PAGO_PRO", p.getMetodoPagoVarchar());
+            datos.put("NUMERO_DIA", "20");
+            datos.put("MES", "Noviembre");
+            datos.put("ANO", "2026");
+
+            try {
+                textoReturnContrato = contratoProveedorPDF.cargarContratoReemplazado(datos);
+            } catch (Exception ex) {
+                System.out.println("Error al generar el contrato PDF: " + ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Error al generar el contrato para visualizar.");
+            }
+            fireEditingStopped();
+        });
+
+        // Evento botón Rechazar
+        btnDescargar.addActionListener(e ->
+
+        {
+            if (proveedores.isEmpty()) {
+                return;
+
+            }
+            Proveedor p = proveedores.get(0);
+
+            Map<String, String> datos = new HashMap<>();
+            datos.put("NOMBRE_ADMIN", admin.get(1).toString() + " " + admin.get(2).toString());
+            datos.put("DOCU_ADMIN", admin.get(0).toString());
+            datos.put("NOMBRE_PROVEEDOR", p.getNombre());
+            datos.put("NUMERO_DOC_PRO", p.getDocumento());
+            datos.put("DIRECCION_PRO", p.getDireccion());
+            datos.put("PRODUCTO_PRO", p.getProducto());
+            datos.put("PRECIO_PRO", String.valueOf(p.getPrecioProducto()));
+            datos.put("METODO_PAGO_PRO", p.getMetodoPagoVarchar());
             datos.put("NUMERO_DIA", "20");
             datos.put("MES", "Noviembre");
             datos.put("ANO", "2025");
 
             try {
                 ContratoProveedorPDF.generarPDFDesdeTXT(
-                        "C:/plantillas/Contrato_proveedor.txt",
-                        "C:/contratos/Contrato_" + p.getId() + ".pdf",
+                        "Contrato_" + proveedores.get(0).getNombre() + " " + System.currentTimeMillis() + ".pdf",
                         datos);
 
-                JOptionPane.showMessageDialog(null, "Contrato PDF generado correctamente.");
+                JOptionPane.showMessageDialog(null, "Contrato PDF generado correctamente en la carpeta Descargas.");
 
             } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Error al generar el PDF.");
+                System.out.println("Error al generar el contrato PDF: " + ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Error al generar el contrato PDF.");
             }
         });
     }
@@ -99,6 +131,7 @@ public class AccionesContratoProveedor extends AbstractCellEditor implements Tab
                 idProveedorActual = Integer.parseInt(value.toString());
                 String proveedor = Integer.toString(idProveedorActual);
                 proveedores = proveedorDao.listarProveedorPorID(proveedor);
+                admin = adminDao.lista();
             } catch (NumberFormatException e) {
                 idProveedorActual = -1;
             }
@@ -114,4 +147,7 @@ public class AccionesContratoProveedor extends AbstractCellEditor implements Tab
 
     private List<Proveedor> proveedores = new ArrayList<>();
 
+    public String textoParaVisualizar() {
+        return textoReturnContrato;
+    }
 }

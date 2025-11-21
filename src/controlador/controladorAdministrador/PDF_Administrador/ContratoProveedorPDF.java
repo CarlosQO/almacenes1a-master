@@ -10,10 +10,14 @@ import java.util.Map;
 
 public class ContratoProveedorPDF {
 
-    public static void generarPDFDesdeTXT(String rutaPlantilla, String rutaSalidaPDF, Map<String, String> datos)
-            throws Exception {
+    private static final String RUTA_PLANTILLA = "C:\\Users\\ASUS VIVOBOOK\\Documents\\NetBeansProjects\\almacenes1a-master\\src\\contrato\\Contrato_proveedor.txt";
 
-        String texto = new String(Files.readAllBytes(Paths.get(rutaPlantilla)), "UTF-8");
+    public static void generarPDFDesdeTXT(String nombreArchivoPDF, Map<String, String> datos) throws Exception {
+
+        String rutaDescargas = System.getProperty("user.home") + "\\Downloads\\";
+        String rutaSalidaPDF = rutaDescargas + nombreArchivoPDF;
+
+        String texto = new String(Files.readAllBytes(Paths.get(RUTA_PLANTILLA)), "UTF-8");
 
         for (String key : datos.keySet()) {
             texto = texto.replace("{{" + key + "}}", datos.get(key));
@@ -24,16 +28,26 @@ public class ContratoProveedorPDF {
 
         document.open();
 
-        // Fuente básica
         Font font = new Font(Font.HELVETICA, 11);
+        Paragraph p = new Paragraph(texto, font);
+        p.setAlignment(Element.ALIGN_JUSTIFIED);
 
-        // Crear párrafo completo
-        Paragraph parrafo = new Paragraph(texto, font);
-        parrafo.setAlignment(Element.ALIGN_JUSTIFIED);
-
-        // Agregar al PDF
-        document.add(parrafo);
-
+        document.add(p);
         document.close();
+    }
+
+    public String cargarContratoReemplazado(Map<String, String> datos) throws Exception {
+
+        String ruta = "C:\\Users\\ASUS VIVOBOOK\\Documents\\NetBeansProjects\\almacenes1a-master\\src\\contrato\\Contrato_proveedor.txt";
+
+        // Leer todo el archivo
+        String texto = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get(ruta)), "UTF-8");
+
+        // Reemplazar variables {{VARIABLE}}
+        for (String key : datos.keySet()) {
+            texto = texto.replace("{{" + key + "}}", datos.get(key));
+        }
+
+        return texto;
     }
 }
