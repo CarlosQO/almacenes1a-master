@@ -10,4 +10,6 @@ public interface CrudReposicion<T> {
 
     public boolean actualizarEstado(int idSolicitud);
 
+    public void actualizarCantidadProduc(int cantidadProd, int idProducto);
+
 }

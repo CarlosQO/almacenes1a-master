@@ -92,4 +92,21 @@ public class ReposicionDao implements CrudReposicion<Reposicion> {
             return false;
         }
     }
+
+    @Override
+    public void actualizarCantidadProduc(int cantidadProd, int idProducto) {
+        String sql = "UPDATE producto SET cantidad= cantidad + ? WHERE id = ?";
+
+        try (Connection con = Conexion.getInstance().getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, cantidadProd);
+            ps.setInt(2, idProducto);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "Error al actualizar estado", JOptionPane.ERROR_MESSAGE);
+
+        }
+    }
 }
