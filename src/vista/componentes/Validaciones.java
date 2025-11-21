@@ -40,6 +40,14 @@ public class Validaciones {
         return cedula.matches(patron);
     }
 
+    public static boolean validarCedulayNIT(String cedula) {
+        String patron = "^[0-9]{8,11}$";
+        if (cedula == null || cedula.trim().isEmpty()) {
+            return false;
+        }
+        return cedula.matches(patron);
+    }
+
     public static boolean validarContrasena(String contrasena) {
         String patron = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&.,_-]{8,}$";
         if (contrasena == null || contrasena.trim().isEmpty()) {

@@ -5,7 +5,7 @@ import java.sql.Connection;
 
 public class Conexion {
     private static Conexion instance;
-    private final String url = "jdbc:mysql://localhost:3306/bd_almacenes1a";
+    private final String url = "jdbc:mysql://localhost:3306/bd_almacenes1anorbi";
     private final String user = "root";
     private final String pass = "";
 

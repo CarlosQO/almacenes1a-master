@@ -78,7 +78,7 @@ public class PaginaDeshabilitarProveedor extends JFrame {
         busqueda.setFont(fuente.fuente(3, false));
         busqueda.setBackground(null);
         busqueda.setBorder(null);
-        limitarCaracteres(busqueda, 10);
+        limitarCaracteres(busqueda, 11);
         busqueda.setBounds(8, 5, 270, 40);
         panelBusqueda.add(busqueda);
 

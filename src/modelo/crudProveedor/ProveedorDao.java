@@ -184,8 +184,9 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
         try {
             Connection con = Conexion.getInstance().getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
+            String nit = Integer.toString(id);
             ps.setInt(1, estado);
-            ps.setInt(2, id);
+            ps.setString(2, nit);
             return ps.executeUpdate();
         } catch (Exception e) {
             System.out.println("Error al cambiar el estado del proveedor: " + e.getMessage());

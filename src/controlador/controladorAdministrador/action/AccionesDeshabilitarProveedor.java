@@ -36,6 +36,7 @@ public class AccionesDeshabilitarProveedor extends AbstractCellEditor implements
                     "Confirmar Deshabilitación",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
+                
                 int result = proveedorDao.CambiarEstado(idProveedorActual, 2);
                 if (result != 0) {
                     JOptionPane.showMessageDialog(null, "Se Deshabilito correctamente el proveedor");

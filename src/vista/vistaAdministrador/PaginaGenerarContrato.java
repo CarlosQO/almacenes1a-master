@@ -127,7 +127,7 @@ public class PaginaGenerarContrato extends JFrame {
     }
 
     public boolean validarCampos() {
-        if (!Validaciones.validarCedula(contratoDoc.getText())) {
+        if (!Validaciones.validarCedulayNIT(contratoDoc.getText())) {
             JOptionPane.showMessageDialog(null, "El Documento o NIT no es valido, debe ser numerico", "Error",
                     JOptionPane.WARNING_MESSAGE);
             return false;
