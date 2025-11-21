@@ -45,4 +45,6 @@ public interface CrudProducto<P> {
         public List<Producto> informacionDeUnProducto(int id);
 
         public int obtenerCantidadCategoriasConProductos();
+
+        public void registrarProductoEnVentas(int idProducto, int cantidad);
 }

@@ -356,6 +356,22 @@ public class ProductoDao implements CrudProducto<Producto> {
             ps.setInt(2, idProducto);
             ps.setInt(1, cantidad);
             ps.executeUpdate();
+            registrarProductoEnVentas(idProducto, cantidad);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString(), "Error de Consulta(Guardar Historia de venta)",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    @Override
+    public void registrarProductoEnVentas(int idProducto, int cantidad) {
+         String sql = "INSERT INTO ventas (idProducto, cantidadVentas) VALUES (?, ?)";
+        try (
+                Connection con = Conexion.getInstance().getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);) {
+            ps.setInt(2, idProducto);
+            ps.setInt(1, cantidad);
+            ps.executeUpdate();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString(), "Error de Consulta(Guardar Historia de venta)",
                     JOptionPane.ERROR_MESSAGE);
