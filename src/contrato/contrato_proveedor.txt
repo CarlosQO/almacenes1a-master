@@ -1,0 +1,81 @@
+CONTRATO
+
+Almacenes 1A identificada con NIT No. 000000000, con domicilio en CDTI SENA, 
+representada por su administrador, el/la señor(a) {{NOMBRE_ADMIN}}, 
+quien en adelante se denominará “EL COMPRADOR”,
+
+Y
+
+{{NOMBRE_PROVEEDOR}}, identificado {{NUMERO_DOC_PRO}}, 
+con domicilio en {{DIRECCION_PRO}}, quien actúa como proveedor individual 
+y en adelante se denominará “EL PROVEEDOR”,
+
+se acuerda el siguiente contrato de suministro, regido por las siguientes cláusulas:
+
+
+-------------------------------------------------------------
+1. OBJETO DEL CONTRATO
+-------------------------------------------------------------
+
+EL PROVEEDOR se compromete a suministrar los productos acordados con 
+EL COMPRADOR, conforme a las especificaciones descritas a continuación:
+
+Producto(s): {{PRODUCTO_PRO}}
+Cantidades: No definido
+
+
+-------------------------------------------------------------
+2. APROBACIÓN DEL PROVEEDOR
+-------------------------------------------------------------
+
+Este contrato entra en vigencia únicamente una vez que EL ADMINISTRADOR 
+apruebe formalmente al proveedor y registre su información en el sistema.
+
+La aprobación podrá ser retirada o dada de baja por incumplimiento 
+de criterios internos establecidos por el administrador.
+
+
+-------------------------------------------------------------
+3. PRECIO Y PAGOS
+-------------------------------------------------------------
+
+El valor acordado por cada producto será de {{PRECIO_PRO}}.
+
+EL COMPRADOR realizará el pago por medio de {{METODO_PAGO_PRO}}.
+
+
+-------------------------------------------------------------
+4. ENTREGAS
+-------------------------------------------------------------
+
+Las entregas deberán hacerse en la dirección indicada por EL COMPRADOR:  
+CDTI SENA.
+
+
+-------------------------------------------------------------
+5. TERMINACIÓN DEL CONTRATO
+-------------------------------------------------------------
+
+Este contrato podrá ser terminado cuando EL PROVEEDOR incumpla 
+los criterios internos de cumplimiento establecidos por EL COMPRADOR.
+
+
+-------------------------------------------------------------
+6. FIRMA DEL CONTRATO
+-------------------------------------------------------------
+
+Firmado en Cali, a los {{NUMERO_DIA}} días del mes de {{MES}} de {{ANO}}.
+
+
+_____________________________
+EL COMPRADOR  
+Firma: {{NOMBRE_ADMIN}}
+Nombre del administrador: {{NOMBRE_ADMIN}}
+Documento de identidad: {{DOCU_ADMIN}}
+
+
+_____________________________
+EL PROVEEDOR  
+Firma: {{NOMBRE_PROVEEDOR}}
+Nombre: {{NOMBRE_PROVEEDOR}}
+Documento de identidad (si aplica): {{NUMERO_DOC_PRO}}
