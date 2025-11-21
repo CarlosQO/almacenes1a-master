@@ -46,7 +46,7 @@ public class ControladorCatalogo implements ActionListener {
     private DaoCarrito daoCarrito;
     private ProductoDao daoProducto;
     private ScrollPersonalizado scrollPersonalizado;
-    private PasarelaPagosVista pasarela;
+    private PasarelaPagosVista pasarela = new PasarelaPagosVista();
     private Tarjetas tarjeta;
     private Consignacion tarjetaConsignacion;
     private BilleterElectronica tarjetaBilletera;

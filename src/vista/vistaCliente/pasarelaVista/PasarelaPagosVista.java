@@ -13,6 +13,8 @@ public class PasarelaPagosVista {
     JLabel titulo;
     public JButton btnTarjetaCredito, btnTarjetaDebito, btnConsignacion, btnBilletera;
 
+    public PasarelaPagosVista(){}
+
     public PasarelaPagosVista(JFrame frame) {
         dialogo = new JDialog(frame, "Método de pago", true); // modal
         dialogo.setLayout(null);

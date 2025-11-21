@@ -81,8 +81,7 @@ public class ControladorActividad implements ActionListener {
         for (modelo.crudActividad.Pedido p : listaPedido) {
             List<ProductoDetalleFactura> productos = daoHistoria.obtenerDetallesCompra(p.getIdFactura());
             int tamañoPanelProductos = productos.size() * 30;
-            TarjetasHistorial tarjeta = new TarjetasHistorial(p.getFecha(), tamañoPanelProductos, p.getTotal(),
-                    p.getEstado());
+            TarjetasHistorial tarjeta = new TarjetasHistorial(p.getFecha(), tamañoPanelProductos, p.getTotal(), p.getEstado());
 
             int y = 0;
             for (ProductoDetalleFactura pd : productos) {
@@ -106,19 +105,19 @@ public class ControladorActividad implements ActionListener {
             tarjeta.getPanelHistorial().setBounds(65, yTarjeta, 550, tamañoPanelProductos + 120);
             panelPrincipal.panelActividadCentrado.add(tarjeta.getPanelHistorial());
             yTarjeta += tamañoPanelProductos + 140;
-            alturaExtra += y;
+            alturaExtra += y*4;
         }
-        yTarjeta += alturaExtra;
 
         int numeroTarjetas = listaPedido.size();
-        if (numeroTarjetas > 0 && numeroTarjetas > 3) {
+        yTarjeta += alturaExtra;
+        if ( numeroTarjetas > 2) {
             panelPrincipal.panelActividadCentrado.setBounds(0, 0, 680, yTarjeta);
             panelPrincipal.panelActividadCentrado.setPreferredSize(new Dimension(680, yTarjeta));
 
             scroll = new ScrollPersonalizado(panelPrincipal.panelActividadCentrado, "vertical", 680, 700);
             scroll.setBounds(150, 250, 680, 700);
             panelPrincipal.panelCentroContenido.add(scroll);
-        } else {
+        } else if (numeroTarjetas >0) {
             // Mostrar sin scroll
             panelPrincipal.panelActividadCentrado.setBounds(150, 240, 680, 700);
             panelPrincipal.panelCentroContenido.add(panelPrincipal.panelActividadCentrado);

@@ -72,7 +72,7 @@ public class ControladorHistorial implements ActionListener {
         panelPrincipal.panelHistorialCentrado.setBackground(new Color(180, 230, 255));
         panelPrincipal.panelHistorialCentrado.setLayout(null);
 
-        int yTarjeta = 10, alturaExtra = 0;
+        int yTarjeta = 10;
         // Obtener pedidos
         List<Pedido> listaPedido = daoFactura.obtenerHistorialComprasFacturas(idUsuario, fechaInicio, fechaFin);
 
@@ -101,26 +101,29 @@ public class ControladorHistorial implements ActionListener {
 
                 y += 30;
             }
-            tarjeta.getTarjetafactura().setBounds(65, yTarjeta, 550, tamañoPanelProductos + 150);
+            int alturaTarjeta = tamañoPanelProductos + 150;
+            tarjeta.getTarjetafactura().setBounds(65, yTarjeta, 550, alturaTarjeta);
             panelPrincipal.panelHistorialCentrado.add(tarjeta.getTarjetafactura());
 
             tarjeta.getBtnDescargarFactura().addActionListener(eGenerarFactura -> {
                 generarFactura(fechaInicio, fechaFin, p.getIdFactura(), productos, p.getTotal());
             });
 
-            yTarjeta += tamañoPanelProductos + 200;
-            alturaExtra += y;
+            yTarjeta += alturaTarjeta + 50;
+            
         }
-        yTarjeta += alturaExtra;
+       
 
         int numeroTarjetas = listaPedido.size();
-        if (numeroTarjetas > 0 && numeroTarjetas > 1) {
-            panelPrincipal.panelHistorialCentrado.setBounds(0, 0, 680, yTarjeta);
+         yTarjeta += numeroTarjetas*100;
+        if (numeroTarjetas > 2) {
+            //panelPrincipal.panelHistorialCentrado.setBounds(0, 0, 680, yTarjeta);
+            int alturaReal = panelPrincipal.panelHistorialCentrado.getPreferredSize().height;
             panelPrincipal.panelHistorialCentrado.setPreferredSize(new Dimension(680, yTarjeta));
             scrollHistorial = new ScrollPersonalizado(panelPrincipal.panelHistorialCentrado, "vertical", 680, 700);
             scrollHistorial.setBounds(150, 200, 680, 700);
             panelPrincipal.panelCentroContenido.add(scrollHistorial);
-        } else {
+        } else if (numeroTarjetas > 0) {
             // Mostrar sin scroll
             panelPrincipal.panelHistorialCentrado.setBounds(150, 240, 680, 700);
             panelPrincipal.panelCentroContenido.add(panelPrincipal.panelHistorialCentrado);
