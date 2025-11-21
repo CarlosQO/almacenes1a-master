@@ -19,10 +19,12 @@ import vista.vistaVendedor.VistaVendedor;
 public class ControladorVendedor implements MouseListener {
 
     private VistaVendedor vv = new VistaVendedor();
+    private String idVendedor;
 
-    public ControladorVendedor(VistaVendedor vv) {
+    public ControladorVendedor(VistaVendedor vv, String idVendedor) {
         this.vv = vv;
         vv.setLocationRelativeTo(null);
+        this.idVendedor = idVendedor;
         vv.getPanelRecepcionOrdenes().addMouseListener(this);
         vv.getPanelRecepcionOrdenes().setCursor(new Cursor(Cursor.HAND_CURSOR));
         vv.getPanelBajoStock().addMouseListener(this);
@@ -73,7 +75,7 @@ public class ControladorVendedor implements MouseListener {
 
         vv.setVisible(false);
         RecepcionDeOrdenes vro = new RecepcionDeOrdenes();
-        new controladorRecepcionOrdenes(vro);
+        new controladorRecepcionOrdenes(vro, idVendedor);
         vro.setVisible(true);
 
         vro.addWindowListener(new WindowAdapter() {
@@ -88,7 +90,8 @@ public class ControladorVendedor implements MouseListener {
 
     private void registroProducto() {
         JFrame rp = new JFrame("Registro de Productos");
-        ControladorRegistrarProductos conRegisProd = new ControladorRegistrarProductos(rp, 1);
+        ControladorRegistrarProductos conRegisProd = new ControladorRegistrarProductos(rp,
+                Integer.parseInt(idVendedor));
         ModuloRegistrarModulos moduloRegistro = new ModuloRegistrarModulos(rp, conRegisProd.getListarCatgorias());
         rp.setVisible(true);
         configurarCierreVentana(rp);
@@ -97,7 +100,8 @@ public class ControladorVendedor implements MouseListener {
     private void bajoStock() {
 
         JFrame ap = new JFrame("Actualizar de Productos");
-        ControladorActualizarProductos conActualizarProd = new ControladorActualizarProductos(ap, 1);
+        ControladorActualizarProductos conActualizarProd = new ControladorActualizarProductos(ap,
+                Integer.parseInt(idVendedor));
         ModuloActualizarDatosProductos moduloActualizarProductos = new ModuloActualizarDatosProductos(ap,
                 conActualizarProd.getListarCatgorias(), conActualizarProd.getListarEstado());
         ap.setVisible(true);
@@ -111,7 +115,7 @@ public class ControladorVendedor implements MouseListener {
 
         ModuloReposicionArticulos moduloReposicionArticulos = new ModuloReposicionArticulos(sr);
         controladorSolicitudesDeReposicion controladorSolicitudesDeReposicion = new controladorSolicitudesDeReposicion(
-                sr, 1);
+                sr, Integer.parseInt(idVendedor));
         configurarCierreVentana(sr);
 
     }

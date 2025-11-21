@@ -113,7 +113,7 @@ public class PaginaLogin implements ActionListener {
                 break;
             case 3:
                 VistaVendedor vista = new VistaVendedor();
-                ControladorVendedor cv = new ControladorVendedor(vista);
+                ControladorVendedor cv = new ControladorVendedor(vista, login.inputNumero.getText());
                 vista.setResizable(false);
                 vista.setVisible(true);
                 vista.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
