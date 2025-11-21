@@ -34,6 +34,7 @@ public class PaginaHistoricoVentas extends JFrame {
          */
         setSize(1300, 700);
         setLocationRelativeTo(null);
+        setResizable(false);
         contenedor = getContentPane();
         contenedor.setLayout(null);
         contenedor.setBackground(Color.white);

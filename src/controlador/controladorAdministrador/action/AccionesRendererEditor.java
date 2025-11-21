@@ -14,7 +14,7 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
     private final JPanel panel;
     private final RoundedJXButton btnAprobar;
     private final RoundedJXButton btnRechazar;
-    private int idProveedorActual;
+    private long idProveedorActual;
     private AccionProveedorListener listener;
     ProveedorDao proveedorDao = new ProveedorDao();
 
@@ -48,7 +48,7 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
                     "Confirmar Aprobación",
                     JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                String documentoString = Integer.toString(idProveedorActual);
+                String documentoString = Long.toString(idProveedorActual);
                 if (validarQueExistaProveedorAsociadoAlProducto(documentoString)) {
                     int result = proveedorDao.CambiarEstado(idProveedorActual, 2);
                     if (result != 0) {
@@ -117,7 +117,7 @@ public class AccionesRendererEditor extends AbstractCellEditor implements TableC
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         if (value != null) {
             try {
-                idProveedorActual = Integer.parseInt(value.toString());
+                idProveedorActual = Long.parseLong(value.toString());
             } catch (NumberFormatException e) {
                 idProveedorActual = -1;
             }

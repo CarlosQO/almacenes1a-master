@@ -19,7 +19,7 @@ public class AccionesContratoProveedor extends AbstractCellEditor implements Tab
     private final JPanel panel;
     private final RoundedJXButton btnVisualizar;
     private final RoundedJXButton btnDescargar;
-    private int idProveedorActual;
+    private long idProveedorActual;
     ProveedorDao proveedorDao = new ProveedorDao();
     AdministradorDao adminDao = new AdministradorDao();
     List<Object> admin = new ArrayList<>();
@@ -128,8 +128,8 @@ public class AccionesContratoProveedor extends AbstractCellEditor implements Tab
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         if (value != null) {
             try {
-                idProveedorActual = Integer.parseInt(value.toString());
-                String proveedor = Integer.toString(idProveedorActual);
+                idProveedorActual = Long.parseLong(value.toString());
+                String proveedor = Long.toString(idProveedorActual);
                 proveedores = proveedorDao.listarProveedorPorID(proveedor);
                 admin = adminDao.lista();
             } catch (NumberFormatException e) {
