@@ -44,13 +44,13 @@ public class DaoSolicitudesReposicion implements CrudSolicitudesReposicion<Solic
 
 
     @Override
-    public void enviarSolicitud(int idVendedor, int idProducto) {
+    public void enviarSolicitud(String idVendedor, int idProducto) {
         String sql = "INSERT INTO solicitudes_reposicion (id_usuario, id_producto, fecha) VALUES (?, ?, NOW())";
 
         try (Connection conn = Conexion.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, idVendedor); //  el id del vendedor activo
+            ps.setString(1, idVendedor); //  el id del vendedor activo
             ps.setInt(2, idProducto);
 
             ps.executeUpdate();

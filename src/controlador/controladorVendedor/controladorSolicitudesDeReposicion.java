@@ -15,13 +15,13 @@ import java.awt.Dimension;
 
 public class controladorSolicitudesDeReposicion implements ActionListener {
 
-    private int idVendedor;
+    private String idVendedor;
     private DaoSolicitudesReposicion daoSolicitudesReposicion;
     private ModuloReposicionArticulos vistaModuloSolicitudes;
     private ScrollPersonalizado scrollSolicitudes;
     private JFrame frame;
 
-    public controladorSolicitudesDeReposicion(JFrame frame, int idVendedor) {
+    public controladorSolicitudesDeReposicion(JFrame frame, String idVendedor) {
         this.idVendedor = idVendedor;
         this.daoSolicitudesReposicion = new DaoSolicitudesReposicion();
         this.frame = frame;
@@ -110,10 +110,5 @@ public class controladorSolicitudesDeReposicion implements ActionListener {
 
         panelSolicitudes.revalidate();
         panelSolicitudes.repaint();
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Módulo Solicitudes de Reposición");
-        controladorSolicitudesDeReposicion controlador = new controladorSolicitudesDeReposicion(frame, 1002);
     }
 }

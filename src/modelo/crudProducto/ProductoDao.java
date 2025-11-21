@@ -167,8 +167,8 @@ public class ProductoDao implements CrudProducto<Producto> {
             String sql = "SELECT p.id, p.nombre, p.talla, p.imagen, SUM(h.cantidadVenta) AS total_vendidos FROM producto p INNER JOIN histoventas h ON p.id = h.idProducto WHERE h.fecha BETWEEN ? AND ? GROUP BY p.id, p.nombre, p.talla ORDER BY total_vendidos DESC LIMIT 10";
             con = Conexion.getInstance().getConnection();
             ps = con.prepareStatement(sql);
-            ps.setString(1, fechaInicio);
-            ps.setString(2, fechaFin);
+            ps.setString(1, fechaInicio + " 00:00:00");
+            ps.setString(2, fechaFin + " 23:59:59");
             rs = ps.executeQuery();
             while (rs.next()) {
                 Producto p = new Producto();
@@ -193,8 +193,8 @@ public class ProductoDao implements CrudProducto<Producto> {
             String sql = "SELECT p.id, p.nombre, p.talla, p.imagen, SUM(h.cantidadVenta) AS total_vendidos FROM producto p INNER JOIN histoventas h ON p.id = h.idProducto WHERE h.fecha BETWEEN ? AND ? GROUP BY p.id, p.nombre, p.talla ORDER BY total_vendidos ASC LIMIT 10";
             con = Conexion.getInstance().getConnection();
             ps = con.prepareStatement(sql);
-            ps.setString(1, fechaInicio);
-            ps.setString(2, fechaFin);
+            ps.setString(1, fechaInicio + " 00:00:00");
+            ps.setString(2, fechaFin   + " 23:59:59");
             rs = ps.executeQuery();
             while (rs.next()) {
                 Producto p = new Producto();
