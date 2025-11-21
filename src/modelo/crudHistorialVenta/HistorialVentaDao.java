@@ -5,9 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JOptionPane;
-
 import modelo.Conexion;
 
 public class HistorialVentaDao implements CrudHistorialVenta {
@@ -35,7 +32,7 @@ public class HistorialVentaDao implements CrudHistorialVenta {
             ps = con.prepareStatement(sql);
             ps.setString(1, fechaInicio + " 00:00:00");
             ps.setString(2, FechaFin + " 23:59:59");
-            
+
             rs = ps.executeQuery();
             while (rs.next()) {
                 Object[] fila = new Object[6];

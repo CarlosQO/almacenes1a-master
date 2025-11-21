@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import controladorLogin.pr;
 import vista.vistaVendedor.ModuloActualizarDatosProductos;
 import vista.vistaVendedor.ModuloRegistrarModulos;
 import vista.vistaVendedor.ModuloReposicionArticulos;
@@ -15,10 +16,10 @@ import vista.vistaVendedor.RecepcionDeOrdenes;
 import vista.vistaVendedor.VistaVendedor;
 
 public class ControladorVendedor implements MouseListener {
-
+    private String idVendedor;
     private VistaVendedor vv = new VistaVendedor();
 
-    public ControladorVendedor(VistaVendedor vv) {
+    public ControladorVendedor(VistaVendedor vv, String idVendedor) {
         this.vv = vv;
         vv.setLocationRelativeTo(null);
         vv.getPanelRecepcionOrdenes().addMouseListener(this);
@@ -101,7 +102,7 @@ public class ControladorVendedor implements MouseListener {
 
         ModuloReposicionArticulos moduloReposicionArticulos = new ModuloReposicionArticulos(sr);
         controladorSolicitudesDeReposicion controladorSolicitudesDeReposicion = new controladorSolicitudesDeReposicion(
-                sr, "1087790416");
+                sr, idVendedor);
         configurarCierreVentana(sr);
 
     }
@@ -125,5 +126,13 @@ public class ControladorVendedor implements MouseListener {
                 }
             });
         });
+    }
+
+    public void setIdVendedor(String idVendedor) {
+        this.idVendedor = idVendedor;
+    }
+
+    public String getIdVendedor() {
+        return idVendedor;
     }
 }
