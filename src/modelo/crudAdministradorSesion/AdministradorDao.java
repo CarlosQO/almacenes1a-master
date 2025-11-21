@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import modelo.Conexion;
 
@@ -45,4 +47,31 @@ public class AdministradorDao implements CrudAdministrador {
         }
         return -1;
     }
+
+    @Override
+    public List<Object> lista() {
+        List<Object> admin = new ArrayList<>();
+        String sql = "SELECT * FROM usuarios WHERE id_rol = 1";
+        try {
+            con = Conexion.getInstance().getConnection();
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                admin.add(rs.getObject(1));
+                admin.add(rs.getObject(2));
+                admin.add(rs.getObject(3));
+                admin.add(rs.getObject(4));
+                admin.add(rs.getObject(5));
+                admin.add(rs.getObject(6));
+                admin.add(rs.getObject(7));
+                admin.add(rs.getObject(8));
+                admin.add(rs.getObject(9));
+            }
+            return admin;
+        } catch (Exception e) {
+            System.out.println("Error al listar administradores: " + e.getMessage());
+        }
+        return admin;
+    }
+
 }

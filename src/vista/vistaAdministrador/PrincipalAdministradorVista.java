@@ -20,21 +20,22 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import vista.componentes.Header;
 import vista.componentes.ScrollPersonalizado;
 
 public class PrincipalAdministradorVista extends JFrame {
 
         private Container container;
         private JPanel principal, histoContain, proveeContain;
-        private RoundedPanel principalContainer, header, cuerpo;
+        private RoundedPanel principalContainer, headerContain, cuerpo;
         private RoundedPanel carritoContain;
         private JLabel icono, user, titulo, permisos, promociones, reportes, historicos, proveedores, cerrarSesion;
-        private RoundedPanel contratoProvee, modificarInfo;
+        private RoundedPanel modificarInfo;
         public RoundedPanel confiRol, promoContain, producMasVendi, producMenVendi,
                         informeGlobal, histoVentas, historiVentaPeri, historiTendeCompra, aprobarProvee,
-                        habilitarProvee, deshabiliProvee, listaProvee;
-        public JLabel actualizarPerfil;
-        private static boolean carritoBooleano = false;
+                        habilitarProvee, deshabiliProvee, listaProvee, contratoProvee;
+
+        private Header header;
 
         public PrincipalAdministradorVista() throws IOException {
                 super("Almacenes 1A");
@@ -65,102 +66,21 @@ public class PrincipalAdministradorVista extends JFrame {
                 // Ubicarlo centrado
                 principalContainer.setBounds(margenHorizontal, margenVertical - 20, ancho, alto);
 
-                // Agregar el header de la principalContainer
-                header = new RoundedPanel(20, 0xFFFFFF);
-                header.setLayout(null);
-                header.setBackground(Color.WHITE);
-                header.setShadowSize(0);
-                header.setRoundAllCorners(2);
-                header.setBounds(22, 22, (int) principalContainer.getPreferredSize().getWidth() - 43, 80);
+                // Agregar el headerContain de la principalContainer
+                headerContain = new RoundedPanel(20, 0xFFFFFF);
+                headerContain.setLayout(null);
+                headerContain.setBackground(Color.WHITE);
+                headerContain.setShadowSize(0);
+                headerContain.setRoundAllCorners(2);
+                headerContain.setBounds(22, 22, (int) principalContainer.getPreferredSize().getWidth() - 43, 80);
 
-                // carrito de compra
-                carritoContain = new RoundedPanel(40, 0x9E9C9C);
-                carritoContain.setBackground(Color.white);
-                carritoContain.setRoundAllCorners(3);
-                carritoContain.setLayout(null);
-                carritoContain.setShadowSize(1);
-                carritoContain.setBounds(principalContainer.getWidth() - 230, header.getY() + header.getHeight(), 200,
-                                250);
-
-                JLabel miPerfil = new JLabel("Mi Perfil");
-                miPerfil.setFont(fuente(false));
-                miPerfil.setBounds(70, 10, (int) miPerfil.getPreferredSize().getWidth(),
-                                (int) miPerfil.getPreferredSize().getHeight());
-                carritoContain.add(miPerfil);
-
-                JLabel equis = new JLabel("<html><p style='font-Size: 20px;'>X</p></html>");
-                equis.setFont(fuente(false));
-                equis.setBounds(carritoContain.getWidth() - (int) equis.getPreferredSize().getWidth() - 10, 0,
-                                (int) equis.getPreferredSize().getWidth(), (int) equis.getPreferredSize().getHeight());
-                equis.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                equis.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                                carritoContain.setVisible(false);
-                                carritoBooleano = false;
-                                repaint();
-                                revalidate();
-                        }
-                });
-                carritoContain.add(equis);
-
-                // agregar el icono user a mi perfil
-                BufferedImage originalUserCarr = ImageIO.read(new File("src/Iconos/user.png"));
-                ImageIcon imagenUserCarr = resizeImage(originalUserCarr, 70, 70);
-                JLabel userCarrito = new JLabel(imagenUserCarr);
-                userCarrito.setBounds(70, 30, 80, 80);
-                carritoContain.add(userCarrito);
-
-                // agregar el actualizar mi perfil}
-                actualizarPerfil = new JLabel("Actualizar mi Perfil");
-                actualizarPerfil.setFont(fuente(false));
-                actualizarPerfil.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                actualizarPerfil.setBounds(20, 120, (int) actualizarPerfil.getPreferredSize().getWidth(),
-                                (int) actualizarPerfil.getPreferredSize().getHeight());
-                carritoContain.add(actualizarPerfil);
-
-                // agregar cerrar sesion
-                cerrarSesion = new JLabel("Cerrar Sesión");
-                cerrarSesion.setFont(fuente(false));
-                cerrarSesion.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                cerrarSesion.setBounds(20, (int) (carritoContain.getHeight() * 0.8),
-                                (int) cerrarSesion.getPreferredSize().getWidth(),
-                                (int) cerrarSesion.getPreferredSize().getHeight());
-                carritoContain.add(cerrarSesion);
-
-                carritoContain.setVisible(false);
-                principalContainer.add(carritoContain);
-
-                // añadir el icono del almacen de la imagen
-                BufferedImage originalIcon = ImageIO.read(new File("src/Iconos/LogoMejorado.png"));
-                ImageIcon imagen = resizeImage(originalIcon, 70, 70);
-                icono = new JLabel(imagen);
-                icono.setBounds(20, 15, 70, 70);
-                header.add(icono);
-
-                // añadir el icono de usuario
-                BufferedImage originalUser = ImageIO.read(new File("src/Iconos/user.png"));
-                ImageIcon imagenUser = resizeImage(originalUser, 60, 60);
-                user = new JLabel(imagenUser);
-                user.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                user.setBounds((int) header.getPreferredSize().getWidth() - 90, 15, 60, 60);
-                header.add(user);
-                user.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                                if (!carritoBooleano) {
-                                        carritoContain.setVisible(true);
-                                        carritoBooleano = true;
-                                } else {
-                                        carritoContain.setVisible(false);
-                                        carritoBooleano = false;
-                                }
-                                repaint();
-                                revalidate();
-                        }
-                });
-                // añadir el header
-                principalContainer.add(header);
+                header = new Header();
+                header.setBounds(10, 0, headerContain.getWidth() - 10, headerContain.getHeight());
+                header.setBackground(headerContain.getBackground());
+                header.modificarUbicacionUser(1080);
+                headerContain.add(header);
+                // añadir el headerContain
+                principalContainer.add(headerContain);
 
                 // añadir el titulo
                 titulo = new JLabel("Almacenes 1A");
@@ -422,6 +342,7 @@ public class PrincipalAdministradorVista extends JFrame {
 
                 // contratoProvee
                 contratoProvee = new RoundedPanel(20, 0x9E9C9C);
+                contratoProvee.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 contratoProvee.setShadowSize(1);
                 contratoProvee.setLayout(null);
                 contratoProvee.setBackground(Color.white);

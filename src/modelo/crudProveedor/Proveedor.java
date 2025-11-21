@@ -14,6 +14,7 @@ public class Proveedor {
     private String metodoPagoVarchar;
     private String estadoVarchar;
     private int idProducto;
+    private Double precioProducto;
 
     public Proveedor(int id, String tipo, String nombre, String documento, int metodoDePago, String direccion,
             String telefono, String correo, int estado, int idProducto) {
@@ -135,5 +136,13 @@ public class Proveedor {
 
     public void setIdProducto(int idProducto) {
         this.idProducto = idProducto;
+    }
+
+    public Double getPrecioProducto() {
+        return precioProducto;
+    }
+
+    public void setPrecioProducto(Double precioProducto) {
+        this.precioProducto = precioProducto;
     }
 }

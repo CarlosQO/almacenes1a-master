@@ -196,7 +196,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
     @Override
     public List<Proveedor> listarProveedorPorID(String documento) {
         List<Proveedor> proveedores = new ArrayList<>();
-        String sql = "SELECT proveedor.*, producto.nombre AS nombreProduc, metodo_pago.nombre AS metodoPago FROM proveedor INNER JOIN producto ON proveedor.idProducto = producto.id INNER JOIN metodo_pago ON proveedor.metodo_pago = metodo_pago.id WHERE proveedor.documento = ?";
+        String sql = "SELECT proveedor.*, producto.nombre AS nombreProduc, metodo_pago.nombre AS metodoPago, producto.precio AS precio FROM proveedor INNER JOIN producto ON proveedor.idProducto = producto.id INNER JOIN metodo_pago ON proveedor.metodo_pago = metodo_pago.id WHERE proveedor.documento = ?";
         try {
             Connection con = Conexion.getInstance().getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
@@ -216,6 +216,7 @@ public class ProveedorDao implements CrudProveedor<Proveedor> {
                 proveedor.setProducto(rs.getString("nombreProduc"));
                 proveedor.setMetodoPagoVarchar(rs.getString("metodoPago"));
                 proveedor.setIdProducto(rs.getInt("idProducto"));
+                proveedor.setPrecioProducto(rs.getDouble("precio"));
                 proveedores.add(proveedor);
             }
             return proveedores;

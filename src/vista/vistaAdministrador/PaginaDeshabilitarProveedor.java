@@ -130,4 +130,5 @@ public class PaginaDeshabilitarProveedor extends JFrame {
         contenedor.add(containInfo);
 
     }
+
 }
