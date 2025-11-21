@@ -49,8 +49,8 @@ public class HistoricoVentaDao implements CrudHistoricoVenta {
 
             con = Conexion.getInstance().getConnection();
             ps = con.prepareStatement(sql);
-            ps.setString(1, fechaInicio);
-            ps.setString(2, fechaFin);
+            ps.setString(1, fechaInicio + " 00:00:00");
+            ps.setString(2, fechaFin + " 23:59:59");
             rs = ps.executeQuery();
 
             while (rs.next()) {
