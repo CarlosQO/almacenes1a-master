@@ -113,7 +113,7 @@ public class ControladorSoliRepo {
                         String texto = txtCantidad.getText().trim();
                         try {
                             int cantidad = Integer.parseInt(texto);
-                            if (cantidad >= 5) {
+                            if (cantidad > 5) {
                                 // Intentar insertar la reposición en la base de datos
                                 final int idProducto = r.getIdProducto(); // Capturar el ID del producto
                                 final int idSolicitud = r.getIdSolicitudesRepo(); // Capturar el ID de la solicitud
@@ -121,6 +121,9 @@ public class ControladorSoliRepo {
                                         && rpdDao.actualizarEstado(idSolicitud)) {
                                     JOptionPane.showMessageDialog(vsr,
                                             "Se realizo correctamente la reposición");
+
+                                    rpdDao.actualizarCantidadProduc(cantidad, idProducto);
+
                                     // Recargar la lista de solicitudes
                                     vsr.getPanelSoliContent().removeAll();
                                     crearSoliRepo();
