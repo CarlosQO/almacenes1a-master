@@ -4,6 +4,7 @@ import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import modelo.crudPedidos.EstadoPedido;
 import modelo.crudPedidos.Pedido;
+import modelo.crudHistorialVenta.HistorialVentaDao;
 import modelo.crudPedidos.DaoPedido;
 import vista.vistaVendedor.RecepcionDeOrdenes;
 import java.awt.event.ActionEvent;
@@ -13,10 +14,15 @@ import java.util.List;
 public class controladorRecepcionOrdenes {
     private RecepcionDeOrdenes vista;
     private DaoPedido modelo;
+    private HistorialVentaDao historialVentaDao;
+    private String idVendedor;
 
-    public controladorRecepcionOrdenes(RecepcionDeOrdenes vista) {
+    public controladorRecepcionOrdenes(RecepcionDeOrdenes vista, String idVendedor) {
         this.vista = vista;
+        this.idVendedor = idVendedor;
         this.modelo = new DaoPedido();
+        this.historialVentaDao = new HistorialVentaDao();
+        asignarVendedorAOrdenes();
         cargarEstadosEnComboBox();
         configurarEventos();
 
@@ -112,6 +118,8 @@ public class controladorRecepcionOrdenes {
                                             javax.swing.SwingUtilities.invokeLater(() -> {
                                                 actualizarTablaPedidos();
                                             });
+                                            historialVentaDao.registrarVenta(idVendedor, idPedido);
+
                                         }
                                     }
                                 }
@@ -165,5 +173,9 @@ public class controladorRecepcionOrdenes {
         for (EstadoPedido estado : estados) {
             comboBox.addItem(estado.getEstado());
         }
+    }
+
+    private void asignarVendedorAOrdenes() {
+
     }
 }

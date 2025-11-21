@@ -37,7 +37,7 @@ public class ControladorPediEn {
         // Obtener la lista y mostrar su contenido en consola
         List<PedidoSupervisor> lista = rpdDao.listarPE();
         if (lista == null || lista.isEmpty()) {
-            JLabel vacio = new JLabel("No hay reposiciones encontradas.");
+            JLabel vacio = new JLabel("No hay pedidos entregados.");
             vacio.setOpaque(false);
             vpe.getPanelPedido().add(vacio);
         } else {
