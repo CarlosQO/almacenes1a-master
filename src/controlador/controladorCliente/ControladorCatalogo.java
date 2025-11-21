@@ -660,6 +660,10 @@ public class ControladorCatalogo implements ActionListener {
         cargarProductosACarrito();
     }
 
+    public void eliminarProductoDelCarrito(int idProducto, String idUsuario){
+        daoCarrito.eliminarProductoDelCarrito(idProducto,idUsuario);
+    }
+
     // validaciones para permitir hacer la compra y disminucion de stock
     private boolean validarStockProductos(List<ProductosCarrito> listaCarrito, String idUsuario) {
         boolean stockSuficiente = true;
@@ -668,6 +672,10 @@ public class ControladorCatalogo implements ActionListener {
             boolean hayStock = getValidadStockProductos(c.getIdProducto(), c.getCantidadProducto());
             if (!hayStock) {
                 int disponible = getCantidadDisponible(c.getIdProducto());
+                if (disponible <= 0) {
+                    eliminarProductoDelCarrito(c.getIdProducto(),idUsuario);
+                    continue; // pasa al siguiente producto
+                }
                 int opcion = JOptionPane.showConfirmDialog(null,
                         "El producto: " + c.getNombreProducto() + " solo tiene disponible " + disponible + " unidades.\n¿Deseas continuar con la compra?",
                         "Stock insuficiente", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE
@@ -686,13 +694,22 @@ public class ControladorCatalogo implements ActionListener {
         return stockSuficiente;
     }
 
+    public void eliminarPromocionDelCarrito(int idProducto, String idUsuario){
+        daoCarrito.eliminarPromocionDelCarrito(idProducto,idUsuario);
+    }
+
     private boolean validarStockPromociones(List<PromocionCarrito> listaPromocion, String idUsuario) {
         boolean stockSuficiente = true;
 
         for (PromocionCarrito promo : listaPromocion) {
             boolean hayStockPromo = getValidarStockPromocion(promo.getIdPromocion(), promo.getCantidadPromocion());
             if (!hayStockPromo) {
-                int disponiblePromo = getCantidadDisponiblePromocion(promo.getIdPromocion());
+                 int disponiblePromo = getCantidadDisponiblePromocion(promo.getIdPromocion());
+                if (disponiblePromo <= 0) {
+                    eliminarPromocionDelCarrito(promo.getIdPromocion(),idUsuario);
+                    continue; // pasa al siguiente producto
+                }
+               
                 int opcion = JOptionPane.showConfirmDialog(null,
                         "La promoción: " + promo.getNombreProducto() +
                         " solo tiene disponible " + disponiblePromo + " unidades.\n¿Deseas continuar con la compra?",
