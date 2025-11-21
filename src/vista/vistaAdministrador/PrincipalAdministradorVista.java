@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -358,6 +359,7 @@ public class PrincipalAdministradorVista extends JFrame {
 
                 // modificarInfo
                 modificarInfo = new RoundedPanel(20, 0x9E9C9C);
+                modificarInfo.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 modificarInfo.setShadowSize(1);
                 modificarInfo.setLayout(null);
                 modificarInfo.setBackground(Color.white);
@@ -369,6 +371,13 @@ public class PrincipalAdministradorVista extends JFrame {
                                 (int) nomModiInfo.getPreferredSize().getWidth() - 40,
                                 (int) nomModiInfo.getPreferredSize().getHeight() + 40);
                 modificarInfo.add(nomModiInfo);
+                modificarInfo.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                                JOptionPane.showMessageDialog(null, "Por este momento no esta disponible este modulo",
+                                                "modulo no disponible", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                });
                 proveeContain.add(modificarInfo);
 
                 // deshabiliProvee
