@@ -282,6 +282,7 @@ public class Registro extends JFrame {
                 btnRegistrarse.setBounds(confirmarContrasena.getX(), contrasena.getY() + contrasena.getHeight() + 25,
                                 confirmarContrasena.getWidth(), 40);
                 btnRegistrarse.setForeground(Color.white);
+                getRootPane().setDefaultButton(btnRegistrarse);
                 panelDesgradado.add(btnRegistrarse);
 
                 // Agregar el campo para ingresar la direccion

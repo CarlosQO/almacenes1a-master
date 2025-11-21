@@ -1,7 +1,5 @@
 package vista.vistaAdministrador;
 
-import static vista.vistaAdministrador.RoundedPanel.resizeImage;
-
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -9,12 +7,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;

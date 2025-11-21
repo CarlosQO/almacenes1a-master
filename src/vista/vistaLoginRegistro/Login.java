@@ -143,6 +143,7 @@ public class Login extends JFrame {
         btnIniciarSesion.setHoverColor(new Color(0, 140, 255));
         btnIniciarSesion.setBounds(160, campoContra.getY() + 80, 240, 40);
         btnIniciarSesion.setForeground(Color.white);
+        getRootPane().setDefaultButton(btnIniciarSesion);
         panelDesgradado.add(btnIniciarSesion);
 
         // agregar texto para el registro de usuario
