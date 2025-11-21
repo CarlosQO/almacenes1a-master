@@ -25,5 +25,5 @@ public class Seguridad {
         boolean esValida = verificar(contrasena, hash);
         System.out.println("¿La contraseña es válida? " + esValida);
     }
-    
+
 }

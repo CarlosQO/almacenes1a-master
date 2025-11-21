@@ -19,6 +19,7 @@ import modelo.crudUsuario.Usuario;
 import modelo.crudUsuario.UsuarioDao;
 import modelo.crudVendedor.Vendedor;
 import modelo.crudVendedor.VendedorDao;
+import vista.vistaAdministrador.PaginaGenerarContrato;
 import vista.vistaAdministrador.PaginaHistoricoTendenciaCompra;
 import vista.vistaAdministrador.PaginaHistoricoVentas;
 import vista.vistaAdministrador.PaginaProductoMasVendidos;
@@ -77,6 +78,10 @@ public class PaginaPrincipal implements ActionListener {
     public vista.vistaAdministrador.PaginaListarProveedores paginaListarProveedores;
 
     private String idAdministrador;
+
+    // contrato de proveedores
+    public PaginaContratoProveeControlador PContratoProvee;
+    public PaginaGenerarContrato paginaGenerarContrato;
 
     public PaginaPrincipal(PrincipalAdministradorVista p, String id) throws IOException {
         this.principal = p;
@@ -182,6 +187,14 @@ public class PaginaPrincipal implements ActionListener {
                 paginaListarProveedores = new vista.vistaAdministrador.PaginaListarProveedores();
                 controListarProveedor = new PaginaListarProveedor(paginaListarProveedores);
                 configurarCierreVentana(paginaListarProveedores);
+            }
+        });
+        p.contratoProvee.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                paginaGenerarContrato = new PaginaGenerarContrato();
+                PContratoProvee = new PaginaContratoProveeControlador(paginaGenerarContrato);
+                configurarCierreVentana(paginaGenerarContrato);
             }
         });
     }

@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 import org.jdesktop.swingx.JXTextField;
 
 import vista.componentes.CamposConLimite;
+import vista.componentes.OjoLabel;
 import vista.componentes.RoundedJXButton;
 import vista.componentes.RoundedJXPanel;
 import vista.fuenteLetra.Fuente;
@@ -31,6 +32,7 @@ public class Login extends JFrame {
     private RoundedJXPanel panelDesgradado;
     private Fuente fuente = new Fuente();
     public JLabel registrarse;
+    private OjoLabel ojo;
 
     public Login() {
         super("LOGIN");
@@ -121,12 +123,17 @@ public class Login extends JFrame {
         inputContra = new JPasswordField();
         inputContra.setFont(fuente.fuente(4, false));
         inputContra.setForeground(Color.BLACK);
-        inputContra.setBounds(40, 5, 245, 40);
+        inputContra.setBounds(40, 5, 200, 40);
         inputContra.setBackground(new Color(227, 227, 227, 255));
         inputContra.setBorder(null);
         inputContra.setColumns(14);
         CamposConLimite.agregarPlaceholder(inputContra, "contraseña");
+        CamposConLimite.limitarCaracteres(inputContra, 25);
         campoContra.add(inputContra);
+
+        ojo = new OjoLabel(inputContra);
+        ojo.setBounds(inputContra.getWidth() + inputContra.getX() + 20, 15, 40, 20);
+        campoContra.add(ojo);
 
         // agregar el boton de iniciar sesion
         btnIniciarSesion = new RoundedJXButton("Iniciar Sesión");
