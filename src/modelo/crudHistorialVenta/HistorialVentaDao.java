@@ -16,7 +16,7 @@ public class HistorialVentaDao implements CrudHistorialVenta {
     @Override
     public List<Object[]> lista(String fechaInicio, String FechaFin) {
         List<Object[]> datos = new ArrayList<>();
-       try {
+        try {
             String sql = "SELECT "
                     + "h.idHistoVenta, "
                     + "p.nombre AS producto, "

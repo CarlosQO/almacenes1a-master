@@ -8,7 +8,6 @@ import java.awt.event.MouseListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import controladorLogin.pr;
 import vista.vistaVendedor.ModuloActualizarDatosProductos;
 import vista.vistaVendedor.ModuloRegistrarModulos;
 import vista.vistaVendedor.ModuloReposicionArticulos;
@@ -18,7 +17,6 @@ import vista.vistaVendedor.VistaVendedor;
 public class ControladorVendedor implements MouseListener {
     private String idVendedor;
     private VistaVendedor vv = new VistaVendedor();
-    private String idVendedor;
 
     public ControladorVendedor(VistaVendedor vv, String idVendedor) {
         this.vv = vv;
@@ -106,7 +104,7 @@ public class ControladorVendedor implements MouseListener {
 
         ModuloReposicionArticulos moduloReposicionArticulos = new ModuloReposicionArticulos(sr);
         controladorSolicitudesDeReposicion controladorSolicitudesDeReposicion = new controladorSolicitudesDeReposicion(
-                sr, 1);
+                sr, idVendedor);
         configurarCierreVentana(sr);
 
     }
