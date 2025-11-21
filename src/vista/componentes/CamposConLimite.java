@@ -41,6 +41,32 @@ public class CamposConLimite {
         });
     }
 
+    public static void limitarCaracteres(JPasswordField campo, int limite) {
+        ((AbstractDocument) campo.getDocument()).setDocumentFilter(new DocumentFilter() {
+
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+                    throws BadLocationException {
+                if (fb.getDocument().getLength() + string.length() <= limite) {
+                    super.insertString(fb, offset, string, attr);
+                } else {
+                    Toolkit.getDefaultToolkit().beep();
+                }
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                    throws BadLocationException {
+                if (fb.getDocument().getLength() - length + text.length() <= limite) {
+                    super.replace(fb, offset, length, text, attrs);
+                } else {
+                    Toolkit.getDefaultToolkit().beep();
+                }
+            }
+
+        });
+    }
+
     public static void agregarPlaceholder(JPasswordField field, String placeholder) {
         field.setText(placeholder);
         field.setForeground(java.awt.Color.GRAY);
