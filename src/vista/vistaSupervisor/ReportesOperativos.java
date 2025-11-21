@@ -106,7 +106,7 @@ public class ReportesOperativos extends JFrame {
 
         int añoActual = Calendar.getInstance().get(Calendar.YEAR);
         cBAño = new JComboBox<>();
-        for (int año = 2005; año <= 2100; año++) {
+        for (int año = 2025; año <= añoActual; año++) {
             cBAño.addItem(año);
         }
         cBAño.setSelectedItem(añoActual);

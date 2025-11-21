@@ -21,11 +21,12 @@ public class ControladorActualizarProductos implements ActionListener {
     private DaoCategoriaProductos daoCategoria;
     private ProductoDao daoProducto;
     private DaoEstadosProductos daoEstadoProductos;
-    private String urlImagen; 
+    private String urlImagen;
 
     public ControladorActualizarProductos(JFrame frame, int idVendedor) {
         this.frame = frame;
         this.idVendedor = idVendedor;
+        frame.setResizable(false);
         daoCategoria = new DaoCategoriaProductos();
         daoProducto = new ProductoDao();
         daoEstadoProductos = new DaoEstadosProductos();
@@ -66,7 +67,8 @@ public class ControladorActualizarProductos implements ActionListener {
                 Producto p = infoProducto.get(0);
 
                 if (moduloActualizarDatosProductos.formularioActualizar != null) {
-                    moduloActualizarDatosProductos.remove(moduloActualizarDatosProductos.formularioActualizar.getPanelFormulario());
+                    moduloActualizarDatosProductos
+                            .remove(moduloActualizarDatosProductos.formularioActualizar.getPanelFormulario());
                     moduloActualizarDatosProductos.formularioActualizar = null;
                     moduloActualizarDatosProductos.revalidate();
                     moduloActualizarDatosProductos.repaint();
@@ -83,10 +85,12 @@ public class ControladorActualizarProductos implements ActionListener {
                 // Llenar los campos con la info del producto
                 moduloActualizarDatosProductos.formularioActualizar.getTxtNombre().setText(p.getNombre());
                 moduloActualizarDatosProductos.formularioActualizar.getTxtDescripcion().setText(p.getDescripcion());
-                moduloActualizarDatosProductos.formularioActualizar.getTxtPrecioVenta() .setText(String.valueOf(p.getPrecio()));
+                moduloActualizarDatosProductos.formularioActualizar.getTxtPrecioVenta()
+                        .setText(String.valueOf(p.getPrecio()));
                 // cantidad e imagen se pueden llenar si los tienes en Producto
                 if (moduloActualizarDatosProductos.formularioActualizar.getTxtCantidad() != null) {
-                    moduloActualizarDatosProductos.formularioActualizar.getTxtCantidad().setText(String.valueOf(p.getCantidad()));
+                    moduloActualizarDatosProductos.formularioActualizar.getTxtCantidad()
+                            .setText(String.valueOf(p.getCantidad()));
                 }
                 moduloActualizarDatosProductos.formularioActualizar.lblImagenSeleccionada.setText(p.getImagen());
                 moduloActualizarDatosProductos.formularioActualizar.setUrlImagen(p.getImagen());
@@ -112,9 +116,10 @@ public class ControladorActualizarProductos implements ActionListener {
                     }
                 }
 
-                //seleccionar la talla correspondiente en el combo
+                // seleccionar la talla correspondiente en el combo
                 String tallaProducto = p.getTalla();
-                for (int i = 0; i < moduloActualizarDatosProductos.formularioActualizar.getComboTalla().getItemCount(); i++) {
+                for (int i = 0; i < moduloActualizarDatosProductos.formularioActualizar.getComboTalla()
+                        .getItemCount(); i++) {
                     String item = moduloActualizarDatosProductos.formularioActualizar.getComboTalla().getItemAt(i);
                     if (item.equalsIgnoreCase(tallaProducto)) {
                         moduloActualizarDatosProductos.formularioActualizar.getComboTalla().setSelectedIndex(i);
@@ -123,7 +128,8 @@ public class ControladorActualizarProductos implements ActionListener {
                 }
                 // Hacer visible el panel del formulario
                 moduloActualizarDatosProductos.formularioActualizar.getPanelFormulario().setVisible(true);
-                moduloActualizarDatosProductos.add(moduloActualizarDatosProductos.formularioActualizar.getPanelFormulario());
+                moduloActualizarDatosProductos
+                        .add(moduloActualizarDatosProductos.formularioActualizar.getPanelFormulario());
                 moduloActualizarDatosProductos.revalidate();
                 moduloActualizarDatosProductos.repaint();
 
@@ -144,10 +150,12 @@ public class ControladorActualizarProductos implements ActionListener {
         // obtiene los datos desde los campos de texto
         String nombre = moduloActualizarDatosProductos.formularioActualizar.getTxtNombre().getText().trim();
         String descripcion = moduloActualizarDatosProductos.formularioActualizar.getTxtDescripcion().getText().trim();
-        double precio = Double.parseDouble(moduloActualizarDatosProductos.formularioActualizar.getTxtPrecioVenta().getText().trim());
+        double precio = Double
+                .parseDouble(moduloActualizarDatosProductos.formularioActualizar.getTxtPrecioVenta().getText().trim());
         String imagen = moduloActualizarDatosProductos.formularioActualizar.getUrlImagen();
         String talla = (String) moduloActualizarDatosProductos.formularioActualizar.getComboTalla().getSelectedItem();
-        String categoriaSeleccionada = (String) moduloActualizarDatosProductos.formularioActualizar.getComboCategoria().getSelectedItem();
+        String categoriaSeleccionada = (String) moduloActualizarDatosProductos.formularioActualizar.getComboCategoria()
+                .getSelectedItem();
         int idCategoria = -1;
 
         for (Map.Entry<Integer, String> entry : getListarCatgorias().entrySet()) {
@@ -157,7 +165,8 @@ public class ControladorActualizarProductos implements ActionListener {
             }
         }
 
-        String estadoSeleccionada = (String) moduloActualizarDatosProductos.formularioActualizar.getComboEstado().getSelectedItem();
+        String estadoSeleccionada = (String) moduloActualizarDatosProductos.formularioActualizar.getComboEstado()
+                .getSelectedItem();
         int idEstado = -1;
 
         for (Map.Entry<Integer, String> entry : getListarEstado().entrySet()) {
@@ -166,7 +175,8 @@ public class ControladorActualizarProductos implements ActionListener {
                 break;
             }
         }
-        daoProducto.actualizarDatosProducto(idProducto, nombre, precio, descripcion, talla, imagen, idCategoria, idEstado);
+        daoProducto.actualizarDatosProducto(idProducto, nombre, precio, descripcion, talla, imagen, idCategoria,
+                idEstado);
         return true;
     }
 
@@ -201,7 +211,6 @@ public class ControladorActualizarProductos implements ActionListener {
     public String getUrlImagen() {
         return urlImagen;
     }
-
 
     public int getIdVendedor() {
         return idVendedor;

@@ -22,6 +22,7 @@ public class ControladorRegistrarProductos implements ActionListener {
     public ControladorRegistrarProductos(JFrame frame, int idVendedor) {
         this.frame = frame;
         this.idVendedor = idVendedor;
+        frame.setResizable(false);
         daoCategoria = new DaoCategoriaProductos();
         daoProducto = new ProductoDao();
         cargarModuloProductos();
@@ -59,12 +60,14 @@ public class ControladorRegistrarProductos implements ActionListener {
         String nombre = moduloRegistroProductos.formularioRegistro.getTxtNombre().getText().trim();
         String descripcion = moduloRegistroProductos.formularioRegistro.getTxtDescripcion().getText().trim();
         int cantidad = Integer.parseInt(moduloRegistroProductos.formularioRegistro.getTxtCantidad().getText().trim());
-        double precio = Double.parseDouble(moduloRegistroProductos.formularioRegistro.getTxtPrecioVenta().getText().trim());
+        double precio = Double
+                .parseDouble(moduloRegistroProductos.formularioRegistro.getTxtPrecioVenta().getText().trim());
         String talla = (String) moduloRegistroProductos.formularioRegistro.getComboTalla().getSelectedItem();
 
         String imagen = moduloRegistroProductos.formularioRegistro.getUrlImagen();
 
-        String categoriaSeleccionada = (String) moduloRegistroProductos.formularioRegistro.getComboCategoria().getSelectedItem();
+        String categoriaSeleccionada = (String) moduloRegistroProductos.formularioRegistro.getComboCategoria()
+                .getSelectedItem();
         int idCategoria = -1;
 
         for (Map.Entry<Integer, String> entry : getListarCatgorias().entrySet()) {

@@ -9,11 +9,12 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 public class PasarelaPagosVista {
-    public JDialog dialogo;
+    public static JDialog dialogo;
     JLabel titulo;
     public JButton btnTarjetaCredito, btnTarjetaDebito, btnConsignacion, btnBilletera;
 
-    public PasarelaPagosVista(){}
+    public PasarelaPagosVista() {
+    }
 
     public PasarelaPagosVista(JFrame frame) {
         dialogo = new JDialog(frame, "Método de pago", true); // modal

@@ -21,6 +21,7 @@ public class ModuloReposicionArticulos extends JPanel {
         setLayout(null);
         setBackground(Color.WHITE);
         setSize(1300, 700);
+        
 
         // encabezado
         header = new Header();

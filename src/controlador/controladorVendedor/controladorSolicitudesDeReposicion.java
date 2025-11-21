@@ -25,6 +25,7 @@ public class controladorSolicitudesDeReposicion implements ActionListener {
         this.idVendedor = idVendedor;
         this.daoSolicitudesReposicion = new DaoSolicitudesReposicion();
         this.frame = frame;
+        frame.setResizable(false);
         cargarModuloReposicion();
     }
 
