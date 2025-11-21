@@ -37,7 +37,7 @@ public class ControladorPediNoEn {
         // Obtener la lista y mostrar su contenido en consola
         List<PedidoSupervisor> lista = rpdDao.listarPNoE();
         if (lista == null || lista.isEmpty()) {
-            JLabel vacio = new JLabel("No hay pedidos.");
+            JLabel vacio = new JLabel("No hay pedidos no entregados.");
             vacio.setOpaque(false);
             vacio.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
             vpnoe.getPanelPedidoNoE().add(vacio);

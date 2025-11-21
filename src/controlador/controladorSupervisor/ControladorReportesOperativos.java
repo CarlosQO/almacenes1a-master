@@ -51,8 +51,6 @@ public class ControladorReportesOperativos {
 
             if (añoRow == (añoSeleccionado != null ? añoSeleccionado : añoRow)
                     && mesRow == mesSeleccionado) {
-
-                System.out.println(df.format(reporte.getMonto()));
                 Object[] fila = new Object[] {
                         "", // ID (oculto)
                         reporte.getConcepto(),
