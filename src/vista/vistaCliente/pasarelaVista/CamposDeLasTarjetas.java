@@ -2,12 +2,15 @@ package vista.vistaCliente.pasarelaVista;
 
 import java.awt.Font;
 import java.util.Map;
-
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.awt.Color;
 import java.util.List;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+
 
 public class CamposDeLasTarjetas {
     private Font fuenteLabel = new Font("Arial", Font.BOLD, 13);
@@ -20,6 +23,7 @@ public class CamposDeLasTarjetas {
         panel.add(lbl);
 
         JTextField txt = new JTextField();
+        agregarPlaceholder(txt, "Ejm: 4532 7812 9012");
         txt.setName("txtNumeroTarjeta");
         txt.setBounds(x + 200, y, 205, 25);
         txt.setBorder(null);
@@ -50,6 +54,7 @@ public class CamposDeLasTarjetas {
         panel.add(lbl);
 
         JTextField txt = new JTextField();
+        agregarPlaceholder(txt, "Ejm: Sandra Gómez");
         txt.setName("txtNombreTitular");
         txt.setBounds(x + 200, y, 205, 25);
         txt.setBorder(null);
@@ -57,7 +62,7 @@ public class CamposDeLasTarjetas {
         return txt;
     }
 
-    /** Agrega el campo para dirección */
+    //Agrega el campo para dirección */
     public JTextField agregarCampoDireccion(JPanel panel, int x, int y) {
         JLabel lbl = new JLabel("Dirección de residencia*");
         lbl.setFont(fuenteLabel);
@@ -65,6 +70,7 @@ public class CamposDeLasTarjetas {
         panel.add(lbl);
 
         JTextField txt = new JTextField();
+        agregarPlaceholder(txt, "Ejm: Cra 7 # 45-67");
         txt.setName("txtDireccion");
         txt.setBounds(x + 200, y, 205, 25);
         txt.setBorder(null);
@@ -72,6 +78,7 @@ public class CamposDeLasTarjetas {
         return txt;
     }
 
+    // Agrega el campo para documento */
     public JTextField agregarCampoDocumento(JPanel panel, int x, int y) {
         JLabel lbl = new JLabel("Documento*");
         lbl.setFont(fuenteLabel);
@@ -79,6 +86,7 @@ public class CamposDeLasTarjetas {
         panel.add(lbl);
 
         JTextField txt = new JTextField();
+        agregarPlaceholder(txt, "Ejm: 1098765432");
         txt.setName("txtDocumento");
         txt.setBounds(x + 200, y, 200, 25);
         txt.setBorder(null);
@@ -141,8 +149,7 @@ public class CamposDeLasTarjetas {
     }
 
     // Agrega un combo genérico (por ejemplo banco o tipo de cuenta) */
-    public JComboBox<String> agregarComboGenerico(JPanel panel, int x, int y, String etiqueta, String[] opciones,
-            String nombre) {
+    public JComboBox<String> agregarComboGenerico(JPanel panel, int x, int y, String etiqueta, String[] opciones, String nombre) {
         JLabel lbl = new JLabel(etiqueta);
         lbl.setFont(fuenteLabel);
         lbl.setBounds(x, y, 160, 20);
@@ -177,4 +184,32 @@ public class CamposDeLasTarjetas {
         panel.add(combo);
         return combo;
     }
+
+    //para el fondo de los campos
+    public void agregarPlaceholder(JTextField txt, String placeholder) {
+
+        // Colocar placeholder inicial
+        txt.setText(placeholder);
+        txt.setForeground(Color.GRAY);
+
+        txt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (txt.getText().equals(placeholder)) {
+                    txt.setText("");
+                    txt.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (txt.getText().isEmpty()) {
+                    txt.setText(placeholder);
+                    txt.setForeground(Color.GRAY);
+                }
+            }
+        });
+    }
+
+
 }
