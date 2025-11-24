@@ -10,10 +10,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 import javax.swing.*;
 import vista.componentes.*;
 import java.util.Map;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class Formulario extends JPanel {
     private RoundedPanel panelFormulario;
@@ -31,8 +32,7 @@ public class Formulario extends JPanel {
     public int idProducto;
 
     // constructor que recibe tambien las categorias
-    public Formulario(String titulo, int idProducto, Map<Integer, String> categorias, Map<Integer, String> estados,
-            int x, int y) {
+    public Formulario(String titulo, int idProducto, Map<Integer, String> categorias, Map<Integer, String> estados, int x, int y) {
         this.titulo = titulo;
         this.idProducto = idProducto;
 
@@ -178,6 +178,14 @@ public class Formulario extends JPanel {
         btnGuardar.setFont(new Font("Times New Roman", Font.BOLD, 16));
         btnGuardar.setBounds(180, 450, 160, 40);
         panelFormulario.add(btnGuardar);
+
+        if (titulo.equals("Registro")) {
+            agregarPlaceholder(txtIdProducto, "Ej: 1023");
+            agregarPlaceholder(txtNombre, "Ej: Camisa deportiva");
+            agregarPlaceholder(txtDescripcion, "Ej: Camisa de algodón manga corta");
+            agregarPlaceholder(txtCantidad, "Ej: 25");
+            agregarPlaceholder(txtPrecioVenta, "Ej: 49.900");
+        }
     }
 
     private void agregarImagen() {
@@ -455,4 +463,29 @@ public class Formulario extends JPanel {
         lblImagenSeleccionada.setText("");
         lblImagenSeleccionada.setIcon(null);
     }
+
+    public void agregarPlaceholder(JTextField txt, String placeholder) {
+        // Colocar placeholder inicial
+        txt.setText(placeholder);
+        txt.setForeground(Color.GRAY);
+
+        txt.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (txt.getText().equals(placeholder)) {
+                    txt.setText("");
+                    txt.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (txt.getText().isEmpty()) {
+                    txt.setText(placeholder);
+                    txt.setForeground(Color.GRAY);
+                }
+            }
+        });
+    }
+
 }
