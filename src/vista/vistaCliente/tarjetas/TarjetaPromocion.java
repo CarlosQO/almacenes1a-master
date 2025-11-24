@@ -8,14 +8,12 @@ import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
 import vista.componentes.ImagenRoundedPanel;
 import vista.componentes.RoundedButton;
 import vista.componentes.RoundedPanel;
@@ -77,7 +75,7 @@ public class TarjetaPromocion extends JPanel {
 
         lblDescripcion = new JLabel(descripcion);
         lblDescripcion.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblDescripcion.setBounds(50, 310, 900, 40);
+        lblDescripcion.setBounds(50, 310, 565, 40);
         panelPromocion.add(lblDescripcion);
 
         lblTotal = new JLabel("Total : " + total);
@@ -119,61 +117,33 @@ public class TarjetaPromocion extends JPanel {
         return panelImg;
     }
 
-    public double getTotal() {
-        return total;
-    }
+    public double getTotal() { return total; }
 
-    public void setTotal(double total) {
-        this.total = total;
-    }
+    public void setTotal(double total) { this.total = total; }
 
-    public String getNombrePromocion() {
-        return nombrePromocion;
-    }
+    public String getNombrePromocion() { return nombrePromocion; }
 
-    public void setNombrePromocion(String nombrePromocion) {
-        this.nombrePromocion = nombrePromocion;
-    }
+    public void setNombrePromocion(String nombrePromocion) { this.nombrePromocion = nombrePromocion; }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+    public String getDescripcion() {  return descripcion; }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public int getDescuento() {
-        return descuento;
-    }
+    public int getDescuento() {  return descuento; }
 
-    public void setDescuento(int descuento) {
-        this.descuento = descuento;
-    }
+    public void setDescuento(int descuento) { this.descuento = descuento; }
 
-    public String getRutaImagen1() {
-        return rutaImagen1;
-    }
+    public String getRutaImagen1() { return rutaImagen1; }
 
-    public void setRutaImagen1(String rutaImagen1) {
-        this.rutaImagen1 = rutaImagen1;
-    }
+    public void setRutaImagen1(String rutaImagen1) { this.rutaImagen1 = rutaImagen1; }
 
-    public String getRutaImagen2() {
-        return rutaImagen2;
-    }
+    public String getRutaImagen2() { return rutaImagen2; }
 
-    public void setRutaImagen2(String rutaImagen2) {
-        this.rutaImagen2 = rutaImagen2;
-    }
+    public void setRutaImagen2(String rutaImagen2) { this.rutaImagen2 = rutaImagen2; }
 
-    public int getIdPromocion() {
-        return idPromocion;
-    }
+    public int getIdPromocion() { return idPromocion; }
 
-    public void setIdPromocion(int idPromocion) {
-        this.idPromocion = idPromocion;
-    }
+    public void setIdPromocion(int idPromocion) { this.idPromocion = idPromocion; }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -202,4 +172,5 @@ public class TarjetaPromocion extends JPanel {
             frame.setVisible(true);
         });
     }
+
 }
