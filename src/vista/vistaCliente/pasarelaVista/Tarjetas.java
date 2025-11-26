@@ -149,7 +149,7 @@ public class Tarjetas {
             errores += "- El número de tarjeta no puede estar vacío.\n";
 
         } else if (!Validaciones.validarNumeroCuenta(numeroTarjeta)) {
-            errores += "- Número de tarjeta inválido.\n";
+            errores += "- Número de tarjeta inválido, el numero de tarjeta debe empezar con un 4 o 5 y tener entre 13 y 16 dígitos.\n";
         }
 
         if (cvv.isEmpty()) {

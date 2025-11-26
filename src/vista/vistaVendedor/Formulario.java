@@ -313,7 +313,7 @@ public class Formulario extends JPanel {
             errores += "- El precio no puede estar vacío.\n";
             confirmarPrecio = false;
         } else if (!Validaciones.validarPrecio(precio)) {
-            errores += "- El precio debe tener un formato válido.\n";
+            errores += "- El precio debe tener un formato válido(ejem: 66000.00 o 66000).\n";
             confirmarPrecio = false;
         }
 
@@ -325,8 +325,8 @@ public class Formulario extends JPanel {
                         null,
                         "¿Seguro que desea que el producto cueste " + precioDouble + "?",
                         "Confirmar precio bajo",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.WARNING_MESSAGE);
+                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE
+                    );
 
                 // Si el usuario elige "No, se puede manejar el caso según lo necesites
                 if (opcion != JOptionPane.YES_OPTION) {

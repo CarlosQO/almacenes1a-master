@@ -147,7 +147,7 @@ public class Consignacion {
             ciudad = cbCiudad.getSelectedItem().toString();
         }
 
-        // ===== VALIDACIONES =====
+        //  VALIDACIONES
 
         // Nombre
         if (nombre.isEmpty()) {
