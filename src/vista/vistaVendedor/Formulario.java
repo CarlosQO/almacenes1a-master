@@ -312,9 +312,28 @@ public class Formulario extends JPanel {
         if (precio.isEmpty()) {
             errores += "- El precio no puede estar vacío.\n";
             confirmarPrecio = false;
-        } else if (!Validaciones.validarPrecio(precio)) {
-            errores += "- El precio debe tener un formato válido(ejem: 66000.00 o 66000).\n";
+            double precioConvertido=0;
+        }  
+        
+        if (precio.isEmpty()) {
+            errores += "- El precio no puede estar vacío.\n";
             confirmarPrecio = false;
+        } else {
+            double precioConvertido = 0;
+            try {
+                precioConvertido = Double.parseDouble(precio);
+                if (precioConvertido <= 0) {
+                    errores += "- El precio debe ser mayor 0.\n";
+                    confirmarPrecio = false;
+                }
+            } catch (NumberFormatException e) {
+                errores += "-  El precio debe tener un formato válido (ej: 66000.00 o 66000).\n";
+                confirmarPrecio = false;
+            }
+            if (!Validaciones.validarPrecio(precio)) {
+                errores += "- El precio debe tener un formato válido (ej: 66000.00 o 66000).\n";
+                confirmarPrecio = false;
+            }
         }
 
         if (confirmarPrecio) {
