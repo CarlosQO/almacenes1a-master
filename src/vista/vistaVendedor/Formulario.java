@@ -308,13 +308,7 @@ public class Formulario extends JPanel {
             errores += "- La descripción debe tener entre 25 y 55 caracteres.\n";
         }
 
-        boolean confirmarPrecio = true;
-        if (precio.isEmpty()) {
-            errores += "- El precio no puede estar vacío.\n";
-            confirmarPrecio = false;
-            double precioConvertido=0;
-        }  
-        
+        boolean confirmarPrecio = true;    
         if (precio.isEmpty()) {
             errores += "- El precio no puede estar vacío.\n";
             confirmarPrecio = false;
