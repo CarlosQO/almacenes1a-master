@@ -308,7 +308,7 @@ public class Formulario extends JPanel {
             errores += "- El precio debe tener un formato válido.\n";
             confirmarPrecio = false;
         }
-
+//comentario
         if (confirmarPrecio) {
             double precioDouble = Double.parseDouble(precio);
 
